@@ -111,7 +111,7 @@ export default function KanbanBoard() {
     const activeColumn = columns[activeColumnIndex];
     const overColumn = overColumnIndex !== -1 ? columns[overColumnIndex] : null;
     
-    if (overColumn && (activeColumn.id !== 'ideas' || overColumn.id !== 'start-launch')) {
+    if (overColumn && !(activeColumn.id === 'ideas' && overColumn.id === 'start-launch')) {
       return; // Block this drag operation - only allow Ideas → Start/Launch
     }
 
@@ -178,7 +178,7 @@ export default function KanbanBoard() {
     const activeColumn = columns[activeColumnIndex];
     const targetColumn = targetColumnIndex !== -1 ? columns[targetColumnIndex] : null;
     
-    if (activeColumn && targetColumn && (activeColumn.id !== 'ideas' || targetColumn.id !== 'start-launch')) {
+    if (activeColumn && targetColumn && !(activeColumn.id === 'ideas' && targetColumn.id === 'start-launch')) {
       setActiveTask(null);
       return; // Block this drag operation - only allow Ideas → Start/Launch
     }
