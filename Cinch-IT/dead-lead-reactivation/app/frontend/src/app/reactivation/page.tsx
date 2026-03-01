@@ -1,20 +1,83 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { MonthlyPerformanceChart, PipelineValueChart } from "@/components/charts/performance-chart";
 import { ModulePageLayout } from "@/components/navigation/module-page-layout";
 import { MetricStatCard } from "@/components/ui/metric-card";
 import { SectionTitle } from "@/components/ui/section-title";
-import { monthlyPerformance, reactivationMetrics } from "@/lib/demo-data";
+import { monthlyPerformance } from "@/lib/demo-data";
+import type { MetricCard } from "@/lib/types";
+
+interface DashboardStats {
+  contacts: {
+    total: number;
+    ready: number;
+    needs_enrichment: number;
+    do_not_contact: number;
+    sms_ready: number;
+    email_only: number;
+  };
+  outreach: {
+    sms_sent: number;
+    sms_replies: number;
+    emails_sent: number;
+    email_replies: number;
+    meetings_booked: number;
+    overall_reply_rate: number;
+  };
+  test_mode: boolean;
+  strategy: string;
+}
 
 export default function ReactivationDashboardPage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/dashboard/stats")
+      .then((res) => {
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        return res.json();
+      })
+      .then(setStats)
+      .catch((err) => setError(err.message));
+  }, []);
+
+  const metrics: MetricCard[] = stats
+    ? [
+        { label: "Total Contacts", value: stats.contacts.total.toLocaleString(), delta: `${stats.contacts.ready} ready`, trend: "up" },
+        { label: "SMS-Ready", value: stats.contacts.sms_ready.toLocaleString(), delta: `${stats.contacts.email_only} email-only`, trend: "up" },
+        { label: "Outreach Sent", value: (stats.outreach.sms_sent + stats.outreach.emails_sent).toLocaleString(), delta: `${stats.outreach.sms_sent} SMS, ${stats.outreach.emails_sent} email`, trend: "flat" },
+        { label: "Meetings Booked", value: stats.outreach.meetings_booked.toLocaleString(), delta: `${stats.outreach.overall_reply_rate}% reply rate`, trend: stats.outreach.meetings_booked > 0 ? "up" : "flat" },
+      ]
+    : [];
+
   return (
     <ModulePageLayout
       moduleId="reactivation"
       title="Dead Lead Reactivation Dashboard"
       description="Monitor dormant pipeline recovery, sequence performance, and rep follow-through in one command center."
     >
+      {error && (
+        <div className="rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">
+          Failed to load dashboard stats: {error}
+        </div>
+      )}
+
+      {stats?.test_mode && (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-300">
+          Test Mode Active &mdash; No real outreach will be sent.
+        </div>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {reactivationMetrics.map((metric) => (
-          <MetricStatCard key={metric.label} metric={metric} />
-        ))}
+        {stats ? (
+          metrics.map((metric) => <MetricStatCard key={metric.label} metric={metric} />)
+        ) : !error ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-28 animate-pulse rounded-xl border border-slate-800 bg-slate-900/70" />
+          ))
+        ) : null}
       </div>
 
       <section className="rounded-xl border border-slate-800 bg-slate-900/70 p-5">

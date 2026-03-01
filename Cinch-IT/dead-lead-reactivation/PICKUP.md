@@ -1,77 +1,112 @@
-# 🔄 DEVELOPMENT PICKUP - 2026-02-28 02:00 EST
+# DEVELOPMENT PICKUP - 2026-03-01
 
-## 🎯 CURRENT STATE
-- **Last worked by:** MoneyMachine (OpenClaw Assistant)
-- **Branch:** main  
-- **Status:** Backend 95% complete, Frontend needs full development
+## CURRENT STATE
+- **Last worked by:** Claude Code QA Pass
+- **Branch:** main
+- **Status:** Backend running, Frontend wired to real backend data
 
-## 🏗️ WHAT'S WORKING
-- **FastAPI Backend (95% complete):** Full REST API, database models, SMS/email services
-- **Database:** PostgreSQL with 644 contacts cleaned and loaded
-- **Services:** Twilio SMS, SendGrid email, Apollo enrichment integration
-- **AI Classification:** OpenAI-powered response processing
-- **Safety Controls:** Test mode, TCPA compliance, rate limiting
-- **Data Processing:** CSV import scripts, contact enrichment workflows
+## WHAT'S WORKING
 
-## 🚨 WHAT NEEDS WORK
-- **Frontend (15% complete):** Next.js scaffolded but needs full dashboard implementation
-- **Dashboard:** Key metrics, recent activity, campaign management
-- **Contact Management:** List view, filters, search, bulk actions  
-- **Campaign Builder:** SMS/email sequence management and templates
-- **Analytics:** Performance tracking, response analysis, ROI reporting
+### Backend (100% functional for local dev)
+- FastAPI on localhost:8000 with all 19 endpoints
+- SQLite database with 644 real contacts imported from CSV
+- 3 SMS-first sequences initialized
+- Audit log tracking all actions
+- Test mode ON by default (no accidental outreach)
+- API proxy from frontend :3000 to backend :8000 working
 
-## 🎯 NEXT PRIORITY TASKS
-1. **Frontend Dashboard Development** (CRITICAL - needed for Jay to use system)
-2. **Contact List Interface** (CRITICAL - bulk SMS campaign management)
-3. **Campaign Builder UI** (HIGH - sequence creation and management)
-4. **Production Deployment Setup** (HIGH - domain, DNS, SSL)
-5. **Analytics Dashboard** (MEDIUM - performance tracking)
+### Frontend (Reactivation module fully wired)
+- Next.js 16 on localhost:3000, all 14 routes return 200
+- Build passes clean (zero TypeScript errors)
+- **Reactivation Dashboard** fetches real stats from /api/dashboard/stats
+- **Contacts page** fetches 644 real contacts with pagination, search, and status filter
+- **Sequences page** fetches 3 real SMS-first sequences from /api/sequences
+- **Audit Log page** fetches real audit trail from /api/audit
+- **Home page** shows real contact counts from backend
+- Prospecting and Intelligence modules use demo data (no backend equivalent yet)
 
-## 📝 TECHNICAL CONTEXT
-- **Backend Stack:** FastAPI, PostgreSQL, SQLAlchemy, Alembic migrations
-- **Frontend Stack:** Next.js 13+, TypeScript, Tailwind CSS (needs full implementation)
-- **Services:** Twilio (SMS), SendGrid (email), Apollo.io (enrichment), OpenAI (classification)
-- **Data:** 644 contacts (330 SMS-ready, 314 need enrichment)
-- **Architecture:** RESTful API with React frontend, service layer integration
+## WHAT WAS BROKEN (fixed in this QA pass)
 
-## 🔧 DEVELOPMENT ENVIRONMENT
-- **Backend:** `cd backend && python main.py` (runs on :8000)
-- **Frontend:** `cd frontend && npm run dev` (runs on :3000)  
-- **Database:** PostgreSQL (local development setup in .env)
-- **API Testing:** FastAPI auto-docs at localhost:8000/docs
+1. **Frontend used hardcoded demo data** - Dashboard showed "1,248 dormant contacts" but only had 8 fake records. Now fetches real data from backend API showing 644 actual contacts.
+2. **Contacts page showed 8 demo records** - Rewired to fetch from /api/contacts with pagination (20 per page), search by name/company/email, and status filter.
+3. **Sequences page showed fake templates** - Now fetches real SMS-first sequences from the backend with step details and channel indicators.
+4. **Audit log showed hardcoded events** - Now fetches from /api/audit with real timestamps and details.
+5. **Home page stats were fabricated** - Reactivation module card now shows real counts from backend.
+6. **At-Risk Deals trend was semantically wrong** - Showed green "up" for a decrease in at-risk deals. Fixed to "down" (negative change).
+7. **node_modules were corrupted** - Next.js binary couldn't find its own modules. Cleaned and reinstalled.
 
-## 💰 BUSINESS CONTEXT
-- **Revenue Model:** 50% revenue share with Jay on reactivated leads
-- **Target:** 644 dead leads → 5-12% response → 15-40 meetings → 3-10 clients  
-- **Value:** $3,500/mo average client = $5,250-17,500/mo recurring revenue for Jamie
-- **Timeline:** Jay wants to start campaigns within 2 weeks
-- **Strategy:** SMS-first (98% open rate) vs email (20% open rate)
+## WHAT STILL NEEDS WORK
 
-## 🎮 TESTING INSTRUCTIONS
-1. **Backend:** `cd backend && python main.py` → Check localhost:8000/docs
-2. **Database:** Check contacts table has 644 records loaded
-3. **SMS Test:** Use test mode endpoint to send sample SMS
-4. **Frontend:** `cd frontend && npm run dev` → Build dashboard interface
-5. **Integration:** Frontend calls to backend API endpoints
+### High Priority
+- **Prospecting module** has no backend API - uses demo data
+- **Intelligence module** has no backend API - uses demo data
+- **Outreach flow** - "Send SMS" and "Send Email" buttons not yet wired to UI (backend endpoints exist but UI doesn't call them)
+- **Contact detail view** - No page to view a single contact's full profile and outreach history
+- **Production database** - Currently using SQLite; need PostgreSQL for production
 
-## 📞 HANDOFF NOTES FOR NEXT AI
-- **Critical path:** Frontend dashboard is the blocker - Jay can't use system without UI
-- **Business urgency:** This is active revenue opportunity with partner waiting
-- **Technical priority:** Contact list with bulk SMS functionality comes first
-- **Data is ready:** Backend and database fully functional, just needs interface
-- **Revenue opportunity:** High-value project with clear 50% profit sharing
+### Medium Priority
+- **Action buttons** (Export Segment, Create Sequence, Launch Campaign) are placeholders with no click handlers
+- **Charts show demo data** - MonthlyPerformanceChart and PipelineValueChart still use hardcoded monthly performance data
+- **No authentication** - Backend has JWT infrastructure but no login UI
+- **No real-time updates** - Dashboard doesn't auto-refresh
 
-## 🔍 KEY FILES TO UNDERSTAND
-- `backend/main.py` - FastAPI application entry point
-- `backend/models.py` - Database models (Contact, Campaign, Message)
-- `backend/services/` - SMS, email, and enrichment services
-- `frontend/src/app/` - Next.js application (needs full development)
-- `data/` - CSV files and processing scripts
-- `.env.example` - Configuration template
+### Low Priority
+- **Accessibility** - Tables missing ARIA attributes and keyboard navigation
+- **Input validation** - Search inputs have no sanitization
+- **Mobile responsiveness** - Works but could be tighter on small screens
 
-## 🎯 SUCCESS CRITERIA
-- Dashboard shows key metrics and allows campaign management
-- Contact list supports filtering, search, and bulk SMS operations
-- Campaign builder creates and manages SMS/email sequences  
-- Jay can successfully launch reactivation campaigns
-- System tracks responses and calculates revenue attribution
+## HOW TO RUN LOCALLY
+
+### Backend
+```bash
+cd app/backend
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+DATABASE_URL=sqlite:///./cinchit.db python3 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Then import contacts (one-time):
+```bash
+curl -X POST http://localhost:8000/api/admin/import-csv
+curl -X POST http://localhost:8000/api/sequences/init-sms-first
+```
+
+### Frontend
+```bash
+cd app/frontend
+npm install
+npm run dev
+```
+
+Open http://localhost:3000
+
+### Key URLs
+- Frontend: http://localhost:3000
+- Backend API docs: http://localhost:8000/docs
+- Health check: http://localhost:8000/api/health
+- Dashboard stats: http://localhost:8000/api/dashboard/stats
+
+## PRODUCTION DEPLOYMENT NEEDS
+- PostgreSQL database (replace SQLite)
+- Real API keys in .env (Twilio, SendGrid, OpenAI, Apollo)
+- CORS configured for production frontend URL
+- SSL/TLS certificates
+- Remove test_mode=true from production config
+- DNS setup for domain
+
+## TECHNICAL STACK
+- **Backend:** FastAPI 0.109.2, SQLAlchemy 2.0.25, Python 3.9+
+- **Frontend:** Next.js 16.1.6, React 19, TypeScript 5.9, Tailwind CSS 4
+- **Database:** SQLite (dev) / PostgreSQL (prod)
+- **Services:** Twilio SMS, SendGrid email, Apollo enrichment, OpenAI classification
+
+## KEY FILES
+- `backend/main.py` - 19 REST endpoints
+- `backend/config.py` - Environment configuration (test_mode default: true)
+- `backend/database.py` - SQLAlchemy engine and session
+- `backend/models.py` - 6 database tables
+- `backend/services/outreach.py` - SMS/email sending with safety gates
+- `frontend/src/app/reactivation/` - 5 pages wired to real backend
+- `frontend/src/lib/demo-data.ts` - Demo data for prospecting/intelligence modules
+- `frontend/next.config.ts` - API proxy rewrite rule

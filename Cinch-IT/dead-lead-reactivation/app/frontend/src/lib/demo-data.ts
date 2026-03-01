@@ -65,7 +65,7 @@ export const prospectingMetrics: MetricCard[] = [
 export const intelligenceMetrics: MetricCard[] = [
   { label: "Pipeline Coverage", value: "3.7x", delta: "+0.4x", trend: "up" },
   { label: "Commit Accuracy", value: "93%", delta: "+2 pts", trend: "up" },
-  { label: "At-Risk Deals", value: "11", delta: "-4", trend: "up" },
+  { label: "At-Risk Deals", value: "11", delta: "-4", trend: "down" },
   { label: "Q2 Forecast", value: "$6.8M", delta: "+$620K", trend: "up" },
 ];
 

@@ -1,29 +1,60 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { monthlyPerformance } from "@/lib/demo-data";
 
-const modules = [
-  {
-    title: "Dead Lead Reactivation",
-    href: "/reactivation",
-    summary: "Recover dormant opportunities with AI sequence orchestration and behavior-triggered follow-up.",
-    stats: ["1,248 dormant contacts", "29.4% reactivation rate", "$2.14M recovered pipeline"],
-  },
-  {
-    title: "AI Prospecting Engine",
-    href: "/prospecting",
-    summary: "Discover and qualify new accounts with intent signals, ICP scoring, and channel recommendations.",
-    stats: ["2,381 accounts discovered", "684 AI-qualified leads", "18.6% reply rate"],
-  },
-  {
-    title: "Sales Intelligence",
-    href: "/intelligence",
-    summary: "Forecast accurately, surface deal risks early, and guide revenue execution with AI insights.",
-    stats: ["93% forecast accuracy", "3.7x pipeline coverage", "$6.8M Q2 projection"],
-  },
-];
+interface DashboardStats {
+  contacts: {
+    total: number;
+    ready: number;
+    sms_ready: number;
+  };
+  outreach: {
+    meetings_booked: number;
+    overall_reply_rate: number;
+  };
+}
 
 export default function Home() {
   const latestMonth = monthlyPerformance[monthlyPerformance.length - 1];
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+
+  useEffect(() => {
+    fetch("/api/dashboard/stats")
+      .then((res) => (res.ok ? res.json() : null))
+      .then(setStats)
+      .catch(() => {});
+  }, []);
+
+  const reactivationStats = stats
+    ? [
+        `${stats.contacts.total.toLocaleString()} contacts loaded`,
+        `${stats.contacts.sms_ready.toLocaleString()} SMS-ready`,
+        `${stats.contacts.ready.toLocaleString()} ready for outreach`,
+      ]
+    : ["Loading...", "", ""];
+
+  const modules = [
+    {
+      title: "Dead Lead Reactivation",
+      href: "/reactivation",
+      summary: "Recover dormant opportunities with AI sequence orchestration and behavior-triggered follow-up.",
+      stats: reactivationStats,
+    },
+    {
+      title: "AI Prospecting Engine",
+      href: "/prospecting",
+      summary: "Discover and qualify new accounts with intent signals, ICP scoring, and channel recommendations.",
+      stats: ["2,381 accounts discovered", "684 AI-qualified leads", "18.6% reply rate"],
+    },
+    {
+      title: "Sales Intelligence",
+      href: "/intelligence",
+      summary: "Forecast accurately, surface deal risks early, and guide revenue execution with AI insights.",
+      stats: ["93% forecast accuracy", "3.7x pipeline coverage", "$6.8M Q2 projection"],
+    },
+  ];
 
   return (
     <div className="space-y-8">
@@ -46,7 +77,7 @@ export default function Home() {
             <h2 className="text-xl font-semibold text-white">{module.title}</h2>
             <p className="mt-2 text-sm text-slate-300">{module.summary}</p>
             <ul className="mt-4 space-y-1 text-sm text-slate-200">
-              {module.stats.map((stat) => (
+              {module.stats.filter(Boolean).map((stat) => (
                 <li key={stat}>{stat}</li>
               ))}
             </ul>
