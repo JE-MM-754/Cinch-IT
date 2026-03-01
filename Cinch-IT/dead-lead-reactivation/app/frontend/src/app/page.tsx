@@ -1,94 +1,79 @@
+import Link from "next/link";
+import { monthlyPerformance } from "@/lib/demo-data";
+
+const modules = [
+  {
+    title: "Dead Lead Reactivation",
+    href: "/reactivation",
+    summary: "Recover dormant opportunities with AI sequence orchestration and behavior-triggered follow-up.",
+    stats: ["1,248 dormant contacts", "29.4% reactivation rate", "$2.14M recovered pipeline"],
+  },
+  {
+    title: "AI Prospecting Engine",
+    href: "/prospecting",
+    summary: "Discover and qualify new accounts with intent signals, ICP scoring, and channel recommendations.",
+    stats: ["2,381 accounts discovered", "684 AI-qualified leads", "18.6% reply rate"],
+  },
+  {
+    title: "Sales Intelligence",
+    href: "/intelligence",
+    summary: "Forecast accurately, surface deal risks early, and guide revenue execution with AI insights.",
+    stats: ["93% forecast accuracy", "3.7x pipeline coverage", "$6.8M Q2 projection"],
+  },
+];
+
 export default function Home() {
+  const latestMonth = monthlyPerformance[monthlyPerformance.length - 1];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-16">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            AI Sales Engine
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Transform your sales process with intelligent lead reactivation and automated prospecting
+    <div className="space-y-8">
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-8">
+        <p className="text-xs uppercase tracking-[0.2em] text-cyan-300">Unified Platform</p>
+        <h1 className="mt-3 text-4xl font-semibold text-white">AI Sales Engine Demo</h1>
+        <p className="mt-3 max-w-3xl text-slate-300">
+          This workspace simulates a full revenue automation workflow from dormant lead recovery to new prospect discovery and AI-driven forecast decisions.
+        </p>
+        <div className="mt-6 grid gap-3 text-sm text-slate-200 sm:grid-cols-3">
+          <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">Import leads and enrich firmographics</div>
+          <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">Launch personalized multi-channel outreach</div>
+          <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-4">Track pipeline lift and forecast confidence</div>
+        </div>
+      </section>
+
+      <section className="grid gap-5 lg:grid-cols-3">
+        {modules.map((module) => (
+          <article key={module.title} className="rounded-xl border border-slate-800 bg-slate-900/70 p-6">
+            <h2 className="text-xl font-semibold text-white">{module.title}</h2>
+            <p className="mt-2 text-sm text-slate-300">{module.summary}</p>
+            <ul className="mt-4 space-y-1 text-sm text-slate-200">
+              {module.stats.map((stat) => (
+                <li key={stat}>{stat}</li>
+              ))}
+            </ul>
+            <Link
+              href={module.href}
+              className="mt-5 inline-flex rounded-lg border border-cyan-500/50 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-200 transition hover:bg-cyan-500/20"
+            >
+              Open Module
+            </Link>
+          </article>
+        ))}
+      </section>
+
+      <section className="grid gap-5 lg:grid-cols-2">
+        <article className="rounded-xl border border-slate-800 bg-slate-900/70 p-6">
+          <h2 className="text-xl font-semibold text-white">Last 30 Days Snapshot</h2>
+          <p className="mt-2 text-sm text-slate-300">
+            {latestMonth.reactivated} dormant contacts reactivated, {latestMonth.qualified} qualified opportunities, and ${latestMonth.pipelineK}K generated pipeline.
           </p>
-        </div>
-
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <div className="w-12 h-12 bg-blue-500 rounded-lg mb-4 flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Dead Lead Reactivation</h3>
-            <p className="text-gray-600">
-              Automatically re-engage cold prospects with personalized AI-generated outreach
-            </p>
-          </div>
-
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <div className="w-12 h-12 bg-green-500 rounded-lg mb-4 flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Smart Analytics</h3>
-            <p className="text-gray-600">
-              Track engagement, conversion rates, and ROI with detailed campaign analytics
-            </p>
-          </div>
-
-          <div className="bg-white p-8 rounded-lg shadow-lg">
-            <div className="w-12 h-12 bg-purple-500 rounded-lg mb-4 flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Automated Workflows</h3>
-            <p className="text-gray-600">
-              Set up complex multi-touch campaigns that run on autopilot
-            </p>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="text-center bg-white p-12 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Ready to 10x Your Sales Pipeline?
-          </h2>
-          <p className="text-gray-600 mb-8 max-w-xl mx-auto">
-            Schedule a demo to see how our AI sales engine can transform your outbound efforts
+        </article>
+        <article className="rounded-xl border border-slate-800 bg-slate-900/70 p-6">
+          <h2 className="text-xl font-semibold text-white">Demo Narrative</h2>
+          <p className="mt-2 text-sm text-slate-300">
+            Use the module switcher to walk prospects through an end-to-end AI sales operating system: identify targets, execute outreach, and act on intelligence.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-              Schedule Demo
-            </button>
-            <button className="border border-gray-300 text-gray-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
-              View Case Studies
-            </button>
-          </div>
-        </div>
-
-        {/* Demo Stats */}
-        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          <div>
-            <div className="text-3xl font-bold text-blue-600 mb-2">250%</div>
-            <div className="text-gray-600">Response Rate Increase</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-green-600 mb-2">80%</div>
-            <div className="text-gray-600">Time Saved</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-purple-600 mb-2">15x</div>
-            <div className="text-gray-600">ROI Improvement</div>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-orange-600 mb-2">500+</div>
-            <div className="text-gray-600">Happy Customers</div>
-          </div>
-        </div>
-      </div>
+        </article>
+      </section>
     </div>
   );
 }
