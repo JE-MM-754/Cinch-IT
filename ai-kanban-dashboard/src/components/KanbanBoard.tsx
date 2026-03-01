@@ -95,8 +95,6 @@ export default function KanbanBoard() {
 
     const activeId = active.id;
     const overId = over.id;
-    
-    console.log('DRAG OVER:', { activeId, overId, activeData: active.data.current, overData: over.data.current });
 
     if (activeId === overId) return;
 
@@ -109,13 +107,13 @@ export default function KanbanBoard() {
 
     if (activeColumnIndex === -1) return;
 
-    // DRAG RESTRICTION: Only allow drag from "Ideas" to "Start/Launch"
-    const activeColumn = columns[activeColumnIndex];
-    const overColumn = overColumnIndex !== -1 ? columns[overColumnIndex] : null;
-    
-    if (overColumn && !(activeColumn.id === 'ideas' && overColumn.id === 'start-launch')) {
-      return; // Block this drag operation - only allow Ideas → Start/Launch
-    }
+    // TEMPORARILY DISABLED: Test basic drag and drop
+    // const activeColumn = columns[activeColumnIndex];
+    // const overColumn = overColumnIndex !== -1 ? columns[overColumnIndex] : null;
+    // 
+    // if (overColumn && !(activeColumn.id === 'ideas' && overColumn.id === 'start-launch')) {
+    //   return; // Block this drag operation - only allow Ideas → Start/Launch
+    // }
 
     // If dropping on a different column
     if (overColumnIndex !== -1 && activeColumnIndex !== overColumnIndex) {
@@ -150,8 +148,6 @@ export default function KanbanBoard() {
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     
-    console.log('DRAG END:', { active, over, activeId: active.id, overId: over?.id });
-    
     if (!over) {
       setActiveTask(null);
       return;
@@ -178,14 +174,14 @@ export default function KanbanBoard() {
     const overColumnIndex = columns.findIndex(col => col.id === overId);
     const targetColumnIndex = overColumnIndex !== -1 ? overColumnIndex : overTaskColumnIndex;
     
-    // DRAG RESTRICTION: Only allow drag from "Ideas" to "Start/Launch" 
-    const activeColumn = columns[activeColumnIndex];
-    const targetColumn = targetColumnIndex !== -1 ? columns[targetColumnIndex] : null;
-    
-    if (activeColumn && targetColumn && !(activeColumn.id === 'ideas' && targetColumn.id === 'start-launch')) {
-      setActiveTask(null);
-      return; // Block this drag operation - only allow Ideas → Start/Launch
-    }
+    // TEMPORARILY DISABLED: Test basic drag and drop
+    // const activeColumn = columns[activeColumnIndex];
+    // const targetColumn = targetColumnIndex !== -1 ? columns[targetColumnIndex] : null;
+    // 
+    // if (activeColumn && targetColumn && !(activeColumn.id === 'ideas' && targetColumn.id === 'start-launch')) {
+    //   setActiveTask(null);
+    //   return; // Block this drag operation - only allow Ideas → Start/Launch
+    // }
 
     // If reordering within the same column
     if (activeColumnIndex === overTaskColumnIndex && activeColumnIndex !== -1) {
