@@ -25,6 +25,7 @@ export default function Column({ column, onPauseTask, onCancelTask }: ColumnProp
 
   return (
     <div
+      ref={setNodeRef}
       className={`flex flex-col w-80 h-full rounded-lg border-2 ${columnColorClass} ${
         isOver ? 'border-blue-400 bg-blue-100' : ''
       } transition-colors`}
@@ -39,7 +40,6 @@ export default function Column({ column, onPauseTask, onCancelTask }: ColumnProp
       </div>
       
       <div
-        ref={setNodeRef}
         className="flex-1 p-4 overflow-y-auto"
       >
         <SortableContext
