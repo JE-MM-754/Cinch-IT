@@ -1,0 +1,26 @@
+# Security - Never commit these files
+auth-profiles*.json
+*-backup-*.json
+SYSTEM_BACKUP_*.md
+RECOVERY_*.md
+.env
+.env.*
+*.key
+*.pem
+*.p12
+.openclaw/
+**/logs/
+**/*secret*
+**/*credential*
+**/*token*
+**/*key*
+**/*password*
+
+# OpenClaw specific
+openclaw.config.json
+auth-profiles.json
+
+# Development
+node_modules/
+*.log
+.DS_Store
