@@ -8,8 +8,8 @@ export interface NavItem {
 export interface MetricCard {
   label: string;
   value: string;
-  delta: string;
-  trend: "up" | "down" | "flat";
+  delta?: string;
+  trend?: "up" | "down" | "flat";
 }
 
 export interface ContactRecord {

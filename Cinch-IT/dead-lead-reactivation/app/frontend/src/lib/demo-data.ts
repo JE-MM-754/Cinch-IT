@@ -1,6 +1,5 @@
 import {
   CampaignPerformance,
-  ContactRecord,
   ForecastRecord,
   InsightRecord,
   LeadRecord,
@@ -8,7 +7,6 @@ import {
   ModuleId,
   NavItem,
   PipelineDeal,
-  SequenceTemplate,
 } from "@/lib/types";
 
 export const moduleNavigation: Record<ModuleId, NavItem[]> = {
@@ -48,12 +46,6 @@ export const moduleSummary: Record<ModuleId, { name: string; subtitle: string }>
   },
 };
 
-export const reactivationMetrics: MetricCard[] = [
-  { label: "Dormant Contacts", value: "1,248", delta: "+7.1%", trend: "up" },
-  { label: "Reactivation Rate", value: "29.4%", delta: "+4.3 pts", trend: "up" },
-  { label: "Meetings Booked", value: "143", delta: "+18", trend: "up" },
-  { label: "Pipeline Recovered", value: "$2.14M", delta: "+$410K", trend: "up" },
-];
 
 export const prospectingMetrics: MetricCard[] = [
   { label: "New Accounts Found", value: "2,381", delta: "+12.8%", trend: "up" },
@@ -78,23 +70,6 @@ export const monthlyPerformance: CampaignPerformance[] = [
   { month: "Feb", reactivated: 81, qualified: 53, pipelineK: 640 },
 ];
 
-export const reactivationContacts: ContactRecord[] = [
-  { id: "DL-1001", name: "Amelia Shaw", title: "VP Revenue Ops", company: "Northlane Logistics", status: "dormant", lastTouch: "2025-09-04", potentialScore: 91, owner: "J. Patel" },
-  { id: "DL-1002", name: "Rafael Ortiz", title: "Head of Sales", company: "Verity Health Systems", status: "in-sequence", lastTouch: "2025-12-19", potentialScore: 88, owner: "D. Kim" },
-  { id: "DL-1003", name: "Nina Caldwell", title: "Director of GTM", company: "PioneerStack", status: "re-engaged", lastTouch: "2026-02-14", potentialScore: 85, owner: "A. Singh" },
-  { id: "DL-1004", name: "Marcus Lowe", title: "SVP Sales", company: "Asteron Capital", status: "dormant", lastTouch: "2025-08-28", potentialScore: 82, owner: "J. Patel" },
-  { id: "DL-1005", name: "Grace Bell", title: "RevOps Lead", company: "Catalyst Security", status: "in-sequence", lastTouch: "2026-01-30", potentialScore: 79, owner: "L. Chen" },
-  { id: "DL-1006", name: "Henry Wells", title: "CRO", company: "Summit Data", status: "re-engaged", lastTouch: "2026-02-22", potentialScore: 93, owner: "D. Kim" },
-  { id: "DL-1007", name: "Sofia Patel", title: "Sales Director", company: "Brio Manufacturing", status: "dormant", lastTouch: "2025-10-11", potentialScore: 77, owner: "A. Singh" },
-  { id: "DL-1008", name: "Ethan Cooper", title: "GTM Operations", company: "SignalForge", status: "in-sequence", lastTouch: "2026-02-08", potentialScore: 86, owner: "L. Chen" },
-];
-
-export const sequenceTemplates: SequenceTemplate[] = [
-  { id: "SQ-11", name: "Value Reconnect", audience: "Dormant Enterprise", steps: 5, openRate: 51, replyRate: 17, meetings: 24 },
-  { id: "SQ-12", name: "Quarterly Trigger", audience: "Budget Cycle Buyers", steps: 4, openRate: 47, replyRate: 15, meetings: 19 },
-  { id: "SQ-13", name: "Winback + Case Study", audience: "Competitor Losses", steps: 6, openRate: 56, replyRate: 21, meetings: 32 },
-  { id: "SQ-14", name: "Champion Reactivation", audience: "Former Champions", steps: 3, openRate: 63, replyRate: 26, meetings: 18 },
-];
 
 export const discoveredLeads: LeadRecord[] = [
   { id: "LD-3001", company: "Monarch Freight", contact: "Claire Morgan", fitScore: 94, intent: "high", channel: "Email", stage: "qualified" },
@@ -154,10 +129,3 @@ export const forecastSeries: ForecastRecord[] = [
   { month: "Aug", commit: 1.86, bestCase: 2.33, aiProjection: 2.29 },
 ];
 
-export const auditLog = [
-  { time: "2026-02-28 09:14", action: "AI identified 42 at-risk dormant contacts", actor: "Reactivation Bot", result: "Queued" },
-  { time: "2026-02-28 10:02", action: "Generated personalized email copy", actor: "AI Composer", result: "288 messages drafted" },
-  { time: "2026-02-28 10:47", action: "Lead enrichment via firmographic model", actor: "Prospecting Bot", result: "117 accounts scored" },
-  { time: "2026-02-28 11:18", action: "Forecast updated from fresh activity signals", actor: "Intelligence Engine", result: "+$210K AI projection" },
-  { time: "2026-02-28 11:59", action: "Escalated proposal-stage deal risk", actor: "Deal Risk Monitor", result: "Owner notified" },
-];

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ModuleSwitcher } from "@/components/navigation/module-switcher";
+import { TestModeBanner } from "@/components/ui/test-mode-banner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -37,7 +38,10 @@ export default function RootLayout({
                 <ModuleSwitcher />
               </div>
             </header>
-            <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</main>
+            <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+              <TestModeBanner />
+              {children}
+            </main>
           </div>
         </div>
       </body>
