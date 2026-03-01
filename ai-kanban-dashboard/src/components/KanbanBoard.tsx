@@ -95,6 +95,8 @@ export default function KanbanBoard() {
 
     const activeId = active.id;
     const overId = over.id;
+    
+    console.log('DRAG OVER:', { activeId, overId, activeData: active.data.current, overData: over.data.current });
 
     if (activeId === overId) return;
 
@@ -147,6 +149,8 @@ export default function KanbanBoard() {
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
+    
+    console.log('DRAG END:', { active, over, activeId: active.id, overId: over?.id });
     
     if (!over) {
       setActiveTask(null);
