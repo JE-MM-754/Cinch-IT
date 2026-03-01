@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Process Monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #00ff41;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff4444;
+        }
+        
+        .status-indicator.connected {
+            background: #00ff41;
+        }
+        
+        .section {
+            background: #2a2a2a;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: #333;
+            padding: 15px 20px;
+            font-weight: bold;
+            color: #00ff41;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .process-item {
+            background: #1e1e1e;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .process-item.warning {
+            border-left-color: #ffaa00;
+        }
+        
+        .process-item.error {
+            border-left-color: #ff4444;
+        }
+        
+        .process-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .process-name {
+            font-weight: bold;
+            color: #00ff41;
+            font-size: 1.1em;
+        }
+        
+        .process-status {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .status-stopped {
+            background: #666;
+            color: #fff;
+        }
+        
+        .status-error {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        .process-details {
+            font-size: 0.9em;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-primary {
+            background: #007acc;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #cc0000;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #666;
+            color: white;
+        }
+        
+        .refresh-indicator {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .log-viewer {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #333;
+            white-space: pre-wrap;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #2a2a2a;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+            color: white;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: #fff;
+        }
+        
+        .error-message {
+            background: #cc0000;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .success-message {
+            background: #00aa00;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 OpenClaw Process Monitor</h1>
+        <div class="status-bar">
+            <div class="connection-status">
+                <div id="statusIndicator" class="status-indicator"></div>
+                <span id="connectionStatus">Connecting...</span>
+            </div>
+            <div>Last Updated: <span id="timestamp">Never</span></div>
+            <div>
+                <span id="autoRefresh" class="refresh-indicator" style="display: none;">⟳</span>
+                <button class="btn btn-primary" onclick="toggleAutoRefresh()">Auto: <span id="autoStatus">OFF</span></button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="errorContainer"></div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div id="activeSubagents" class="stat-number">-</div>
+            <div class="stat-label">Active Subagents</div>
+        </div>
+        <div class="stat-card">
+            <div id="backgroundProcesses" class="stat-number">-</div>
+            <div class="stat-label">Background Processes</div>
+        </div>
+        <div class="stat-card">
+            <div id="cronJobs" class="stat-number">-</div>
+            <div class="stat-label">Scheduled Jobs</div>
+        </div>
+        <div class="stat-card">
+            <div id="activeSessions" class="stat-number">-</div>
+            <div class="stat-label">Active Sessions</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>🤖 Active Subagents</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="subagentsSection">
+            <div class="empty-state">Loading subagents...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>⚙️ Background Processes</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="processesSection">
+            <div class="empty-state">Loading background processes...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>⏰ Scheduled Jobs (Cron)</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="cronSection">
+            <div class="empty-state">Loading scheduled jobs...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>📊 Active Sessions</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="sessionsSection">
+            <div class="empty-state">Loading active sessions...</div>
+        </div>
+    </div>
+
+    <!-- Modal for logs and actions -->
+    <div id="actionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">Action</h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshInterval;
+        let autoRefreshEnabled = false;
+        const API_BASE = '';  // Use relative URLs
+        
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            container.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                container.removeChild(errorDiv);
+            }, 5000);
+        }
+        
+        function showSuccess(message) {
+            const container = document.getElementById('errorContainer');
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.textContent = message;
+            container.appendChild(successDiv);
+            
+            setTimeout(() => {
+                container.removeChild(successDiv);
+            }, 3000);
+        }
+        
+        async function apiCall(endpoint, options = {}) {
+            try {
+                const response = await fetch(`${API_BASE}/api${endpoint}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error(`API call failed: ${endpoint}`, error);
+                throw error;
+            }
+        }
+        
+        function updateConnectionStatus(connected) {
+            const indicator = document.getElementById('statusIndicator');
+            const status = document.getElementById('connectionStatus');
+            
+            if (connected) {
+                indicator.classList.add('connected');
+                status.textContent = 'Connected';
+            } else {
+                indicator.classList.remove('connected');
+                status.textContent = 'Disconnected';
+            }
+        }
+        
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'running': return 'status-running';
+                case 'stopped': return 'status-stopped';
+                case 'error': return 'status-error';
+                case 'enabled': return 'status-running';
+                case 'disabled': return 'status-stopped';
+                default: return 'status-stopped';
+            }
+        }
+        
+        function renderSubagents(subagents) {
+            const section = document.getElementById('subagentsSection');
+            
+            if (!subagents || subagents.length === 0) {
+                section.innerHTML = '<div class="empty-state">No active subagents</div>';
+                return;
+            }
+            
+            const html = subagents.map(agent => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${agent.name || agent.id}</div>
+                        <div class="process-status ${getStatusClass(agent.status)}">${agent.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Runtime:</strong> ${agent.runtime}</div>
+                        <div><strong>Model:</strong> ${agent.model}</div>
+                        <div><strong>Tokens:</strong> ${agent.tokens}</div>
+                        ${agent.key ? `<div><strong>Key:</strong> ${agent.key}</div>` : ''}
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="viewLogs('subagent', '${agent.id}')">View Logs</button>
+                        <button class="btn btn-primary" onclick="steerAgent('${agent.id}')">Send Message</button>
+                        <button class="btn btn-danger" onclick="killAgent('${agent.id}')">Stop</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderProcesses(processes) {
+            const section = document.getElementById('processesSection');
+            
+            if (!processes || processes.length === 0) {
+                section.innerHTML = '<div class="empty-state">No background processes running</div>';
+                return;
+            }
+            
+            const html = processes.map(proc => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${proc.name || proc.id}</div>
+                        <div class="process-status ${getStatusClass(proc.status)}">${proc.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Runtime:</strong> ${proc.runtime}</div>
+                        <div><strong>Key:</strong> ${proc.key}</div>
+                        <div><strong>Tokens:</strong> ${proc.tokens}</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="viewLogs('process', '${proc.id}')">View Logs</button>
+                        <button class="btn btn-danger" onclick="killProcess('${proc.id}')">Kill</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderCronJobs(jobs) {
+            const section = document.getElementById('cronSection');
+            
+            if (!jobs || jobs.length === 0) {
+                section.innerHTML = '<div class="empty-state">No scheduled jobs configured</div>';
+                return;
+            }
+            
+            const html = jobs.map(job => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${job.name}</div>
+                        <div class="process-status ${getStatusClass(job.status)}">${job.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Schedule:</strong> ${job.schedule}</div>
+                        <div><strong>Next Run:</strong> ${job.nextRun}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderSessions(sessions) {
+            const section = document.getElementById('sessionsSection');
+            
+            if (!sessions || sessions.length === 0) {
+                section.innerHTML = '<div class="empty-state">No active sessions</div>';
+                return;
+            }
+            
+            const html = sessions.map(session => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${session.channel}</div>
+                        <div class="process-status status-running">active</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Key:</strong> ${session.key}</div>
+                        <div><strong>Age:</strong> ${session.age}</div>
+                        <div><strong>Tokens:</strong> ${session.tokens}</div>
+                        <div><strong>Model:</strong> ${session.model}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function updateStats(data) {
+            document.getElementById('activeSubagents').textContent = data.subagents?.length || 0;
+            document.getElementById('backgroundProcesses').textContent = data.processes?.length || 0;
+            document.getElementById('cronJobs').textContent = data.cronJobs?.length || 0;
+            document.getElementById('activeSessions').textContent = data.sessions?.length || 0;
+        }
+        
+        async function refreshData() {
+            document.getElementById('autoRefresh').style.display = 'inline-block';
+            
+            try {
+                const data = await apiCall('/data');
+                
+                renderSubagents(data.subagents);
+                renderProcesses(data.processes);
+                renderCronJobs(data.cronJobs);
+                renderSessions(data.sessions);
+                updateStats(data);
+                
+                document.getElementById('timestamp').textContent = new Date().toLocaleString();
+                updateConnectionStatus(true);
+            } catch (error) {
+                showError(`Failed to refresh data: ${error.message}`);
+                updateConnectionStatus(false);
+            } finally {
+                document.getElementById('autoRefresh').style.display = 'none';
+            }
+        }
+        
+        function toggleAutoRefresh() {
+            const statusElement = document.getElementById('autoStatus');
+            
+            if (autoRefreshEnabled) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshEnabled = false;
+                statusElement.textContent = 'OFF';
+            } else {
+                autoRefreshInterval = setInterval(refreshData, 10000); // 10 seconds
+                autoRefreshEnabled = true;
+                statusElement.textContent = 'ON';
+            }
+        }
+        
+        // Modal functions
+        function showModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').innerHTML = content;
+            document.getElementById('actionModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('actionModal').style.display = 'none';
+        }
+        
+        // Agent control functions
+        async function viewLogs(type, id) {
+            try {
+                const endpoint = type === 'subagent' ? '/control/subagents/logs' : '/control/processes/logs';
+                const result = await apiCall(endpoint, {
+                    method: 'POST',
+                    body: JSON.stringify({ id: id })
+                });
+                
+                if (result.status === 'success') {
+                    showModal(`Logs for ${id}`, `<div class="log-viewer">${result.logs}</div>`);
+                } else {
+                    showError(`Failed to get logs: ${result.message}`);
+                }
+            } catch (error) {
+                showError(`Error getting logs: ${error.message}`);
+            }
+        }
+        
+        async function steerAgent(agentId) {
+            const message = prompt(`Send message to agent ${agentId}:`);
+            if (message) {
+                try {
+                    const result = await apiCall('/control/subagents/steer', {
+                        method: 'POST',
+                        body: JSON.stringify({ id: agentId, message: message })
+                    });
+                    
+                    if (result.status === 'success') {
+                        showSuccess(result.message);
+                    } else {
+                        showError(`Failed to send message: ${result.message}`);
+                    }
+                } catch (error) {
+                    showError(`Error sending message: ${error.message}`);
+                }
+            }
+        }
+        
+        async function killAgent(agentId) {
+            if (confirm(`Are you sure you want to stop agent ${agentId}?`)) {
+                try {
+                    const result = await apiCall('/control/subagents/kill', {
+                        method: 'POST',
+                        body: JSON.stringify({ id: agentId })
+                    });
+                    
+                    if (result.status === 'success') {
+                        showSuccess(result.message);
+                        refreshData(); // Refresh to show updated status
+                    } else {
+                        showError(`Failed to stop agent: ${result.message}`);
+                    }
+                } catch (error) {
+                    showError(`Error stopping agent: ${error.message}`);
+                }
+            }
+        }
+        
+        async function killProcess(processId) {
+            if (confirm(`Are you sure you want to kill process ${processId}?`)) {
+                try {
+                    const result = await apiCall('/control/processes/kill', {
+                        method: 'POST',
+                        body: JSON.stringify({ id: processId })
+                    });
+                    
+                    if (result.status === 'success') {
+                        showSuccess(result.message);
+                        refreshData(); // Refresh to show updated status
+                    } else {
+                        showError(`Failed to kill process: ${result.message}`);
+                    }
+                } catch (error) {
+                    showError(`Error killing process: ${error.message}`);
+                }
+            }
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+            
+            // Modal close event
+            document.querySelector('.close').onclick = closeModal;
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('actionModal')) {
+                    closeModal();
+                }
+            }
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+        });
+    </script>
+</body>
+</html>

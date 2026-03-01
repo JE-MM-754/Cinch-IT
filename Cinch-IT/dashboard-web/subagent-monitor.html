@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Process Monitor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #00ff41;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #2a2a2a;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .section {
+            background: #2a2a2a;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: #333;
+            padding: 15px 20px;
+            font-weight: bold;
+            color: #00ff41;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .process-item {
+            background: #1e1e1e;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .process-item.warning {
+            border-left-color: #ffaa00;
+        }
+        
+        .process-item.error {
+            border-left-color: #ff4444;
+        }
+        
+        .process-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .process-name {
+            font-weight: bold;
+            color: #00ff41;
+            font-size: 1.1em;
+        }
+        
+        .process-status {
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .status-stopped {
+            background: #666;
+            color: #fff;
+        }
+        
+        .status-error {
+            background: #ff4444;
+            color: #fff;
+        }
+        
+        .process-details {
+            font-size: 0.9em;
+            color: #ccc;
+        }
+        
+        .controls {
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: #007acc;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #cc0000;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #666;
+            color: white;
+        }
+        
+        .refresh-indicator {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 0.9em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 40px;
+        }
+        
+        .log-viewer {
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 OpenClaw Process Monitor</h1>
+        <div id="lastUpdate" class="status-bar">
+            <span>Last Updated: <span id="timestamp">Never</span></span>
+            <span id="autoRefresh" class="refresh-indicator" style="display: none;">⟳</span>
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div id="activeSubagents" class="stat-number">0</div>
+            <div class="stat-label">Active Subagents</div>
+        </div>
+        <div class="stat-card">
+            <div id="backgroundProcesses" class="stat-number">0</div>
+            <div class="stat-label">Background Processes</div>
+        </div>
+        <div class="stat-card">
+            <div id="cronJobs" class="stat-number">0</div>
+            <div class="stat-label">Scheduled Jobs</div>
+        </div>
+        <div class="stat-card">
+            <div id="activeSessions" class="stat-number">0</div>
+            <div class="stat-label">Active Sessions</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>🤖 Active Subagents</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="subagentsSection">
+            <div class="empty-state">Loading subagents...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>⚙️ Background Processes</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="processesSection">
+            <div class="empty-state">Loading background processes...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>⏰ Scheduled Jobs (Cron)</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="cronSection">
+            <div class="empty-state">Loading scheduled jobs...</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">
+            <span>📊 Active Sessions</span>
+            <button class="btn btn-primary" onclick="refreshData()">Refresh</button>
+        </div>
+        <div class="section-content" id="sessionsSection">
+            <div class="empty-state">Loading active sessions...</div>
+        </div>
+    </div>
+
+    <script>
+        let autoRefreshInterval;
+        
+        // Mock data structure - in real implementation, this would call OpenClaw APIs
+        const mockData = {
+            subagents: [
+                {
+                    id: "gaming-research",
+                    name: "Gaming Research Agent",
+                    status: "running",
+                    runtime: "5m",
+                    task: "Research HD2 and BL4 builds comprehensively...",
+                    model: "claude-sonnet-4-20250514"
+                }
+            ],
+            processes: [
+                {
+                    id: "amber-tidepool",
+                    name: "Claude Code - CinchIT Build",
+                    status: "running", 
+                    runtime: "7h 45m",
+                    workdir: "~/Projects/cinch-it-prospecting-engine",
+                    command: "claude Build the CinchIT AI Prospecting Engine..."
+                }
+            ],
+            cronJobs: [
+                {
+                    name: "Weekly Optimization Audit",
+                    schedule: "0 17 * * 5",
+                    nextRun: "in 6d 21h",
+                    status: "idle"
+                },
+                {
+                    name: "Daily Job Hunt",
+                    schedule: "0 8 * * *",
+                    nextRun: "in 9h 48m",
+                    status: "idle"
+                },
+                {
+                    name: "Motion Check - Noon",
+                    schedule: "0 12 * * *",
+                    nextRun: "in 13h 48m",
+                    status: "idle"
+                }
+            ],
+            sessions: [
+                {
+                    key: "agent:main:main",
+                    channel: "webchat",
+                    age: "0m",
+                    tokens: "131k/200k (66%)"
+                },
+                {
+                    key: "agent:main:discord:channel:1476362745296191650",
+                    channel: "discord",
+                    age: "7m",
+                    tokens: "154k/200k (77%)"
+                }
+            ]
+        };
+        
+        function formatRuntime(runtime) {
+            return runtime;
+        }
+        
+        function getStatusClass(status) {
+            switch(status.toLowerCase()) {
+                case 'running': return 'status-running';
+                case 'stopped': return 'status-stopped';
+                case 'error': return 'status-error';
+                default: return 'status-stopped';
+            }
+        }
+        
+        function renderSubagents(subagents) {
+            const section = document.getElementById('subagentsSection');
+            
+            if (!subagents || subagents.length === 0) {
+                section.innerHTML = '<div class="empty-state">No active subagents</div>';
+                return;
+            }
+            
+            const html = subagents.map(agent => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${agent.name || agent.id}</div>
+                        <div class="process-status ${getStatusClass(agent.status)}">${agent.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Runtime:</strong> ${agent.runtime}</div>
+                        <div><strong>Model:</strong> ${agent.model}</div>
+                        <div><strong>Task:</strong> ${agent.task}</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="viewLogs('${agent.id}')">View Logs</button>
+                        <button class="btn btn-primary" onclick="steerAgent('${agent.id}')">Send Message</button>
+                        <button class="btn btn-danger" onclick="killAgent('${agent.id}')">Stop</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderProcesses(processes) {
+            const section = document.getElementById('processesSection');
+            
+            if (!processes || processes.length === 0) {
+                section.innerHTML = '<div class="empty-state">No background processes running</div>';
+                return;
+            }
+            
+            const html = processes.map(proc => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${proc.name || proc.id}</div>
+                        <div class="process-status ${getStatusClass(proc.status)}">${proc.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Runtime:</strong> ${proc.runtime}</div>
+                        <div><strong>Working Dir:</strong> ${proc.workdir}</div>
+                        <div><strong>Command:</strong> ${proc.command}</div>
+                    </div>
+                    <div class="controls">
+                        <button class="btn btn-secondary" onclick="viewProcessLogs('${proc.id}')">View Logs</button>
+                        <button class="btn btn-danger" onclick="killProcess('${proc.id}')">Kill</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderCronJobs(jobs) {
+            const section = document.getElementById('cronSection');
+            
+            if (!jobs || jobs.length === 0) {
+                section.innerHTML = '<div class="empty-state">No scheduled jobs configured</div>';
+                return;
+            }
+            
+            const html = jobs.map(job => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${job.name}</div>
+                        <div class="process-status ${getStatusClass(job.status)}">${job.status}</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Schedule:</strong> ${job.schedule}</div>
+                        <div><strong>Next Run:</strong> ${job.nextRun}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function renderSessions(sessions) {
+            const section = document.getElementById('sessionsSection');
+            
+            if (!sessions || sessions.length === 0) {
+                section.innerHTML = '<div class="empty-state">No active sessions</div>';
+                return;
+            }
+            
+            const html = sessions.map(session => `
+                <div class="process-item">
+                    <div class="process-header">
+                        <div class="process-name">${session.channel}</div>
+                        <div class="process-status status-running">active</div>
+                    </div>
+                    <div class="process-details">
+                        <div><strong>Session:</strong> ${session.key}</div>
+                        <div><strong>Age:</strong> ${session.age}</div>
+                        <div><strong>Tokens:</strong> ${session.tokens}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            section.innerHTML = html;
+        }
+        
+        function updateStats(data) {
+            document.getElementById('activeSubagents').textContent = data.subagents?.length || 0;
+            document.getElementById('backgroundProcesses').textContent = data.processes?.length || 0;
+            document.getElementById('cronJobs').textContent = data.cronJobs?.length || 0;
+            document.getElementById('activeSessions').textContent = data.sessions?.length || 0;
+        }
+        
+        function refreshData() {
+            document.getElementById('autoRefresh').style.display = 'inline-block';
+            
+            // In real implementation, make actual API calls to OpenClaw
+            // For now, using mock data
+            setTimeout(() => {
+                renderSubagents(mockData.subagents);
+                renderProcesses(mockData.processes);
+                renderCronJobs(mockData.cronJobs);
+                renderSessions(mockData.sessions);
+                updateStats(mockData);
+                
+                document.getElementById('timestamp').textContent = new Date().toLocaleString();
+                document.getElementById('autoRefresh').style.display = 'none';
+            }, 1000);
+        }
+        
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            autoRefreshInterval = setInterval(refreshData, 30000); // Refresh every 30 seconds
+        }
+        
+        function stopAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+        }
+        
+        // Agent control functions (these would make actual API calls in real implementation)
+        function viewLogs(agentId) {
+            alert(`Viewing logs for agent: ${agentId}\n\nIn real implementation, this would show live logs.`);
+        }
+        
+        function steerAgent(agentId) {
+            const message = prompt(`Send message to agent ${agentId}:`);
+            if (message) {
+                alert(`Message sent to ${agentId}: "${message}"\n\nIn real implementation, this would send via subagents API.`);
+            }
+        }
+        
+        function killAgent(agentId) {
+            if (confirm(`Are you sure you want to stop agent ${agentId}?`)) {
+                alert(`Agent ${agentId} stopped.\n\nIn real implementation, this would call subagents kill API.`);
+            }
+        }
+        
+        function viewProcessLogs(processId) {
+            alert(`Viewing logs for process: ${processId}\n\nIn real implementation, this would show live logs.`);
+        }
+        
+        function killProcess(processId) {
+            if (confirm(`Are you sure you want to kill process ${processId}?`)) {
+                alert(`Process ${processId} killed.\n\nIn real implementation, this would call process kill API.`);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshData();
+            startAutoRefresh();
+        });
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', stopAutoRefresh);
+    </script>
+</body>
+</html>

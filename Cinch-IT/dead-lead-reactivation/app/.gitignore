@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+node_modules/
+.next/
+data/contacts-cleaned.csv
+data/contacts-enriched.csv
+data/raw-contacts.csv
+*.db
+*.sqlite
+.DS_Store

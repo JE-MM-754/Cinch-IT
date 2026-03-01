@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-02-27T22:25:30",
+  "subagents": [
+    {
+      "id": "gaming-research-agent",
+      "name": "Gaming Research Agent",
+      "status": "completed",
+      "runtime": "3m 21s",
+      "model": "claude-sonnet-4-20250514",
+      "task": "Research HD2 and BL4 builds comprehensively - analyzed 54 builds with strategic context",
+      "tokens": "62k"
+    }
+  ],
+  "processes": [
+    {
+      "id": "warm-harbor", 
+      "name": "Web Dashboard Server",
+      "status": "running",
+      "runtime": "3m 45s",
+      "workdir": "~/dashboard",
+      "command": "python3 web-server.py --port 8080"
+    },
+    {
+      "id": "amber-tidepool",
+      "name": "Claude Code Agent - CinchIT Build", 
+      "status": "running",
+      "runtime": "13h 2m",
+      "workdir": "~/Projects/cinch-it-prospecting-engine",
+      "command": "Building CinchIT AI Prospecting Engine with FastAPI + Next.js"
+    }
+  ],
+  "cronJobs": [
+    {
+      "name": "Weekly Optimization Audit",
+      "schedule": "0 17 * * 5",
+      "nextRun": "in 6d 20h", 
+      "status": "enabled"
+    },
+    {
+      "name": "Daily Job Hunt War Room",
+      "schedule": "0 8 * * *",
+      "nextRun": "in 9h 35m",
+      "status": "enabled"
+    },
+    {
+      "name": "Motion Check - Noon",
+      "schedule": "0 12 * * *", 
+      "nextRun": "in 13h 35m",
+      "status": "enabled"
+    },
+    {
+      "name": "Motion Check - Evening", 
+      "schedule": "0 19 * * *",
+      "nextRun": "in 20h 35m",
+      "status": "enabled"
+    },
+    {
+      "name": "Nightly Security Audit",
+      "schedule": "30 3 * * *",
+      "nextRun": "in 5h 8m",
+      "status": "enabled"
+    },
+    {
+      "name": "Daily Investor Monitor",
+      "schedule": "0 7 * * *",
+      "nextRun": "in 8h 35m", 
+      "status": "enabled"
+    }
+  ],
+  "sessions": [
+    {
+      "key": "agent:main:main",
+      "channel": "webchat",
+      "age": "2h 15m",
+      "tokens": "139k/200k (70%)",
+      "model": "claude-sonnet-4"
+    },
+    {
+      "key": "agent:main:discord:channel:1476362745296191650", 
+      "channel": "discord",
+      "age": "45m",
+      "tokens": "138k/200k (69%)",
+      "model": "claude-sonnet-4"
+    },
+    {
+      "key": "agent:main:subagent:a0a02d6e-c713-4db1-8c81-2203e5d1f6e1",
+      "channel": "webchat",
+      "age": "3m 21s", 
+      "tokens": "62k/200k (31%)",
+      "model": "claude-sonnet-4"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "status": "active",
+  "updatedAt": "2026-02-26T16:20:00.000Z",
+  "netWorth": 573203,
+  "vitals": {
+    "income": "$23K/mo",
+    "burn": "$14K/mo",
+    "debt": "$117K",
+    "debtToIncome": "0.42",
+    "monthlyIncome": "$23,083",
+    "monthlyBurn": "$14,000",
+    "ytdIncome": "$21,079",
+    "ytdSpending": "$25,245",
+    "note": "Combined HH income ~$275K/yr. Burn includes aggressive debt paydown."
+  },
+  "currentTask": {
+    "name": "DAY 1: MORNING WAR ROOM — EXECUTE",
+    "detail": "Fix Schwab address → sell ARKK/TSLA → pay Amex CC. Apply to 3 jobs. Export ChatGPT/Gemini. Get Motion + ElevenLabs API keys.",
+    "progress": 25
+  },
+  "tasks": [
+    {"name": "Fix Schwab address + sell 48 ARKK + 40 TSLA", "status": "running", "agent": "JAMIE", "started": "2026-02-26T13:00:00.000Z"},
+    {"name": "Apply to 3 jobs before lunch", "status": "queued", "agent": "JAMIE"},
+    {"name": "Export ChatGPT + Google Gemini data", "status": "queued", "agent": "JAMIE"},
+    {"name": "Get Motion API key + ElevenLabs API key", "status": "queued", "agent": "JAMIE"},
+    {"name": "Enable macOS firewall", "status": "queued", "agent": "JAMIE"},
+    {"name": "Set up Mac Mini remote access", "status": "queued", "agent": "JAMIE"},
+    {"name": "Review Cinch IT demo mockup", "status": "running", "agent": "MAIN", "started": "2026-02-26T15:45:00.000Z"},
+    {"name": "Review Work It Dance Challenge research", "status": "queued", "agent": "MAIN"},
+    {"name": "Daily investor monitoring (Pal, Saylor, Dalio, Wood)", "status": "done", "agent": "SONNET", "started": "2026-02-26T12:00:00.000Z", "completed": "2026-02-26T12:01:00.000Z"},
+    {"name": "Daily job search — top 10 roles", "status": "running", "agent": "SONNET"},
+    {"name": "Nightly security audit", "status": "done", "agent": "SONNET", "started": "2026-02-26T08:30:00.000Z", "completed": "2026-02-26T08:31:00.000Z"},
+    {"name": "Investment dossiers (Pal, Saylor, Dalio, Wood)", "status": "done", "agent": "MAIN", "completed": "2026-02-26T01:00:00.000Z"},
+    {"name": "Fractional sales business dossier", "status": "done", "agent": "MAIN", "completed": "2026-02-26T01:30:00.000Z"},
+    {"name": "Julian's house project — discovery docs", "status": "done", "agent": "MAIN", "completed": "2026-02-26T00:50:00.000Z"},
+    {"name": "Cinch IT demo dashboard + script", "status": "done", "agent": "SONNET", "completed": "2026-02-26T15:51:00.000Z"},
+    {"name": "Dashboard v2: JARVIS/Matrix redesign", "status": "done", "agent": "MAIN", "completed": "2026-02-26T01:42:00.000Z"},
+    {"name": ".gitignore created — security fix", "status": "done", "agent": "MAIN", "completed": "2026-02-26T08:31:00.000Z"}
+  ],
+  "stats": {
+    "tasksDone": 17,
+    "searches": 28,
+    "filesWritten": 22
+  },
+  "log": [
+    {"ts": "2026-02-26T00:35:00.000Z", "type": "start", "msg": "SYSTEM ONLINE — First session initiated with Jamie"},
+    {"ts": "2026-02-26T01:00:00.000Z", "type": "complete", "msg": "Investment dossiers built: Raoul Pal, Saylor, Dalio, Cathie Wood"},
+    {"ts": "2026-02-26T01:30:00.000Z", "type": "complete", "msg": "Fractional VP Sales business dossier created — $30-50K/mo potential"},
+    {"ts": "2026-02-26T01:42:00.000Z", "type": "complete", "msg": "Dashboard v2 deployed — JARVIS/Matrix theme"},
+    {"ts": "2026-02-26T08:00:00.000Z", "type": "alert", "msg": "API credits ran out — cron jobs failed. Jamie topped up credits."},
+    {"ts": "2026-02-26T08:31:00.000Z", "type": "complete", "msg": "Security audit: 2 HIGH risks found. .gitignore created. Firewall still OFF."},
+    {"ts": "2026-02-26T11:15:00.000Z", "type": "complete", "msg": "All cron jobs switched to Sonnet 4 — ~60-70% cost savings"},
+    {"ts": "2026-02-26T12:01:00.000Z", "type": "complete", "msg": "Investor dossiers updated — no actionable trades. Hold positions."},
+    {"ts": "2026-02-26T15:51:00.000Z", "type": "complete", "msg": "Cinch IT demo dashboard built — ready for J. Small walkthrough"},
+    {"ts": "2026-02-26T16:20:00.000Z", "type": "info", "msg": "Vitals updated: YTD income $21,079 / spending $25,245 (incl. investments + debt)"},
+    {"ts": "2026-02-26T16:20:00.000Z", "type": "info", "msg": "Total debt revised to $117K (added $25K Audi + $30K mom loan)"}
+  ]
+}

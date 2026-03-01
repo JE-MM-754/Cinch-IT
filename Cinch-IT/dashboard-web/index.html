@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw Process Monitor - WORKING</title>
+    <style>
+        body {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #00ff41;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+        
+        .stat-label {
+            color: #ccc;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        
+        .section {
+            background: #2a2a2a;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: #333;
+            padding: 15px 20px;
+            font-weight: bold;
+            color: #00ff41;
+            font-size: 1.2em;
+        }
+        
+        .section-content {
+            padding: 20px;
+        }
+        
+        .item {
+            background: #1e1e1e;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00ff41;
+        }
+        
+        .item.completed {
+            border-left-color: #ffaa00;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .item-name {
+            font-weight: bold;
+            color: #00ff41;
+            font-size: 1.1em;
+        }
+        
+        .item-status {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        
+        .status-running {
+            background: #00ff41;
+            color: #000;
+        }
+        
+        .status-completed {
+            background: #ffaa00;
+            color: #000;
+        }
+        
+        .status-enabled {
+            background: #007acc;
+            color: #fff;
+        }
+        
+        .item-details {
+            font-size: 0.9em;
+            color: #ccc;
+            line-height: 1.4;
+        }
+        
+        .success-badge {
+            background: #00aa00;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        
+        .update-time {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 OpenClaw Process Monitor</h1>
+        <div class="update-time">
+            Last Updated: February 27, 2026 10:25 PM EST
+        </div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">1</div>
+            <div class="stat-label">Completed Subagents</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Background Processes</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">6</div>
+            <div class="stat-label">Scheduled Jobs</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Active Sessions</div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">🤖 AI Subagents</div>
+        <div class="section-content">
+            <div class="item completed">
+                <div class="item-header">
+                    <div class="item-name">Gaming Research Agent</div>
+                    <div class="item-status status-completed">COMPLETED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Runtime:</strong> 3m 21s</div>
+                    <div><strong>Model:</strong> claude-sonnet-4-20250514</div>
+                    <div><strong>Task:</strong> Research HD2 and BL4 builds comprehensively</div>
+                    <div><strong>Result:</strong> ✅ 54 builds analyzed with strategic context</div>
+                    <div><strong>Tokens:</strong> 62k (in 89 / out 10k)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">⚙️ Background Processes</div>
+        <div class="section-content">
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Web Dashboard Server</div>
+                    <div class="item-status status-running">RUNNING</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Runtime:</strong> 4 minutes</div>
+                    <div><strong>Session:</strong> warm-harbor</div>
+                    <div><strong>Command:</strong> python3 web-server.py --port 8080</div>
+                    <div><strong>Working Dir:</strong> ~/dashboard</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Claude Code Agent - CinchIT Build</div>
+                    <div class="item-status status-running">RUNNING</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Runtime:</strong> 13 hours 5 minutes 🔥</div>
+                    <div><strong>Session:</strong> amber-tidepool</div>
+                    <div><strong>Task:</strong> Building CinchIT AI Prospecting Engine</div>
+                    <div><strong>Tech Stack:</strong> FastAPI + PostgreSQL + Next.js + Claude Haiku</div>
+                    <div><strong>Working Dir:</strong> ~/Projects/cinch-it-prospecting-engine</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">⏰ Scheduled Jobs (Cron)</div>
+        <div class="section-content">
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Weekly Optimization Audit</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Schedule:</strong> Fridays at 5:00 PM EST</div>
+                    <div><strong>Next Run:</strong> in 6 days 20 hours</div>
+                    <div><strong>Purpose:</strong> Analyze system efficiency and provide improvement recommendations</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Daily Job Hunt War Room</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Schedule:</strong> Daily at 8:00 AM EST</div>
+                    <div><strong>Next Run:</strong> in 9 hours 35 minutes</div>
+                    <div><strong>Purpose:</strong> Daily accountability and job search progress tracking</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Motion Task Monitoring</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Schedule:</strong> Noon & Evening (12pm, 7pm)</div>
+                    <div><strong>Next Run:</strong> in 13 hours 35 minutes</div>
+                    <div><strong>Purpose:</strong> Track task completion and progress via Motion API</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Nightly Security Audit</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Schedule:</strong> Daily at 3:30 AM EST</div>
+                    <div><strong>Next Run:</strong> in 5 hours 8 minutes</div>
+                    <div><strong>Purpose:</strong> Automated security hardening and risk assessment</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Daily Investor Monitor</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Schedule:</strong> Daily at 7:00 AM EST</div>
+                    <div><strong>Next Run:</strong> in 8 hours 35 minutes</div>
+                    <div><strong>Purpose:</strong> Track market performance and investment opportunities</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Reminder Jobs</div>
+                    <div class="item-status status-enabled">ENABLED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Active:</strong> Schwab transfer, a16z Talent follow-up, Project orchestration</div>
+                    <div><strong>Purpose:</strong> Time-sensitive reminders and follow-ups</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">📊 Active Sessions</div>
+        <div class="section-content">
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Webchat (Current)</div>
+                    <div class="item-status status-running">ACTIVE</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Age:</strong> 2 hours 15 minutes</div>
+                    <div><strong>Tokens:</strong> 139k/200k (70%)</div>
+                    <div><strong>Model:</strong> claude-sonnet-4-20250514</div>
+                    <div><strong>Context:</strong> Building dashboard systems, GitHub integration help</div>
+                </div>
+            </div>
+            
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Discord (#general)</div>
+                    <div class="item-status status-running">ACTIVE</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Age:</strong> 45 minutes</div>
+                    <div><strong>Tokens:</strong> 138k/200k (69%)</div>
+                    <div><strong>Model:</strong> claude-sonnet-4-20250514</div>
+                    <div><strong>Context:</strong> Gaming build research coordination</div>
+                </div>
+            </div>
+            
+            <div class="item completed">
+                <div class="item-header">
+                    <div class="item-name">Gaming Research Agent</div>
+                    <div class="item-status status-completed">COMPLETED</div>
+                </div>
+                <div class="item-details">
+                    <div><strong>Session Duration:</strong> 3m 21s</div>
+                    <div><strong>Tokens Used:</strong> 62k/200k (31%)</div>
+                    <div><strong>Model:</strong> claude-sonnet-4-20250514</div>
+                    <div><strong>Output:</strong> Comprehensive build research saved to workspace/research-output.md</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-header">🎯 System Health Summary</div>
+        <div class="section-content">
+            <div class="item">
+                <div class="item-header">
+                    <div class="item-name">Multi-Agent Orchestration Status</div>
+                    <div class="item-status status-running">EXCELLENT</div>
+                </div>
+                <div class="item-details">
+                    <div>✅ <strong>Parallel Processing:</strong> Claude building CinchIT for 13+ hours while research agent completed separate task</div>
+                    <div>✅ <strong>Cross-Channel Operation:</strong> Active sessions across webchat + Discord</div>
+                    <div>✅ <strong>Automated Scheduling:</strong> 6+ cron jobs running daily automation</div>
+                    <div>✅ <strong>Resource Management:</strong> Efficient token usage across sessions</div>
+                    <div>✅ <strong>Task Completion:</strong> Research agent successfully delivered 54-build analysis</div>
+                    <div>✅ <strong>Long-Running Builds:</strong> CinchIT project building production-ready MVP</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
