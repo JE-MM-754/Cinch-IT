@@ -23,4 +23,82 @@ auth-profiles.json
 # Development
 node_modules/
 *.log
+.DS_Store# Added by OpenClaw Security Setup
+
+# ==============================================
+# OPENCLAW SECURITY .GITIGNORE TEMPLATE
+# Copy this to every repo where Codex/Claude works
+# ==============================================
+
+# 🚨 NEVER COMMIT THESE - API KEYS & SECRETS
+**/sk-*
+**/*secret*
+**/*credential*
+**/*token*
+**/*key*
+**/*password*
+**/*auth*
+auth-profiles*.json
+*-backup-*.json
+SYSTEM_BACKUP_*.md
+RECOVERY_*.md
+.env*
+*.pem
+*.p12
+*.pfx
+config/secrets.*
+
+# 🚨 OPENCLAW SPECIFIC - NEVER COMMIT
+.openclaw/
+openclaw.config.json
+openclaw.json
+**/openclaw-*-backup*
+gateway-token*
+
+# 🚨 COMMON SECRET LOCATIONS
+secrets/
+credentials/
+config/local.*
+config/dev.*
+config/prod.*
+.aws/
+.azure/
+.gcp/
+
+# 🚨 ANTHROPIC / OPENAI KEYS (specific patterns)
+sk-ant-*
+sk-proj-*
+gpt-*
+claude-*
+
+# 🚨 COMMON BACKUP/TEMP FILES THAT LEAK SECRETS
+*backup*
+*temp*
+*tmp*
+*cache*
+dump.*
+*.dump
+*.bak
+*.backup
+
+# Development
+node_modules/
+*.log
 .DS_Store
+.vscode/
+.idea/
+
+# 💡 IF YOU NEED TO COMMIT CONFIG:
+# Use config.example.json (without real values)
+# Use environment variables for secrets
+# Document required env vars in README
+# UUID transcript files
+*.srt
+*.vtt
+*.tsv
+????????-????-????-????-????????????.json
+????????-????-????-????-????????????.txt
+
+# Claude worktrees (embedded git repos)
+Cinch-IT/dead-lead-reactivation/app/frontend/.claude/
+memory/motion-state.json
