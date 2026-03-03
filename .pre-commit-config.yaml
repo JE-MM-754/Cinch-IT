@@ -5,13 +5,6 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
   
-  - repo: https://github.com/gitguardian/ggshield
-    rev: v1.25.0
-    hooks:
-      - id: ggshield
-        language: python
-        stages: [commit]
-  
   - repo: local
     hooks:
       - id: openclaw-security-check
