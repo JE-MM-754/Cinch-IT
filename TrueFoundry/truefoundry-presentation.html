@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jamie Erickson × TrueFoundry — VP Sales Presentation</title>
+<style>
+  :root {
+    --purple: #6C47FF;
+    --cyan: #00D4FF;
+    --bg: #0A0A0F;
+    --card: #12121A;
+    --card2: #16161F;
+    --border: #1E1E2E;
+    --text: #E8E8F0;
+    --muted: #8888AA;
+    --green: #00E599;
+    --red: #FF4466;
+    --yellow: #FFB800;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 240px;
+    min-width: 240px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    padding: 24px 0;
+  }
+  .sidebar-logo {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .sidebar-logo .logo-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: white;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .sidebar-logo p {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .sidebar-logo strong { color: var(--text); }
+  .nav-item {
+    display: block;
+    padding: 10px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    text-decoration: none;
+    line-height: 1.4;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(108,71,255,0.08); }
+  .nav-item.active { color: var(--purple); border-left-color: var(--purple); background: rgba(108,71,255,0.1); }
+  .nav-num { font-size: 10px; color: var(--muted); display: block; margin-bottom: 2px; }
+
+  /* MAIN CONTENT */
+  #main {
+    margin-left: 240px;
+    flex: 1;
+    max-width: 960px;
+    padding: 0 48px 120px;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 72px 0 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-child { border-bottom: none; }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 16px;
+  }
+  .section-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 2px;
+    background: var(--purple);
+  }
+
+  h1 { font-size: 42px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+  h2 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+  h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+  h4 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--cyan); }
+  p { font-size: 15px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; }
+  p strong { color: var(--text); }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .card-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  /* STAT CALLOUTS */
+  .stat-row {
+    display: flex;
+    gap: 16px;
+    margin: 32px 0;
+    flex-wrap: wrap;
+  }
+  .stat-box {
+    flex: 1;
+    min-width: 140px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-box .stat-num {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .stat-box .stat-label { font-size: 12px; color: var(--muted); line-height: 1.3; }
+
+  /* HERO CALLOUT */
+  .hero-callout {
+    background: linear-gradient(135deg, rgba(108,71,255,0.15), rgba(0,212,255,0.08));
+    border: 1px solid rgba(108,71,255,0.3);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 32px 0;
+  }
+  .hero-callout .big-num {
+    font-size: 72px;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .hero-callout .big-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 8px;
+  }
+  .hero-callout .big-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* FUNNEL */
+  .funnel-wrap {
+    margin: 32px 0;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+  }
+  .funnel-stage {
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .funnel-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 4px;
+  }
+  .funnel-label { font-size: 13px; font-weight: 600; width: 180px; flex-shrink: 0; color: var(--text); }
+  .funnel-bar-outer {
+    flex: 1;
+    height: 28px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+  .funnel-bar-inner {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+  }
+  .funnel-sublabel { font-size: 11px; color: var(--muted); margin-left: 196px; margin-bottom: 16px; }
+  .funnel-arrow {
+    text-align: center;
+    font-size: 11px;
+    color: var(--red);
+    font-weight: 600;
+    margin: -4px 0 8px 196px;
+    letter-spacing: 0.5px;
+  }
+
+  /* FIX CARDS */
+  .fix-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 20px 20px 24px;
+    margin-bottom: 12px;
+    position: relative;
+    border-left: 4px solid var(--purple);
+  }
+  .fix-card.red { border-left-color: var(--red); }
+  .fix-card.yellow { border-left-color: var(--yellow); }
+  .fix-card.cyan { border-left-color: var(--cyan); }
+  .fix-card.green { border-left-color: var(--green); }
+  .fix-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .fix-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .fix-obs { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+  .fix-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(108,71,255,0.15);
+    border: 1px solid rgba(108,71,255,0.2);
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .fix-tag.red { background: rgba(255,68,102,0.1); border-color: rgba(255,68,102,0.2); color: var(--red); }
+  .fix-tag.green { background: rgba(0,229,153,0.1); border-color: rgba(0,229,153,0.2); color: var(--green); }
+
+  /* SCENARIO TABLE */
+  .scenario-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+  .scenario-table th {
+    background: rgba(108,71,255,0.2);
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .scenario-table td {
+    padding: 11px 16px;
+    font-size: 13px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+  }
+  .scenario-table tr:hover td { background: rgba(255,255,255,0.02); color: var(--text); }
+  .scenario-table td:first-child { color: var(--text); font-weight: 600; }
+  .scenario-table .highlight-row td { background: rgba(108,71,255,0.08); }
+
+  /* PLAN TABLE */
+  .plan-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .plan-col { }
+  .plan-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 0 0;
+    padding: 16px 20px;
+    border-bottom: none;
+  }
+  .plan-header h4 { color: var(--text); margin-bottom: 4px; font-size: 14px; }
+  .plan-header p { font-size: 12px; margin: 0; }
+  .plan-phase {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 16px 20px;
+  }
+  .plan-phase:last-child { border-radius: 0 0 12px 12px; }
+  .plan-phase-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .plan-phase ul { list-style: none; padding: 0; }
+  .plan-phase li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.4;
+  }
+  .plan-phase li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--purple);
+    font-size: 11px;
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .q-num {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  .q-ask {
+    background: rgba(108,71,255,0.1);
+    border-left: 3px solid var(--purple);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    margin: 12px 0 16px;
+  }
+
+  /* PROOF POINTS */
+  .proof-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .proof-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .proof-icon { font-size: 24px; margin-bottom: 10px; }
+  .proof-card h4 { color: var(--text); font-size: 14px; margin-bottom: 6px; }
+  .proof-card p { font-size: 13px; margin: 0; }
+
+  /* ONE LINER */
+  .one-liner {
+    background: linear-gradient(135deg, rgba(108,71,255,0.2), rgba(0,212,255,0.1));
+    border: 1px solid rgba(108,71,255,0.4);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin: 32px 0;
+  }
+  .one-liner p {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.5;
+    font-style: italic;
+    margin: 0;
+  }
+
+  /* CAVEAT BOX */
+  .caveat {
+    background: rgba(255,184,0,0.08);
+    border: 1px solid rgba(255,184,0,0.25);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 13px;
+    color: var(--yellow);
+    line-height: 1.5;
+  }
+  .caveat strong { color: var(--yellow); }
+
+  /* CHECKLIST */
+  .checklist { list-style: none; padding: 0; margin-top: 16px; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--muted);
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    content: '☐';
+    color: var(--purple);
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .checklist li strong { color: var(--text); }
+
+  /* VISION QUOTE */
+  .vision-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--purple);
+    border-radius: 0 12px 12px 0;
+    padding: 28px;
+    margin: 24px 0;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.8;
+    font-style: italic;
+  }
+  .vision-block em { color: var(--cyan); font-style: normal; font-weight: 600; }
+
+  /* MATRIX */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-top: 24px;
+    background: var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .matrix-cell {
+    background: var(--card);
+    padding: 20px;
+  }
+  .matrix-cell h4 { font-size: 14px; color: var(--text); margin-bottom: 8px; }
+  .matrix-cell p { font-size: 12px; margin: 0; line-height: 1.5; }
+  .matrix-axis-x {
+    grid-column: 1 / -1;
+    background: rgba(108,71,255,0.15);
+    padding: 10px 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--purple);
+    text-align: center;
+  }
+
+  /* AI SECTION */
+  .ai-stack {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .ai-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    border-top: 3px solid var(--purple);
+  }
+  .ai-card h4 { color: var(--text); font-size: 14px; margin-bottom: 8px; }
+  .ai-card p { font-size: 12px; margin: 0; line-height: 1.5; }
+
+  /* COMPETITIVE */
+  .comp-card {
+    background: var(--card);
+    border: 1px solid rgba(255,68,102,0.3);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border-left: 4px solid var(--red);
+  }
+  .comp-badge {
+    display: inline-block;
+    background: rgba(255,68,102,0.15);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .comp-fix {
+    background: rgba(0,229,153,0.08);
+    border: 1px solid rgba(0,229,153,0.2);
+    border-radius: 8px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--green);
+    line-height: 1.5;
+  }
+  .comp-fix strong { color: var(--green); }
+
+  /* DECISION MATRIX TABLE */
+  .dm-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  .dm-table th {
+    background: var(--card2);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid var(--border);
+  }
+  .dm-table td {
+    padding: 10px 14px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .dm-table td:first-child { font-weight: 600; color: var(--text); font-size: 13px; }
+  .dm-table tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+
+  /* SCROLL INDICATOR */
+  #scroll-bar {
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--cyan));
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 200;
+    transition: transform 0.1s;
+  }
+</style>
+</head>
+<body>
+
+<div id="scroll-bar"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">VP SALES CANDIDATE</div>
+    <p><strong>Jamie Erickson</strong><br>March 5, 2026 On-Site<br><span style="color:var(--cyan)">+ Nikunj Prep (March 4)</span></p>
+  </div>
+  <a class="nav-item active" href="#opening" onclick="scrollTo('opening')">
+    <span class="nav-num">01</span>
+    I Did the Job First
+  </a>
+  <a class="nav-item" href="#math" onclick="scrollTo('math')">
+    <span class="nav-num">02</span>
+    The $15M Gap Math
+  </a>
+  <a class="nav-item" href="#fixes" onclick="scrollTo('fixes')">
+    <span class="nav-num">03</span>
+    10 Things I'd Fix
+  </a>
+  <a class="nav-item" href="#databricks" onclick="scrollTo('databricks')">
+    <span class="nav-num">04</span>
+    The Databricks Problem
+  </a>
+  <a class="nav-item" href="#ai-ops" onclick="scrollTo('ai-ops')">
+    <span class="nav-num">05</span>
+    AI-Native Sales Ops
+  </a>
+  <a class="nav-item" href="#plan" onclick="scrollTo('plan')">
+    <span class="nav-num">06</span>
+    30 / 60 / 90 Plan
+  </a>
+  <a class="nav-item" href="#nikunj" onclick="scrollTo('nikunj')">
+    <span class="nav-num">07</span>
+    Nikunj Prep (Wed 1pm)
+  </a>
+  <a class="nav-item" href="#why" onclick="scrollTo('why')">
+    <span class="nav-num">08</span>
+    Why Jamie
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- 01 OPENING -->
+  <section id="opening">
+    <div class="section-tag">The Opening Statement</div>
+    <h1>I Did the Job<br><span class="gradient-text">Before the Interview.</span></h1>
+
+    <p>I didn't prepare a deck. I read your company presentation, your internal Q&A doc, and I watched your actual customer calls — Fortescue, OCBC, S&P. I reverse-engineered your pipeline math. I built five playbooks from scratch. What follows is a live working document I'll use on-site Thursday.</p>
+
+    <div class="vision-block">
+      "Every enterprise leader I've talked to recently has the same look on their face when AI comes up. They've got 50, 70, 100 AI tools running across their company. Teams spinning up their own MCP servers. Nobody knows what data is being touched, what anything costs, or what happens when OpenAI goes down for 3 hours. That's not a future problem — <em>I watched it happen in real conversations at S&P, at Fortescue, at OCBC.</em> The chaos is already here.
+      <br><br>
+      Here's what I believe: every major platform shift in tech produces a control layer that eventually becomes non-negotiable. TCP/IP for the internet. REST APIs for the web. Kubernetes for containers. <em>I think TrueFoundry is building that layer for AI</em> — the governance and control plane that sits between every enterprise and all the AI chaos underneath. And right now you're early enough to own that position before it becomes obvious.
+      <br><br>
+      The honest part: that window isn't infinite. AWS and Azure are building governance features. They'll never be as good as TrueFoundry, but they'll be good enough for the average buyer by 2027 or 2028. The MCP Gateway buys time — nobody has that yet — but the clock is running. <em>My job is to build the sales machine that captures the market before the window narrows.</em> That's the urgency I'm bringing to this role."
+    </div>
+
+    <div class="one-liner">
+      <p>"Your product is winning deals <em>in spite of</em> your sales process.<br>I'm here to build the process that lets the product win <em>because of</em> it."</p>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-box">
+        <span class="stat-num">$5M</span>
+        <div class="stat-label">Current ARR</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">$20M</span>
+        <div class="stat-label">Target ARR (12 months)</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">4×</span>
+        <div class="stat-label">Required growth</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">70%</span>
+        <div class="stat-label">POV close rate (elite)</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">16%</span>
+        <div class="stat-label">Overall win rate (the problem)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 MATH -->
+  <section id="math">
+    <div class="section-tag">Pipeline Diagnosis</div>
+    <h2>Why You're at $5M<br><span class="gradient-text">and Not $20M</span></h2>
+    <p>The math is unambiguous. Your close rate isn't the problem. Your close rate is elite. Here's what the numbers actually say:</p>
+
+    <div class="hero-callout">
+      <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+        <div>
+          <div class="big-num">77%</div>
+          <div class="big-label">of deals die upstream</div>
+          <div class="big-sub">before ever reaching a POV</div>
+        </div>
+        <div style="flex:1;min-width:260px;padding-top:8px;">
+          <div style="font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:12px;">The equation:</div>
+          <div style="background:rgba(255,255,255,0.05);border-radius:10px;padding:16px;font-family:monospace;font-size:14px;color:var(--text);line-height:2;">
+            Overall win rate: <strong style="color:var(--red)">16%</strong><br>
+            POV-to-close: <strong style="color:var(--green)">70%</strong><br>
+            <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+            Deals reaching POV: <strong>16% ÷ 70% = <span style="color:var(--cyan)">23%</span></strong><br>
+            Deals dying upstream: <strong style="color:var(--red)">77%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="caveat">
+      <strong>⚠️ Important:</strong> The 77% figure is derived math (16% ÷ 70% = 23% reach POV), not a TrueFoundry-stated metric. The inputs come from your internal Q&A doc. I want to validate this with Nikunj before Thursday — his answer will tell me whether this is a qualification problem, a brand problem, or a delivery capacity problem.
+    </div>
+
+    <div class="funnel-wrap">
+      <h3 style="margin-bottom:24px;">Current State Funnel</h3>
+      <div class="funnel-stage">
+        <div class="funnel-bar-wrap">
+          <div class="funnel-label">Monthly pipeline</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" id="bar1" style="width:0%;background:linear-gradient(90deg,var(--purple),var(--cyan));">15–20 deals @ $100K = $1.5–2M</div>
+          </div>
+        </div>
+      </div>
+      <div class="funnel-arrow">↓ 77% DIE HERE — no POV reached</div>
+      <div class="funnel-stage">
+        <div class="funnel-bar-wrap">
+          <div class="funnel-label">Reach POV (23%)</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" id="bar2" style="width:0%;background:rgba(108,71,255,0.7);">3–5 deals/month</div>
+          </div>
+        </div>
+      </div>
+      <div class="funnel-arrow">↓ ~20% drop off mid-POV</div>
+      <div class="funnel-stage">
+        <div class="funnel-bar-wrap">
+          <div class="funnel-label">Complete POV (80%)</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" id="bar3" style="width:0%;background:rgba(108,71,255,0.5);">2–4 deals/month</div>
+          </div>
+        </div>
+      </div>
+      <div class="funnel-arrow" style="color:var(--green)">↓ 70% CLOSE ← THIS IS THE STRENGTH. PROTECT IT.</div>
+      <div class="funnel-stage">
+        <div class="funnel-bar-wrap">
+          <div class="funnel-label">Closed / Won</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" id="bar4" style="width:0%;background:rgba(0,229,153,0.7);">1.5–3 deals/month</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Annual run rate at current state</div>
+          <div style="font-size:24px;font-weight:800;color:var(--red);">$1.8–3.6M</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Target ARR</div>
+          <div style="font-size:24px;font-weight:800;color:var(--green);">$20M+</div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">The gap</div>
+          <div style="font-size:24px;font-weight:800;color:var(--yellow);">$15M+</div>
+          <div style="font-size:11px;color:var(--muted);">NOT in the close rate — upstream</div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:16px;">What Fixing the Levers Does</h3>
+    <table class="scenario-table">
+      <tr>
+        <th>Metric</th>
+        <th>Today (Baseline)</th>
+        <th>Fix Lever 1 (TOFU)</th>
+        <th>Fix Lever 2 (AE coaching)</th>
+        <th>Fix Both + ACV lift</th>
+      </tr>
+      <tr>
+        <td>Deals/month</td>
+        <td>15–20</td>
+        <td>25–30</td>
+        <td>15–20</td>
+        <td>25–30</td>
+      </tr>
+      <tr>
+        <td>% reach POV</td>
+        <td>23%</td>
+        <td>23%</td>
+        <td>35%</td>
+        <td>35%</td>
+      </tr>
+      <tr>
+        <td>POV entries/mo</td>
+        <td>3–5</td>
+        <td>6–7</td>
+        <td>5–7</td>
+        <td>9–11</td>
+      </tr>
+      <tr>
+        <td>Close rate</td>
+        <td>70%</td>
+        <td>70%</td>
+        <td>70%</td>
+        <td>70%</td>
+      </tr>
+      <tr>
+        <td>Avg ACV</td>
+        <td>$100K</td>
+        <td>$100K</td>
+        <td>$100K</td>
+        <td>$150K</td>
+      </tr>
+      <tr class="highlight-row">
+        <td>Annual run rate</td>
+        <td style="color:var(--red)">$1.8–3.6M</td>
+        <td style="color:var(--yellow)">$3.6–4.8M</td>
+        <td style="color:var(--yellow)">$3.6–4.8M</td>
+        <td style="color:var(--green)">$9–12M new ARR</td>
+      </tr>
+    </table>
+    <p style="margin-top:12px;font-size:12px;">Combined with existing base ($5M) + 135% NRR expansion → <strong style="color:var(--green)">path to $20M is real within 18–24 months.</strong></p>
+  </section>
+
+  <!-- 03 10 FIXES -->
+  <section id="fixes">
+    <div class="section-tag">From Watching Your Actual Calls</div>
+    <h2><span class="gradient-text">10 Things</span> I'd Fix<br>in 60 Days</h2>
+    <p>I watched your Fortescue calls, OCBC demo, and S&P AI Gateway call. These aren't theoretical — each one is a specific observed behavior with a specific fix.</p>
+
+    <div class="fix-card red">
+      <div class="fix-num">01 — CRITICAL</div>
+      <div class="fix-title">The Anuraag Dependency Ceiling</div>
+      <div class="fix-obs">Observed: Anuraag is the technical anchor on every first call, architecture conversation, and demo. The AEs operate as meeting schedulers — "let me set up a call with our CTO." At 8–10hrs/week for sales, Anuraag can personally touch ~15–20 active deals. That's a hard cap at ~$10M ARR. <strong>To reach $20M you cannot have the CTO on every call.</strong></div>
+      <span class="fix-tag red">⚠ Observed in: Fortescue + OCBC</span>
+      <span class="fix-tag green">Fix: AE Certification Program (5-week shadow → live → independent)</span>
+    </div>
+
+    <div class="fix-card red">
+      <div class="fix-num">02 — HIGH IMPACT</div>
+      <div class="fix-title">First-Call Deck is Backwards</div>
+      <div class="fix-obs">Observed: Decks open with team bios, investor logos, and Fortune 500 customers. Nobody cares yet. The buyer hasn't told you their pain. You're asking them to trust your credibility before you've demonstrated you understand their world. <strong>Flip it: open with their pain, then earn the credibility slide.</strong></div>
+      <span class="fix-tag red">⚠ Observed in: Fortescue Call 1 + Call 2</span>
+      <span class="fix-tag green">Fix: New first-call deck — "drag through the glass" customer-first opening</span>
+    </div>
+
+    <div class="fix-card yellow">
+      <div class="fix-num">03 — QUICK WIN</div>
+      <div class="fix-title">Next Steps Owned by the Customer, Not Sales</div>
+      <div class="fix-obs">Observed in the OCBC call: the <em>customer</em> asked for next steps before the AE did. Sales owns the next step. Always. No call should end without a specific next action, a date, and an owner — proposed by the AE. This is a coaching issue, fixable in one session.</div>
+      <span class="fix-tag yellow">⚠ Observed in: OCBC demo</span>
+      <span class="fix-tag green">Fix: POV Prescription close script — every discovery call ends with committed next step or clean disqualification</span>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">04 — REVENUE LEAK</div>
+      <div class="fix-title">Three Value Props Being Systematically Undersold</div>
+      <div class="fix-obs">Three enterprise-grade differentiators are buried or never mentioned:<br><br>
+        <strong style="color:var(--cyan)">1. Self-hosted model cost tracking + chargebacks</strong> — CFO and IT gold. When a team can see what each business unit is spending on AI, it becomes a budget conversation, not a tech conversation. Not mentioned in observed calls.<br><br>
+        <strong style="color:var(--cyan)">2. Guardrails for regulated industries</strong> — AWS Bedrock, Azure Content Safety, custom filtering. For FSI/healthcare/regulated buyers, this is a compliance requirement. Should be leading the pitch to those verticals.<br><br>
+        <strong style="color:var(--cyan)">3. No TrueFoundry SDK lock-in</strong> — Enterprise buyers hate vendor lock-in. "You can leave whenever you want — no rewrite required" is a trust builder that removes a key objection. Almost never said.
+      </div>
+      <span class="fix-tag">⚠ Observed in: Fortescue Call 2 + OCBC demo</span>
+      <span class="fix-tag green">Fix: Persona-specific pitch scripts — FSI deck, regulated industries deck, enterprise platform deck</span>
+    </div>
+
+    <div class="fix-card yellow">
+      <div class="fix-num">05 — BUYING FRICTION</div>
+      <div class="fix-title">Pricing Not Standardized</div>
+      <div class="fix-obs">The current pricing scalar creates confusion in calls. Buyers can't quickly internalize what they'll spend. When pricing is confusing, deals slow down and procurement gets harder. Three clean tiers with one-sentence descriptions — confirm budget in call 1, not call 3.</div>
+      <span class="fix-tag yellow">⚠ Source: Internal Q&A + Fortescue pricing discussion</span>
+      <span class="fix-tag green">Fix: Simplified pricing tiers — "Core, Scale, Enterprise" — with floor/ceiling anchors per tier</span>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">06 — PIPELINE QUALITY</div>
+      <div class="fix-title">Qualification is Too Light</div>
+      <div class="fix-obs">Economic buyer process, budget approval path, and competitive landscape are not surfaced systematically in early calls. AEs advance deals without knowing who controls the budget, who else is evaluating (Databricks, Azure), or whether there's a real decision deadline. This creates phantom pipeline.</div>
+      <span class="fix-tag">⚠ Observed in: OCBC call</span>
+      <span class="fix-tag green">Fix: MEDDPICC install — deal doesn't advance without documented Pain + Economic Buyer + committed next step</span>
+    </div>
+
+    <div class="fix-card cyan">
+      <div class="fix-num">07 — EFFICIENCY</div>
+      <div class="fix-title">Pre-Read Materials Not Used</div>
+      <div class="fix-obs">Every demo starts from scratch — 20–30 minutes spent on context-setting that the buyer could have done themselves. Sending the AI Gateway overview + MCP Gateway overview as required pre-read before the call compresses the demo and allows the first 15 minutes to be discovery, not education.</div>
+      <span class="fix-tag cyan">⚠ Source: OCBC call notes</span>
+      <span class="fix-tag green">Fix: Mandatory pre-read sequence in SDR handoff — buyer confirms they've reviewed before AE call is confirmed</span>
+    </div>
+
+    <div class="fix-card red">
+      <div class="fix-num">08 — COMPETITIVE RISK (SEE SECTION 4)</div>
+      <div class="fix-title">No Databricks Counter-Narrative</div>
+      <div class="fix-obs"><strong>Fortescue had Databricks already approved internally.</strong> The AE had no counter-narrative — no battle card, no reframe, no prepared response. Databricks will appear in a significant percentage of enterprise deals. There is currently no formal "Why TrueFoundry vs. Databricks" framework. This is a live competitive risk losing deals right now.</div>
+      <span class="fix-tag red">⚠ Observed in: Fortescue Call 1</span>
+      <span class="fix-tag green">Fix: Databricks battle deck — Week 1 (see Section 4)</span>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">09 — GROWTH UNLOCK</div>
+      <div class="fix-title">PLG Not Productized</div>
+      <div class="fix-obs">Self-serve signup exists but there's no credit card onboarding, no clear freemium-to-paid conversion path, and no connection to the enterprise sales funnel. PLG users who hit limits have no friction-free path to an AE conversation. This is a free lead generation engine not being captured.</div>
+      <span class="fix-tag">⚠ Source: Internal Q&A doc</span>
+      <span class="fix-tag green">Fix: PLG → enterprise handoff trigger (usage threshold → AE notification → personalized outreach)</span>
+    </div>
+
+    <div class="fix-card cyan">
+      <div class="fix-num">10 — DEMO OPTIMIZATION</div>
+      <div class="fix-title">The Best Demo Moment Happens at 80%</div>
+      <div class="fix-obs">In the S&P call, the most compelling moment — gated MCP tool access in the playground — happened 80% of the way through a 60-minute call. That's the hook that generates excitement, questions, and urgency. It should happen in the first 10–15 minutes. Put the "wow" moment first.</div>
+      <span class="fix-tag cyan">⚠ Observed in: S&P AI Gateway + MCP call (March 3)</span>
+      <span class="fix-tag green">Fix: Reorder demo — lead with MCP playground gated access in first 15 min, then tell the governance story</span>
+    </div>
+  </section>
+
+  <!-- 04 DATABRICKS -->
+  <section id="databricks">
+    <div class="section-tag">Competitive Intelligence</div>
+    <h2>The <span class="gradient-text">Databricks Problem</span><br>Nobody Is Talking About</h2>
+    <p>In a Fortescue call, they mentioned Databricks was already approved internally. The AE had no counter-narrative. No battle card. No reframe. I've built this before.</p>
+
+    <div class="comp-card">
+      <div class="comp-badge">🚨 Live Competitive Risk</div>
+      <h3>The Scenario Playing Out in Real Deals</h3>
+      <p style="color:var(--text);margin-bottom:12px;">Enterprise buyer is evaluating TrueFoundry. IT says: <em>"We already have Databricks approved. Can't they do this?"</em> AE doesn't have an answer. Deal stalls or dies.</p>
+      <p>This is not a hypothetical. It happened in the Fortescue call. It's likely happening in other deals right now. And there is <strong style="color:var(--red)">no counter-narrative in existence at TrueFoundry</strong>.</p>
+      <div class="comp-fix">
+        <strong>The Reframe (built, ready to deploy in Week 1):</strong><br><br>
+        "Databricks is a data and ML <em>training</em> platform. TrueFoundry is the enterprise <em>deployment and governance</em> layer. They're better together — Databricks builds and trains, TrueFoundry governs, deploys, and controls what happens when models go to production. Using Databricks for this is like using your data warehouse as your production API server."
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h4>Where Databricks Wins</h4>
+        <p>Training and fine-tuning models, data pipelines, ML experimentation, Unity Catalog for data governance. These are real strengths — don't fight them.</p>
+      </div>
+      <div class="card">
+        <h4>Where TrueFoundry Wins</h4>
+        <p>Model deployment to production, multi-model governance across ANY provider (not just Databricks), MCP Gateway for agentic AI, cost attribution across teams, guardrails for compliance — Databricks does none of this at enterprise scale.</p>
+      </div>
+      <div class="card">
+        <h4>The "Better Together" Frame</h4>
+        <p>Never position TrueFoundry as a Databricks replacement. Position it as the missing layer — Databricks gets you to trained models, TrueFoundry gets those models safely and efficiently into production across your entire organization.</p>
+      </div>
+      <div class="card">
+        <h4>The Killing Blow</h4>
+        <p>Ask the buyer: <em>"When your team at Goldman Sachs uses Claude, OpenAI, and a fine-tuned Llama model simultaneously — how does Databricks give you one control plane for all three?"</em> It doesn't. That's the gap.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-left:3px solid var(--cyan);">
+      <h4 style="color:var(--text);">Week 1 Deliverable: The Databricks Battle Deck</h4>
+      <p>A 5-slide competitive battle deck, ready for AEs to pull up in any deal where Databricks is mentioned. Built by Jamie in Week 1, reviewed with Anuraag for technical accuracy, added to Gong library and onboarding materials. This alone will save deals immediately.</p>
+    </div>
+  </section>
+
+  <!-- 05 AI OPS -->
+  <section id="ai-ops">
+    <div class="section-tag">The Compounding Differentiator</div>
+    <h2>AI-Native <span class="gradient-text">Sales Operations</span></h2>
+    <p>Every VP Sales candidate will tell you they'd "use Gong." I build the stack. I've already done it — I built an automated Deepwork AI workflow at Unsupervised that ingested raw call transcripts + account notes, auto-classified projects, wrote status emails, and tracked project status on a live dashboard. <strong>Built in one afternoon.</strong></p>
+    <p>The VP Sales who builds an AI-native RevOps stack has a compounding advantage that a traditional hire cannot replicate. Here's what I'd build in the first 90 days:</p>
+
+    <div class="ai-stack">
+      <div class="ai-card">
+        <h4>Call Intelligence Layer</h4>
+        <p>Record every SDR and AE call (Gong, Chorus, or Grain). Tag by outcome (booked / no meeting, POV committed / no POV, won / lost). Run LLM analysis to surface: opening lines that convert, questions that uncover pain, objection handles that work. Build a <strong>Winning Language Library</strong> — updated monthly — that every new hire learns from the best performers' actual words.</p>
+      </div>
+      <div class="ai-card">
+        <h4>POV Documentation Engine</h4>
+        <p>Auto-generate POV status updates, milestone tracking, and executive readout templates from call transcripts. Currently this is manual — AEs and SEs write updates from scratch. An AI agent that reads the call transcript and writes the status email cuts 30-40 minutes per POV per week. At 10 active POVs, that's 5+ hours of SE time recaptured per week.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Pipeline Forecasting Signals</h4>
+        <p>MEDDPICC score per deal → AI-weighted forecast probability. No more "commit" calls based on gut feel. Deals with documented Pain + Economic Buyer + Champion score 8+/10. Deals missing any letter get flagged in the weekly review. Forecast accuracy goes from art to science.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Competitive Intelligence Feed</h4>
+        <p>Daily monitoring of Databricks, AWS Bedrock, Azure ML, LiteLLM, Portkey announcements. AI agent summarizes what matters, flags anything that needs a battle card update. Sales team knows about competitive moves before buyers bring them up in calls.</p>
+      </div>
+      <div class="ai-card">
+        <h4>ICP Signal Scoring</h4>
+        <p>AI enrichment layer on all inbound — company size, Kubernetes in prod (via job posting signal), ML models in production, open platform engineering roles. SDRs get a score before they pick up the phone. Stops tire-kickers from ever reaching an AE calendar.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Outbound Personalization Engine</h4>
+        <p>Multi-agent n8n workflow (built this at Unsupervised — TOFU up 43%) that researches target accounts, identifies the right pain angle for each persona, and generates personalized first-touch sequences. Not templates. Actual personalization at scale.</p>
+      </div>
+    </div>
+
+    <div class="hero-callout" style="margin-top:32px;">
+      <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;">The compounding math:</div>
+      <p style="color:var(--muted);font-size:14px;margin:0;line-height:1.7;">A traditional VP Sales hire brings a playbook. I bring a playbook <em>and</em> the automation stack to run it at 10× speed. Call intelligence + POV automation + pipeline scoring = the same 6 AEs generating 40% more closed business in 12 months. That's not hiring — that's leverage.</p>
+    </div>
+  </section>
+
+  <!-- 06 PLAN -->
+  <section id="plan">
+    <div class="section-tag">Execution Timeline</div>
+    <h2>The <span class="gradient-text">30 / 60 / 90</span> Plan</h2>
+    <p>Two scenarios. The first 90 days look different depending on what I learn from Nikunj Wednesday. I've pre-built both paths — the core diagnostic questions are in Section 7.</p>
+
+    <div class="matrix-grid" style="margin-bottom:32px;">
+      <div class="matrix-axis-x" style="grid-column:1/-1;">SUPPLY CONSTRAINED = Delivery is the bottleneck. Fix POV throughput first, then open pipeline. &nbsp;|&nbsp; DEMAND CONSTRAINED = Pipeline is the bottleneck. Fix top of funnel first.</div>
+      <div class="matrix-cell">
+        <h4>Scenario A: Supply Constrained</h4>
+        <p>AEs/SEs have more POVs than they can run well. Adding pipeline = chaos, not revenue. Delivery efficiency is the unlock.</p>
+      </div>
+      <div class="matrix-cell">
+        <h4>Scenario B: Demand Constrained</h4>
+        <p>Team has POV capacity sitting unused. The constraint is generating enough qualified pipeline to fill the machine.</p>
+      </div>
+    </div>
+
+    <div class="plan-wrap">
+      <div class="plan-col">
+        <div class="plan-header">
+          <h4>Scenario A — Supply Constrained</h4>
+          <p>"Fix the machine before you fill it"</p>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 1–14: Listen + Diagnose</div>
+          <ul>
+            <li>Attend every customer call — ride along, don't run</li>
+            <li>Read every deal transcript in Gong for last 6 months</li>
+            <li>Map every active POV: stage, health, blockers</li>
+            <li>Identify Anuraag's single biggest time drain in sales</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 15–30: Quick Wins</div>
+          <ul>
+            <li>Build POV Playbook v1 — standardize every stage + exit criteria</li>
+            <li>Fix first-call deck — customer pain first</li>
+            <li>Launch call intelligence stack (Grain + LLM tagging)</li>
+            <li>Databricks battle deck — built and reviewed with Anuraag</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 31–60: Systems</div>
+          <ul>
+            <li>POV automation: AI-generated status updates, milestone tracking</li>
+            <li>AE certification program launched — 5-week shadow schedule</li>
+            <li>MEDDPICC installed as team qualification language</li>
+            <li>POV capacity model: define max concurrent per SE, overflow protocol</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 61–90: Scale</div>
+          <ul>
+            <li>First AEs certified to run demos without Anuraag</li>
+            <li>POV cycle time target set (reduce 30%)</li>
+            <li>Pipeline model built — shows path to $20M with assumptions</li>
+            <li>Begin opening top of funnel as delivery capacity grows</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="plan-col">
+        <div class="plan-header">
+          <h4>Scenario B — Demand Constrained</h4>
+          <p>"Fill the machine that's sitting empty"</p>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 1–14: Listen + Diagnose</div>
+          <ul>
+            <li>Attend every customer call — ride along, don't run</li>
+            <li>Interview every AE + SDR: what's the most common disqualify?</li>
+            <li>Audit inbound lead quality — score last 90 days of deals</li>
+            <li>Map competitor mentions across all lost deals</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 15–30: Quick Wins</div>
+          <ul>
+            <li>Lock down ICP definition — 5 firmographic + behavioral signals</li>
+            <li>SDR qualification scorecard — 5-point gate before AE handoff</li>
+            <li>Databricks battle deck + Azure/Bedrock objection scripts</li>
+            <li>Fix first-call deck + demo hook (wow moment in first 15 min)</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 31–60: Systems</div>
+          <ul>
+            <li>AI outbound engine live (n8n multi-agent, account research + personalization)</li>
+            <li>Call intelligence stack (Grain + LLM) — winning language library v1</li>
+            <li>MEDDPICC installed — deal review cadence weekly</li>
+            <li>Content sprint: YouTube + technical comparison articles brief written</li>
+          </ul>
+        </div>
+        <div class="plan-phase">
+          <div class="plan-phase-label">Days 61–90: Scale</div>
+          <ul>
+            <li>Outbound pipeline showing in metrics (≥20% of new POVs from outbound)</li>
+            <li>SDR → AE conversion rate up (fewer science projects)</li>
+            <li>AE certification program launched</li>
+            <li>Pipeline model: $20M path with confidence intervals</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;border-top:3px solid var(--green);">
+      <h4 style="color:var(--text);">Universal Day 1 Actions (Regardless of Scenario)</h4>
+      <div class="card-grid-3">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Day 1</div>
+          <p style="font-size:13px;margin:0;color:var(--text);">Get call access. Read every transcript from last 6 months. Attend every in-flight deal call this week as observer.</p>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Week 1</div>
+          <p style="font-size:13px;margin:0;color:var(--text);">Databricks battle deck. Fix first-call deck. New demo sequence (wow moment in first 15 min). Three undersold value props added to pitch.</p>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Week 2</div>
+          <p style="font-size:13px;margin:0;color:var(--text);">Call intelligence stack live. First deal review with MEDDPICC lens. Pipeline model draft — show path to $20M with assumptions explicitly named.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 NIKUNJ -->
+  <section id="nikunj">
+    <div class="section-tag" style="color:var(--cyan)">Wednesday March 4 — 1pm EST</div>
+    <h2>Nikunj Call <span class="gradient-text">Prep</span></h2>
+    <p>This is a discovery conversation, not a pitch. Three questions. Let him talk. His answers determine which version of Thursday's presentation I lead with.</p>
+
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <h3>Pre-POV Funnel Break</h3>
+      <p>Are deals dying between first meeting and POV commit (sales execution problem), or are they turning into science projects — no real budget, no champion, no urgency (qualification problem)? Two completely different fixes.</p>
+      <div class="q-ask">"Nikunj, your POV-to-close is strong — around 70%, which is elite. What I'm trying to understand is where deals are breaking down before the POV commitment. Are you seeing more deals die between the first meeting and the POV kickoff, or is the bigger issue that deals get into the POV but turn into science projects — no real budget, no real champion, no urgency? Those two problems require completely different fixes."</div>
+      <table class="dm-table">
+        <tr><th>His Answer</th><th>Diagnosis</th><th>Thursday Emphasis</th></tr>
+        <tr><td>"Deals die between meeting 1 and POV"</td><td>Sales guidance failure</td><td>Lead with MEDDPICC + discovery methodology overhaul</td></tr>
+        <tr><td>"Science projects — wrong buyers"</td><td>Qualification failure</td><td>Lead with ICP tightening + SDR gate criteria</td></tr>
+        <tr><td>"Both"</td><td>Full funnel</td><td>Phase 1: qualification, Phase 2: methodology</td></tr>
+        <tr><td>"I don't know exactly"</td><td>Visibility gap</td><td>Lead with pipeline instrumentation — you can't manage what you can't measure</td></tr>
+      </table>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">2</div>
+      <h3>Supply vs. Demand — The POV Capacity Question</h3>
+      <p>Is TrueFoundry demand-constrained (not enough qualified pipeline) or supply-constrained (delivery can't execute enough POVs fast enough)? The fix is completely opposite.</p>
+      <div class="q-ask">"Here's a thought experiment. If we somehow 10x'd the number of qualified deals entering POV tomorrow — like the pipeline was suddenly there — how much would that strain delivery? I'm trying to understand: is TrueFoundry's growth constraint a demand problem, where there's not enough qualified pipeline and the team has capacity to execute more POVs? Or is it a supply problem, where delivery bandwidth is already stretched and adding more deals would just make the existing ones slower? The fix is completely opposite depending on the answer."</div>
+      <table class="dm-table">
+        <tr><th>His Answer</th><th>Diagnosis</th><th>Thursday Emphasis</th></tr>
+        <tr><td>"We could handle 10x — team has capacity"</td><td>Demand constrained</td><td>80% offense: TOFU, SDR, outbound, content</td></tr>
+        <tr><td>"10x would break delivery"</td><td>Supply constrained</td><td>Fix the machine: POV playbook, SE ratios, cycle time</td></tr>
+        <tr><td>"Somewhere in between"</td><td>Balanced</td><td>Push: "Which is the dominant constraint right now?"</td></tr>
+      </table>
+    </div>
+
+    <div class="q-card">
+      <div class="q-num">3</div>
+      <h3>SDR Lead Quality — Education vs. Qualification</h3>
+      <p>Are buyers arriving at AE calls already understanding why they need TrueFoundry — or are AEs spending the first 30 minutes doing education that should have happened before the call?</p>
+      <div class="q-ask">"One thing I want to understand better is where the 16% overall win rate is really coming from. My hypothesis — and I want to pressure-test this with you — is that a significant portion of buyers are getting on first calls to learn what TrueFoundry does and how it's different from competitors, rather than arriving already convinced there's a problem worth solving. So AEs are spending discovery calls doing education that should have happened before the call. Does that match what you're seeing?"</div>
+      <table class="dm-table">
+        <tr><th>His Answer</th><th>Diagnosis</th><th>Thursday Emphasis</th></tr>
+        <tr><td>"Yes — buyers arrive not knowing why they need us"</td><td>Pre-call education gap</td><td>Dark marketing workstream: YouTube, technical content, comparison articles</td></tr>
+        <tr><td>"No — SDRs book solid meetings, problem is AE execution"</td><td>Post-handoff gap</td><td>Sales methodology + AE enablement as primary lever</td></tr>
+        <tr><td>"We don't have visibility into what's happening on calls"</td><td>Instrumentation gap</td><td>Revenue intelligence stack — Gong/Grain + AI analysis</td></tr>
+      </table>
+    </div>
+
+    <h3 style="margin-top:32px;margin-bottom:16px;">Pre-Call Checklist</h3>
+    <ul class="checklist">
+      <li><strong>Know TrueFoundry's current POV volume</strong> — roughly how many per quarter? (estimate from math if not available)</li>
+      <li><strong>Know SDR-to-AE ratio</strong> — currently 6 SDRs, 4 AEs. How is this working? Where's the friction?</li>
+      <li><strong>Have the 77% math ready</strong> — but frame as hypothesis to validate, not a stated fact</li>
+      <li><strong>Supply vs. demand one-liner ready</strong> — "demand constrained = pipeline is the job, supply constrained = delivery efficiency is the job"</li>
+      <li><strong>Have one AI-native tactic ready to name</strong> — "I'd plug in Grain, tag calls by outcome, and run an LLM to extract winning language from top quartile reps"</li>
+      <li><strong>End with the turn-back question</strong> — "That's my read from outside looking in. What does the market tell you about the window? How long before the hyperscalers are good enough?"</li>
+    </ul>
+
+    <div class="caveat" style="margin-top:24px;">
+      <strong>Nikunj → Thursday handoff:</strong> His answers to these three questions directly determine which version of Thursday's 30/60/90 I lead with (Section 6). After the Nikunj call, update this document and re-read Section 6 before Thursday's on-site.
+    </div>
+  </section>
+
+  <!-- 08 WHY JAMIE -->
+  <section id="why">
+    <div class="section-tag">The Close</div>
+    <h2>Why <span class="gradient-text">Jamie</span></h2>
+    <p>This isn't a summary of my resume. It's the answer to: "Why is this person uniquely suited to 4× TrueFoundry's ARR by March 2027?"</p>
+
+    <div class="proof-row">
+      <div class="proof-card">
+        <div class="proof-icon">📈</div>
+        <h4>16% → 43% Win Rate</h4>
+        <p>At Unsupervised AI over 24 months. Same problem: low win rate, founder-dependent sales, no repeatable process. Built the playbook. Ran it. Results are documented.</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-icon">🤖</div>
+        <h4>Built the AI Stack Myself</h4>
+        <p>Built multi-agent n8n outbound stack at Unsupervised — TOFU up 43%. Built Deepwork AI workflow (raw transcripts → auto project classification → status emails → live dashboard) in one afternoon. Not "I'd use AI tools." I build them.</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-icon">🔬</div>
+        <h4>Engineering First, Sales Second</h4>
+        <p>WPI Biomedical Engineering + Business. FDA validation protocols, MATLAB, LabVIEW, built a DNA sequencing iOS app. When I talk to TrueFoundry's technical buyers about Kubernetes, observability, and MCP — I'm not reading a pitch deck. I understand what they're building.</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-icon">👁️</div>
+        <h4>Watched Your Actual Calls</h4>
+        <p>Fortescue Call 1, Fortescue Call 2, OCBC demo, S&P AI Gateway + MCP call. Section 3 of this document is a direct output of that research. The 10 things I'd fix are not guesses — they're observed behaviors with timestamps.</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-icon">💰</div>
+        <h4>$4.2M → $10.8M ARR</h4>
+        <p>At Unsupervised across 5 years in two roles (SE Director → VP Sales & Delivery). Scaled ARR from $4.2M to $10.8M. Win rates from 16% to 43%. Closed $1.5M F50 expansion via CFO-grade ROI alignment. President's Club at Tableau/Salesforce before that.</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-icon">⚡</div>
+        <h4>Already Doing the Job</h4>
+        <p>This presentation was built before the interview. 5 playbooks written. Battle cards drafted. Funnel math reverse-engineered from your own numbers. Competitive landscape analyzed. The 30/60/90 is ready in two versions. I started Day 1 a week ago.</p>
+      </div>
+    </div>
+
+    <div class="one-liner" style="margin-top:40px;">
+      <p>"Your product is winning deals <em style="color:var(--red)">in spite of</em> your sales process.<br>I'm here to build the process that lets the product win <em style="color:var(--green)">because of</em> it."</p>
+    </div>
+
+    <div class="stat-row" style="margin-top:32px;">
+      <div class="stat-box">
+        <span class="stat-num">$10.8M</span>
+        <div class="stat-label">ARR scaled at Unsupervised</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">43%</span>
+        <div class="stat-label">Win rate achieved (from 16%)</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">5 yrs</span>
+        <div class="stat-label">Scaling from $4.2M → $10.8M</div>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">Day 1</span>
+        <div class="stat-label">Databricks battle deck ready</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Animate funnel bars on scroll
+  const bars = [
+    { id: 'bar1', width: '100%' },
+    { id: 'bar2', width: '23%' },
+    { id: 'bar3', width: '18%' },
+    { id: 'bar4', width: '12%' }
+  ];
+  let barsAnimated = false;
+
+  // Scroll progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progress = scrollTop / docHeight;
+    document.getElementById('scroll-bar').style.transform = `scaleX(${progress})`;
+
+    // Animate funnel bars when visible
+    if (!barsAnimated) {
+      const funnel = document.querySelector('.funnel-wrap');
+      if (funnel) {
+        const rect = funnel.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.8) {
+          bars.forEach(b => {
+            const el = document.getElementById(b.id);
+            if (el) setTimeout(() => { el.style.width = b.width; }, 200);
+          });
+          barsAnimated = true;
+        }
+      }
+    }
+
+    // Update active nav
+    const sections = document.querySelectorAll('section');
+    let current = '';
+    sections.forEach(s => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top <= 100) current = s.id;
+    });
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('href') === '#' + current) {
+        item.classList.add('active');
+      }
+    });
+  });
+
+  // Smooth scroll
+  function scrollTo(id) {
+    event.preventDefault();
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
