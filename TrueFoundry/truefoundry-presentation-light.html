@@ -1,0 +1,2367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrueFoundry · GTM Strategy Review (Light)</title>
+<style>
+  :root {
+    --purple: #4F46E5;
+    --cyan: #0284C7;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --card2: #F1F5F9;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --muted: #475569;
+    --green: #059669;
+    --red: #DC2626;
+    --yellow: #B45309;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; display: flex; min-height: 100vh; }
+  #sidebar { width: 220px; min-width: 220px; background: #EEF2FF; border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 100; padding: 24px 0; }
+  .sidebar-logo { padding: 0 20px 20px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+  .sidebar-logo .wordmark { font-size: 15px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
+  .sidebar-logo .wordmark span { color: var(--purple); }
+  .sidebar-logo .tagline { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .nav-item { display: block; padding: 9px 20px; font-size: 12px; color: var(--muted); cursor: pointer; border-left: 3px solid transparent; transition: all 0.2s; text-decoration: none; line-height: 1.4; }
+  .nav-item:hover { color: var(--text); background: rgba(99,102,241,0.08); }
+  .nav-item.active { color: var(--purple); border-left-color: var(--purple); background: rgba(99,102,241,0.1); }
+  .nav-num { font-size: 10px; color: var(--muted); display: block; margin-bottom: 2px; }
+  #main { margin-left: 220px; flex: 1; max-width: 960px; padding: 0 52px 120px; }
+  section { padding: 64px 0 48px; border-bottom: 1px solid var(--border); }
+  section:last-child { border-bottom: none; }
+  .section-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--purple); margin-bottom: 14px; }
+  .section-tag::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--purple); }
+  h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; }
+  h2 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 14px; }
+  h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 7px; color: var(--cyan); }
+  p { font-size: 14px; line-height: 1.7; color: var(--muted); margin-bottom: 14px; }
+  p strong { color: var(--text); }
+  p:last-child { margin-bottom: 0; }
+  .gradient-text { background: linear-gradient(135deg, var(--purple), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .card-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .stat-row { display: flex; gap: 14px; margin: 28px 0; flex-wrap: wrap; }
+  .stat-box { flex: 1; min-width: 120px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; text-align: center; }
+  .stat-box .stat-num { font-size: 30px; font-weight: 800; background: linear-gradient(135deg, var(--purple), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; margin-bottom: 4px; }
+  .stat-box .stat-label { font-size: 11px; color: var(--muted); line-height: 1.3; }
+  .hero-callout { background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(2,132,199,0.08)); border: 1px solid rgba(99,102,241,0.25); border-radius: 14px; padding: 28px; margin: 28px 0; }
+  .hero-callout .big-num { font-size: 64px; font-weight: 900; background: linear-gradient(135deg, var(--purple), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+  .hero-callout .big-label { font-size: 16px; font-weight: 600; color: var(--text); margin-top: 6px; }
+  .hero-callout .big-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .funnel-wrap { margin: 28px 0; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px; }
+  .funnel-stage { position: relative; margin-bottom: 6px; }
+  .funnel-bar-wrap { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+  .funnel-label { font-size: 12px; font-weight: 600; width: 180px; flex-shrink: 0; color: var(--text); }
+  .funnel-bar-outer { flex: 1; height: 28px; background: rgba(0,0,0,0.04); border-radius: 5px; overflow: hidden; }
+  .funnel-bar-inner { height: 100%; border-radius: 5px; transition: width 1.5s cubic-bezier(0.4,0,0.2,1); display: flex; align-items: center; padding-left: 10px; font-size: 11px; font-weight: 700; color: white; white-space: nowrap; }
+  .funnel-arrow { text-align: left; font-size: 11px; color: var(--red); font-weight: 600; margin: 0 0 8px 194px; letter-spacing: 0.3px; }
+  .funnel-arrow.green { color: var(--green); }
+  .fix-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 20px 20px 24px; margin-bottom: 12px; border-left: 4px solid var(--purple); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .fix-card.red { border-left-color: var(--red); }
+  .fix-card.yellow { border-left-color: var(--yellow); }
+  .fix-card.cyan { border-left-color: var(--cyan); }
+  .fix-card.green { border-left-color: var(--green); }
+  .fix-num { font-size: 10px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 3px; }
+  .fix-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .fix-tag { display: inline-flex; align-items: center; gap: 4px; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.2); color: var(--purple); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; margin-right: 5px; margin-bottom: 3px; }
+  .fix-tag.red { background: rgba(220,38,38,0.09); border-color: rgba(244,63,94,0.2); color: var(--red); }
+  .fix-tag.green { background: rgba(5,150,105,0.10); border-color: rgba(16,185,129,0.2); color: var(--green); }
+  .scenario-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .scenario-table th { background: rgba(99,102,241,0.18); color: var(--purple); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; border: 1px solid var(--border); }
+  .scenario-table td { padding: 10px 14px; font-size: 12px; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .scenario-table tr:hover td { background: rgba(0,0,0,0.03); }
+  .scenario-table td:first-child { color: var(--text); font-weight: 600; }
+  .scenario-table .highlight-row td { background: rgba(99,102,241,0.07); }
+  .plan-wrap { margin-top: 20px; }
+  .plan-col { display: none; }
+  .plan-col.active { display: block; }
+  .plan-header { background: var(--card); border: 1px solid var(--border); border-radius: 12px 12px 0 0; padding: 14px 18px; border-bottom: none; }
+  .plan-phase { background: var(--card2); border: 1px solid var(--border); border-top: none; padding: 14px 18px; }
+  .plan-phase:last-child { border-radius: 0 0 12px 12px; }
+  .plan-phase-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); margin-bottom: 7px; }
+  .plan-phase ul { list-style: none; padding: 0; }
+  .plan-phase li { font-size: 12px; color: var(--muted); padding: 4px 0 4px 14px; position: relative; line-height: 1.45; }
+  .plan-phase li::before { content: '→'; position: absolute; left: 0; color: var(--purple); font-size: 10px; top: 5px; }
+  .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+  .q-num { background: linear-gradient(135deg, var(--purple), var(--cyan)); color: white; font-size: 12px; font-weight: 700; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .proof-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  .proof-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .proof-icon { font-size: 24px; margin-bottom: 10px; }
+  .north-star { background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(2,132,199,0.10)); border: 1px solid rgba(99,102,241,0.35); border-radius: 14px; padding: 28px; margin: 28px 0; }
+  .caveat { background: rgba(180,83,9,0.09); border: 1px solid rgba(180,83,9,0.18); border-radius: 9px; padding: 14px 18px; margin: 16px 0; font-size: 13px; color: var(--yellow); line-height: 1.6; }
+  .dm-table { width: 100%; border-collapse: collapse; margin-top: 14px; }
+  .dm-table th { background: var(--card2); color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 12px; text-align: left; border: 1px solid var(--border); }
+  .dm-table td { padding: 10px 12px; font-size: 12px; border: 1px solid var(--border); color: var(--muted); vertical-align: top; line-height: 1.5; }
+  .dm-table td:first-child { font-weight: 600; color: var(--text); }
+  .dm-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  .ai-stack { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+  .ai-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; border-top: 3px solid var(--purple); position: relative; }
+  .ai-card h4 { color: var(--text); font-size: 13px; margin-bottom: 8px; padding-right: 60px; }
+  .diff-tag { position: absolute; top: 14px; right: 14px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .diff-easy { background: rgba(5,150,105,0.14); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .diff-medium { background: rgba(180,83,9,0.12); color: var(--yellow); border: 1px solid rgba(180,83,9,0.20); }
+  .diff-hard { background: rgba(220,38,38,0.10); color: var(--red); border: 1px solid rgba(220,38,38,0.18); }
+  .comp-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 22px; margin-bottom: 14px; border-left: 4px solid var(--purple); }
+  .comp-win { background: rgba(5,150,105,0.09); border: 1px solid rgba(5,150,105,0.18); border-radius: 7px; padding: 14px; margin-top: 12px; font-size: 13px; color: var(--green); line-height: 1.6; }
+  .priority-block { background: var(--card); border-radius: 12px; padding: 26px; margin-bottom: 18px; }
+  .branch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .branch-card { border-radius: 9px; padding: 16px; }
+  #scroll-bar { position: fixed; top: 0; left: 220px; right: 0; height: 3px; background: linear-gradient(90deg, var(--purple), var(--cyan)); transform-origin: left; transform: scaleX(0); z-index: 200; transition: transform 0.1s; }
+  .bullets { list-style: none; padding: 0; margin: 0 0 14px; }
+  .bullets li { font-size: 13px; color: var(--muted); padding: 5px 0 5px 18px; position: relative; line-height: 1.5; border-bottom: 1px solid rgba(255,255,255,0.035); }
+  .bullets li:last-child { border-bottom: none; }
+  .bullets li::before { content: '→'; position: absolute; left: 0; color: var(--purple); font-size: 11px; top: 6px; }
+  .bullets li strong { color: var(--text); }
+  .bullets li em { color: var(--cyan); font-style: normal; }
+  /* Tooltip */
+  .tooltip-wrap { position: relative; display: inline; cursor: help; border-bottom: 1px dashed var(--cyan); }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; left: 0; top: calc(100% + 8px); background: #FFFFFF; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; width: 280px; font-size: 12px; line-height: 1.8; color: var(--text); z-index: 999; box-shadow: 0 4px 20px rgba(0,0,0,0.12); font-style: normal; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .tooltip-box .math-line { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border); }
+  .tooltip-box .math-line:last-child { border-bottom: none; font-weight: 700; color: var(--cyan); }
+  /* MEDDPICC infographic */
+  .meddpicc-wrap { position: relative; display: inline-flex; gap: 6px; flex-wrap: wrap; margin: 16px 0; }
+  .medd-letter { position: relative; width: 48px; height: 48px; border-radius: 10px; background: rgba(99,102,241,0.15); border: 2px solid rgba(99,102,241,0.35); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 900; color: var(--purple); cursor: pointer; transition: all 0.2s; }
+  .medd-letter:hover { background: rgba(99,102,241,0.3); border-color: var(--purple); transform: translateY(-2px); }
+  .medd-letter .medd-popup { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #FFFFFF; border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; width: 220px; font-size: 12px; line-height: 1.65; color: var(--text); z-index: 999; box-shadow: 0 4px 20px rgba(0,0,0,0.12); text-align: left; white-space: normal; }
+  .medd-letter:hover .medd-popup { display: block; }
+  .medd-popup strong { color: var(--cyan); display: block; margin-bottom: 4px; }
+  /* Toggle */
+  .toggle-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .toggle-btn { padding: 10px 22px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 2px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.2s; position: relative; }
+  .toggle-btn:hover { border-color: var(--purple); color: var(--text); }
+  .toggle-btn.active-a { border-color: var(--purple); background: rgba(99,102,241,0.15); color: var(--purple); }
+  .toggle-btn.active-b { border-color: var(--green); background: rgba(5,150,105,0.12); color: var(--green); }
+  .toggle-btn .toggle-tip { display: none; position: absolute; bottom: calc(100% + 8px); left: 0; background: #FFFFFF; border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; width: 260px; font-size: 12px; color: var(--muted); line-height: 1.6; z-index: 50; text-align: left; font-weight: 400; }
+  .toggle-btn:hover .toggle-tip { display: block; }
+
+  .hrs-tooltip-wrap { display: inline-block; position: relative; cursor: help; border-bottom: 1px dashed rgba(239,68,68,0.5); }
+  .hrs-tooltip-wrap:hover .hrs-tooltip { display: block; }
+  .hrs-tooltip { display: none; position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: #FFFFFF; border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; padding: 12px 14px; width: 230px; font-size: 12px; color: var(--muted); line-height: 1.6; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.10); }
+  .hrs-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: #FFFFFF; }
+  .hrs-tooltip strong { color: var(--text); display: block; margin-bottom: 4px; }
+  /* Objection handling section */
+  .obj-frame { background: rgba(99,102,241,0.07); border-radius: 7px; padding: 12px 14px; margin: 8px 0 12px; font-size: 13px; color: var(--text); line-height: 1.6; }
+  .obj-memory { background: rgba(5,150,105,0.09); border: 1px solid rgba(5,150,105,0.18); border-radius: 7px; padding: 12px 14px; margin: 12px 0 8px; }
+  .obj-memory .om-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--green); margin-bottom: 8px; }
+  .obj-memory ul { list-style: none; padding: 0; margin: 0; }
+  .obj-memory li { font-size: 12px; color: var(--muted); padding: 3px 0 3px 16px; position: relative; line-height: 1.5; }
+  .obj-memory li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-size: 10px; top: 4px; }
+  .obj-close { background: rgba(2,132,199,0.08); border: 1px solid rgba(2,132,199,0.15); border-radius: 7px; padding: 12px 14px; margin-top: 8px; }
+  .obj-close .oc-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--cyan); margin-bottom: 6px; }
+  .obj-close p { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; font-style: italic; }
+  .obj-tab { display: none; }
+  .obj-tab.active { display: block; }
+</style>
+</head>
+<body>
+
+<div id="scroll-bar"></div>
+
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="wordmark">True<span>Foundry</span></div>
+    <div class="tagline">GTM Strategy · March 2026 · Projector</div>
+  </div>
+  <a class="nav-item active" href="#opening" onclick="navTo('opening')">
+    <span class="nav-num">01</span>The Situation
+  </a>
+  <a class="nav-item" href="#vision" onclick="navTo('vision')">
+    <span class="nav-num">02</span>The Vision
+  </a>
+  <a class="nav-item" href="#math" onclick="navTo('math')">
+    <span class="nav-num">03</span>The $25M Gap
+  </a>
+  <a class="nav-item" href="#priorities" onclick="navTo('priorities')">
+    <span class="nav-num">04</span>The Big 3 Priorities
+  </a>
+  <a class="nav-item" href="#founder" onclick="navTo('founder')">
+    <span class="nav-num">05</span>Founder to AE System
+  </a>
+  <a class="nav-item" href="#build-team" onclick="navTo('build-team')">
+    <span class="nav-num">06</span>Building the Team
+  </a>
+  <a class="nav-item" href="#current-team" onclick="navTo('current-team')">
+    <span class="nav-num">07</span>Current Team
+  </a>
+  <a class="nav-item" href="#pricing-strategy" onclick="navTo('pricing-strategy')">
+    <span class="nav-num">08</span>Pricing Strategy
+  </a>
+  <a class="nav-item" href="#competition" onclick="navTo('competition')">
+    <span class="nav-num">09</span>Competitive Positioning
+  </a>
+  <a class="nav-item" href="#objections" onclick="navTo('objections')">
+    <span class="nav-num">10</span>Objection Handling
+  </a>
+  <a class="nav-item" href="#complex-sales" onclick="navTo('complex-sales')">
+    <span class="nav-num">11</span>Sales Playbooks & POC Method
+  </a>
+  <a class="nav-item" href="#marketing" onclick="navTo('marketing')">
+    <span class="nav-num">12</span>Marketing Alignment
+  </a>
+  <a class="nav-item" href="#ai-ops" onclick="navTo('ai-ops')">
+    <span class="nav-num">13</span>AI-Native Sales Ops
+  </a>
+  <a class="nav-item" href="#fixes" onclick="navTo('fixes')">
+    <span class="nav-num">14</span>10 Recommendations
+  </a>
+  <a class="nav-item" href="#plan" onclick="navTo('plan')">
+    <span class="nav-num">15</span>30 / 60 / 90
+  </a>
+  <a class="nav-item" href="#referrals" onclick="navTo('referrals')">
+    <span class="nav-num">16</span>Customer Referrals
+  </a>
+  <a class="nav-item" href="#why" onclick="navTo('why')">
+    <span class="nav-num">17</span>Why This Works
+  </a>
+  <div style="padding:12px 20px 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-top:1px solid var(--border);margin-top:8px;">Appendix</div>
+  <a class="nav-item" href="#open-questions" onclick="navTo('open-questions')">
+    <span class="nav-num">A1</span>Open Questions
+  </a>
+  <a class="nav-item" href="#abhishek-technical" onclick="navTo('abhishek-technical')">
+    <span class="nav-num">A2</span>Abhishek
+  </a>
+</nav>
+
+<main id="main">
+
+<!-- 01 OPENING -->
+<section id="opening">
+  <div class="section-tag">The Situation</div>
+  <h1>When a buyer reaches a real evaluation,<br><span class="gradient-text">TrueFoundry wins 70% of the time.</span></h1>
+
+  <ul class="bullets">
+    <li><strong>70% POV close rate</strong>, elite. Product wins every time it gets a real evaluation.</li>
+    <li><span class="tooltip-wrap"><strong>16% overall win rate</strong>, only 23% of deals reach POV. 77% die upstream. Not a product problem. A systems problem.<div class="tooltip-box"><div class="math-line"><span>Overall win rate</span><span style="color:var(--red)">16%</span></div><div class="math-line"><span>POV-to-close rate</span><span style="color:var(--green)">70%</span></div><div class="math-line"><span>Deals reaching POV</span><span style="color:var(--cyan)">16% / 70% = 23%</span></div><div class="math-line"><span>Deals dying upstream</span><span style="color:var(--red)">77%</span></div></div></span></li>
+    <li>Founder-led sales built $5M ARR, impressive. Scaling to $25M+ requires a system that runs without founders in every deal.</li>
+    <li>Both constraints are fixable without a product rebuild, GTM overhaul, or major headcount investment.</li>
+  </ul>
+
+  <div class="north-star">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:12px;">North Star Recommendation</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.6;margin-bottom:14px;">Three levers: (1) Move lead-to-qualified-POV from 23% to 35%+ through sharper messaging, call scripts, and pricing clarity. (2) Lift ACV from $125K to $200K through value selling. (3) Certify an independent AE team that scales the 70% close rate. $25M+ doesn't require a rebuild, it requires systems and the right hires.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px;">
+      <div style="background:rgba(0,0,0,0.04);border-radius:9px;padding:12px;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Lever 1: Lead → Qualified POV</div><div style="font-size:16px;font-weight:800;color:var(--cyan);">23% to 35%+</div><div style="font-size:11px;color:var(--muted);">Lead-to-qualified-POV rate</div></div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:9px;padding:12px;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Lever 2: ACV Expansion</div><div style="font-size:16px;font-weight:800;color:var(--cyan);">$125K to $200K</div><div style="font-size:11px;color:var(--muted);">Avg contract value</div></div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:9px;padding:12px;"><div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Close Rate: Protect It</div><div style="font-size:16px;font-weight:800;color:var(--green);">70% stays</div><div style="font-size:11px;color:var(--muted);">The asset, don't touch it</div></div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box"><span class="stat-num">$5M</span><div class="stat-label">Current ARR</div></div>
+    <div class="stat-box"><span class="stat-num">$25M+</span><div class="stat-label">Target ARR</div></div>
+    <div class="stat-box"><span class="stat-num">70%</span><div class="stat-label">POV close rate, the asset</div></div>
+    <div class="stat-box"><span class="stat-num">16%</span><div class="stat-label">Overall win rate, the gap</div></div>
+    <div class="stat-box"><span class="stat-num">135%</span><div class="stat-label">NRR, customers expanding</div></div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--cyan);">
+    <h4 style="color:var(--text);margin-bottom:8px;">The Market Window</h4>
+    <ul class="bullets" style="margin:0;">
+      <li>Every enterprise has 50-100 AI tools with no centralized control, no cost visibility, no data exposure tracking, no fallback when a provider goes down. S&amp;P, Fortescue, OCBC. This is live, not theoretical.</li>
+      <li>Every platform shift produces a control layer that becomes non-negotiable. TCP/IP. REST. Kubernetes. <strong>TrueFoundry is that layer for AI.</strong></li>
+      <li>AWS and Azure are building governance features. They won't match TF's depth by 2027. MCP Gateway is the moat. The window isn't infinite.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 17 VISION -->
+<section id="vision">
+  <div class="section-tag">The Bigger Picture</div>
+  <h2>The <span class="gradient-text">Vision</span></h2>
+
+
+  <!-- 90-second statement -->
+  <div style="background:rgba(99,102,241,0.07);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:28px 32px;margin-bottom:28px;position:relative;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:16px;">The 90-Second Vision</div>
+    <blockquote style="margin:0;font-size:14px;line-height:1.8;color:var(--text);font-style:normal;">
+      <p style="margin:0 0 14px;">"Every enterprise leader I've talked to recently has the same look on their face when AI comes up. They've got 50, 70, 100 AI tools running across their company. Teams spinning up their own MCP servers. Nobody knows what data is being touched, what anything costs, or what happens when OpenAI goes down for 3 hours. That's not a future problem. I watched it happen in real conversations at S&amp;P, at Fortescue, at OCBC. <strong>The chaos is already here.</strong></p>
+      <p style="margin:0 0 14px;">Here's what I believe: every major platform shift in tech produces a control layer that eventually becomes non-negotiable. TCP/IP for the internet. REST APIs for the web. Kubernetes for containers. <strong>I think TrueFoundry is building that layer for AI</strong>, the governance and control plane that sits between every enterprise and all the AI chaos running underneath. And right now you're early enough to own that position before it becomes obvious.</p>
+      <p style="margin:0;">The honest part of my vision: that window isn't infinite. AWS and Azure are building governance features. They'll never be as good as TrueFoundry, but they'll be good enough for the average enterprise buyer by 2027 or 2028. The MCP Gateway buys time, nobody has that, but the clock is running. <strong>My job is to build the sales machine that captures the market before the window narrows. That's the urgency I'm bringing to this role. That's why I'm here.</strong>"</p>
+    </blockquote>
+    
+  </div>
+
+  <!-- Infrastructure layer progression -->
+  <h3 style="margin-bottom:14px;font-size:15px;">The Infrastructure Layer Bet</h3>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px;">
+    <div style="background:var(--card);border-radius:10px;padding:16px;text-align:center;opacity:0.6;">
+      <div style="font-size:22px;margin-bottom:8px;">🌐</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">TCP/IP</div>
+      <div style="font-size:10px;color:var(--muted);">The control layer for the Internet. Became non-negotiable.</div>
+    </div>
+    <div style="background:var(--card);border-radius:10px;padding:16px;text-align:center;opacity:0.7;">
+      <div style="font-size:22px;margin-bottom:8px;">🔗</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">REST APIs</div>
+      <div style="font-size:10px;color:var(--muted);">The control layer for the web. Became non-negotiable.</div>
+    </div>
+    <div style="background:var(--card);border-radius:10px;padding:16px;text-align:center;opacity:0.85;">
+      <div style="font-size:22px;margin-bottom:8px;">⎈</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Kubernetes</div>
+      <div style="font-size:10px;color:var(--muted);">The control layer for containers. Became non-negotiable.</div>
+    </div>
+    <div style="background:rgba(99,102,241,0.12);border:2px solid var(--purple);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:8px;">🧠</div>
+      <div style="font-size:12px;font-weight:700;color:var(--purple);margin-bottom:4px;">TrueFoundry</div>
+      <div style="font-size:10px;color:var(--muted);">The control layer for AI. <strong style="color:var(--purple);">Early enough to own the position.</strong></div>
+    </div>
+  </div>
+
+  <!-- Window + how this deck connects -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+    <div>
+      <h3 style="margin-bottom:12px;font-size:15px;">The Window, and Why It Closes</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:rgba(5,150,105,0.10);border-left:3px solid var(--green);border-radius:6px;padding:10px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:3px;">Now → 2026 (12 months)</div>
+          <div style="font-size:12px;color:var(--muted);">TrueFoundry has an open field. MCP Gateway = unique. Hyperscalers have no equivalent. This is when to scale hard and fast.</div>
+        </div>
+        <div style="background:rgba(245,158,11,0.08);border-left:3px solid var(--yellow);border-radius:6px;padding:10px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--yellow);margin-bottom:3px;">2027</div>
+          <div style="font-size:11px;color:var(--muted);">AWS/Azure ship governance features. Not as good, but good enough for most buyers. Window narrows.</div>
+        </div>
+        <div style="background:rgba(239,68,68,0.08);border-left:3px solid var(--red);border-radius:6px;padding:10px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:3px;">2028</div>
+          <div style="font-size:11px;color:var(--muted);">Hyperscalers "good enough" for most buyers. Category commoditizes. Price pressure builds.</div>
+        </div>
+        <div style="background:rgba(99,102,241,0.08);border-left:3px solid var(--purple);border-radius:6px;padding:10px 14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--purple);margin-bottom:3px;">The implication</div>
+          <div style="font-size:11px;color:var(--muted);">12 months to build a 135% NRR customer base before the market crowds. Urgency is real.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="margin-bottom:12px;font-size:15px;">How This Deck Executes the Vision</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:16px;flex-shrink:0;">🏗️</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Founder to AE System</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Frees founders for strategic deals. Scales the motion beyond any one person.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:16px;flex-shrink:0;">📋</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Complex Sales Playbook</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Makes the 70% close rate repeatable at higher volume.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:16px;flex-shrink:0;">📢</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Marketing Alignment</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Builds the buyer before call 1. Closes the upstream gap. Compounds over time.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="font-size:16px;flex-shrink:0;">🎯</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">30/60/90 Execution</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Moves everything from slides to shipped in Q1, before the window narrows further.</div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+
+<!-- 02 MATH -->
+<section id="math">
+  <div class="section-tag">Pipeline Diagnosis</div>
+  <h2>The Path from $5M <span class="gradient-text">to $25M+</span></h2>
+
+  <div class="hero-callout">
+    <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+      <div>
+        <div class="big-num">77%</div>
+        <div class="big-label">of pipeline dies upstream</div>
+        <div class="big-sub">before ever reaching a POV evaluation</div>
+      </div>
+      <div style="flex:1;min-width:260px;padding-top:6px;">
+        <div style="background:rgba(0,0,0,0.04);border-radius:9px;padding:16px;font-family:monospace;font-size:13px;color:var(--text);line-height:2.1;">
+          Overall win rate: <strong style="color:var(--red)">16-17%</strong><br>
+          POV-to-close rate: <strong style="color:var(--green)">70%</strong><br>
+          <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+          Deals reaching POV: <strong>16% / 70% = <span style="color:var(--cyan)">~23%</span></strong><br>
+          Deals dying upstream: <strong style="color:var(--red)">~77%</strong>
+        </div>
+        <div class="caveat" style="margin:12px 0 0;"><strong>Note:</strong> These are derived figures based on the stated metrics, not pulled directly from CRM. Worth pressure-testing the inputs together, the math changes the strategy.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="funnel-wrap">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:20px;flex-wrap:wrap;">
+      <div>
+        <h3 style="margin-bottom:4px;">Illustrative Revenue Funnel</h3>
+        <p style="font-size:12px;color:var(--muted);margin:0;">What the pipeline math implies at 16% win rate and 70% POV close. Volumes are directional. Percentages are derived from stated metrics.</p>
+      </div>
+      <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:9px;padding:12px 16px;font-size:12px;color:var(--muted);line-height:1.6;max-width:220px;">
+        <strong style="color:var(--text);display:block;margin-bottom:2px;">Baseline: current team, current ACV</strong>
+        New hire scenario follows below.
+      </div>
+    </div>
+    <div class="funnel-stage">
+      <div class="funnel-bar-wrap">
+        <div class="funnel-label">Monthly inbound pipeline</div>
+        <div class="funnel-bar-outer"><div class="funnel-bar-inner" id="bar1" style="width:0%;background:linear-gradient(90deg,var(--purple),var(--cyan));">15-20 deals @ $125K avg = $1.9-2.5M/mo</div></div>
+      </div>
+    </div>
+    <div class="funnel-arrow">77% die here, before POV is ever started</div>
+    <div class="funnel-stage">
+      <div class="funnel-bar-wrap">
+        <div class="funnel-label">Reach POV (23%)</div>
+        <div class="funnel-bar-outer"><div class="funnel-bar-inner" id="bar2" style="width:0%;background:rgba(99,102,241,0.75);">3-5 deals/month enter POV</div></div>
+      </div>
+    </div>
+    <div class="funnel-arrow">~20% stall or go dark mid-evaluation</div>
+    <div class="funnel-stage">
+      <div class="funnel-bar-wrap">
+        <div class="funnel-label">Complete POV (80%)</div>
+        <div class="funnel-bar-outer"><div class="funnel-bar-inner" id="bar3" style="width:0%;background:rgba(99,102,241,0.5);">2-4 deals/month complete</div></div>
+      </div>
+    </div>
+    <div class="funnel-arrow green">70% CLOSE, protect this number above all else</div>
+    <div class="funnel-stage">
+      <div class="funnel-bar-wrap">
+        <div class="funnel-label">Closed / Won</div>
+        <div class="funnel-bar-outer"><div class="funnel-bar-inner" id="bar4" style="width:0%;background:linear-gradient(90deg,rgba(16,185,129,0.8),rgba(56,189,248,0.6));">1.5-3 deals/month</div></div>
+      </div>
+    </div>
+    <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;">
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Net new run rate</div>
+<div class="tooltip-wrap" style="display:inline-block;">
+  <div style="font-size:22px;font-weight:800;color:var(--red);">~$2.5-3.2M</div>
+  <div class="tooltip-box" style="width:320px;">
+    <strong style="display:block;color:var(--cyan);margin-bottom:8px;">How we get to ~$2.5-3.2M annual net new ARR</strong>
+    <div class="math-line"><span>Closed deals/month (1.5-3)</span><span style="color:var(--green)">avg 2.25</span></div>
+    <div class="math-line"><span>× Avg ACV</span><span style="color:var(--cyan)">$125K</span></div>
+    <div class="math-line"><span>= Monthly net new ARR</span><span style="color:var(--text)">$187K-$375K</span></div>
+    <div class="math-line"><span>Annualized (×12)</span><span style="color:var(--yellow)">$2.24M-$4.5M</span></div>
+    <div class="math-line"><span>Expected range (center case)</span><span style="color:var(--red)">~$2.5-3.2M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Consistent with ~$3M of the stated $3.8M ARR growth coming from net new (vs NRR expansion). Directional. Actual CRM data will refine this.</div>
+  </div>
+</div>
+<div style="font-size:11px;color:var(--muted);margin-top:3px;">~$3M of recent $3.8M growth</div></div>
+      <div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Expansion ARR (NRR 135%)</div>
+  <div class="tooltip-wrap" style="display:inline-block;">
+    <div style="font-size:22px;font-weight:800;color:var(--cyan);">~$800K</div>
+    <div class="tooltip-box" style="width:320px;">
+      <strong style="display:block;color:var(--cyan);margin-bottom:8px;">How we get to ~$800K expansion ARR</strong>
+      <div class="math-line"><span>Total recent ARR growth</span><span style="color:var(--text)">~$3.8M</span></div>
+      <div class="math-line"><span>Net new (new logo) portion</span><span style="color:var(--red)">~$3.0M</span></div>
+      <div class="math-line"><span>Expansion (existing customer growth)</span><span style="color:var(--cyan)">~$800K</span></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;"><strong style="color:var(--yellow)">Note:</strong> At 135% NRR on $5M ARR, theoretical expansion is $1.75M/yr. The observed ~$800K reflects a smaller prior-year ARR base. As the base grows, NRR expansion compounds significantly — at $10M ARR it adds $3.5M/yr with no new logos.</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);margin-top:3px;">Existing customers expanding</div>
+</div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Target ARR</div><div style="font-size:22px;font-weight:800;color:var(--green);">$25M+</div><div style="font-size:11px;color:var(--muted);margin-top:3px;">12-month goal</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px;">Where the gap lives</div><div style="font-size:22px;font-weight:800;color:var(--yellow);">Upstream</div><div style="font-size:11px;color:var(--muted);margin-top:3px;">Most of the $25M gap lives here</div></div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 4px;">Two Levers. Close Rate Stays the Same.</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:9px;padding:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;">Lever 1: More Pipeline</div>
+        <div style="font-size:10px;background:rgba(245,158,11,0.15);color:var(--yellow);border:1px solid rgba(180,83,9,0.20);padding:2px 7px;border-radius:4px;font-weight:700;">Supporting Motion</div>
+      </div>
+      <p style="font-size:12px;margin:0;color:var(--muted);line-height:1.6;">More volume into the same leaky funnel = same conversion loss at scale. <span class="tooltip-wrap" style="border-bottom:1px dashed var(--yellow);">Gets you to ~$5.7M net new ARR
+  <div class="tooltip-box" style="width:320px;">
+    <strong style="display:block;color:var(--yellow);margin-bottom:8px;">Lever 1 Only: Volume Math</strong>
+    <div class="math-line"><span>Current deals entering/month</span><span style="color:var(--muted)">15-20</span></div>
+    <div class="math-line"><span>With +60% volume (SDRs + outbound)</span><span style="color:var(--cyan)">25-30/month</span></div>
+    <div class="math-line"><span>POV rate stays at 23%</span><span style="color:var(--red)">still 23%</span></div>
+    <div class="math-line"><span>Extra POVs from volume alone</span><span style="color:var(--yellow)">+3/month</span></div>
+    <div class="math-line"><span>+3 POVs × 70% close × $125K × 12</span><span style="color:var(--yellow)">+$3.15M/yr</span></div>
+    <div class="math-line"><span>Baseline net new</span><span style="color:var(--muted)">$2.5-3.2M</span></div>
+    <div class="math-line"><span>Total with volume lift</span><span style="color:var(--yellow)">~$5.7M net new</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Gets you to ~$10.7M ARR (base $5M + $5.7M net new). Better than today, but the 77% upstream loss rate means most added volume still goes to waste. Not the primary lever.</div>
+  </div>
+</span>. Doesn't close the gap.</p>
+    </div>
+    <div style="background:rgba(16,185,129,0.09);border:2px solid rgba(16,185,129,0.3);border-radius:9px;padding:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;">Lever 2: Better Qualification</div>
+        <div style="font-size:10px;background:rgba(5,150,105,0.14);color:var(--green);border:1px solid rgba(16,185,129,0.3);padding:2px 7px;border-radius:4px;font-weight:700;">Primary Investment</div>
+      </div>
+      <p style="font-size:12px;margin:0;color:var(--muted);line-height:1.6;">At 70% close and $125K ACV: each additional POV per month means 12 more POVs per year, 8-9 more deals closed, <strong style="color:var(--green)">+$1.05M in net new ARR annually.</strong> Add 3 more POVs/month through better qualification, that's <strong style="color:var(--green)">+$3.15M ARR from qualification alone.</strong> 23% to 35%+ lead-to-qualified-POV rate is the primary investment.</p>
+    </div>
+  </div>
+  <table class="scenario-table">
+    <tr><th>Metric</th><th>Today (Baseline)</th><th>Lever 1 Only</th><th>Lever 2 Only (Recommended)</th><th>Both Levers + ACV Lift</th></tr>
+    <tr><td>Deals entering/month</td><td>15-20</td><td style="color:var(--cyan)">25-30 (+60%)</td><td>15-20 (same)</td><td style="color:var(--cyan)">25-30</td></tr>
+    <tr><td>% reaching POV</td><td>23%</td><td>23% (gap stays)</td><td style="color:var(--green)">35% (+52%)</td><td style="color:var(--green)">35%</td></tr>
+    <tr><td>POV entries/month</td><td>4 (avg)</td><td>+3 from volume (7/mo)</td><td style="color:var(--green)">+3 from qualification (7/mo)</td><td style="color:var(--green)">+7 combined (11/mo)</td></tr>
+    <tr><td>POV close rate</td><td style="color:var(--green)">70%</td><td style="color:var(--green)">70%, unchanged</td><td style="color:var(--green)">70%, unchanged</td><td style="color:var(--green)">70%, unchanged</td></tr>
+    <tr><td>Avg ACV</td><td>$125K</td><td>$125K</td><td>$125K</td><td style="color:var(--cyan)">$200K (+60%)</td></tr>
+    <tr class="highlight-row"><td>Annual net new ARR (normalized to +3 POVs/mo)</td><td style="color:var(--red)">$2.5-3.2M baseline</td><td style="color:var(--yellow)">+$3.15M = ~$5.7M (volume alone not enough)</td><td style="color:var(--cyan)">+$3.15M = ~$6.3M (qualification wins)</td><td style="color:var(--green)" class="tooltip-wrap">+$11.8M net new ARR = $14M+ total (see math)<div class="tooltip-box" style="width:340px;"><strong style="display:block;color:var(--green);margin-bottom:8px;">Both Levers + ACV Lift: Full Math</strong><div class="math-line"><span>Deals entering/month (both levers)</span><span style="color:var(--cyan)">25-30</span></div><div class="math-line"><span>× 35% qualified POV rate</span><span style="color:var(--green)">35%</span></div><div class="math-line"><span>= POVs/month entering</span><span style="color:var(--text)">8.75-10.5</span></div><div class="math-line"><span>× 70% close rate</span><span style="color:var(--green)">70%</span></div><div class="math-line"><span>= Deals closed/month</span><span style="color:var(--text)">6.1-7.4/month</span></div><div class="math-line"><span>× ACV (lifted to $200K)</span><span style="color:var(--cyan)">$200K</span></div><div class="math-line"><span>= Monthly net new ARR</span><span style="color:var(--text)">$1.22-$1.48M</span></div><div class="math-line"><span>Annualized (×12)</span><span style="color:var(--green)">$14.6-17.8M net new</span></div><div class="math-line"><span>+ Starting ARR base</span><span style="color:var(--muted)">$5M</span></div><div class="math-line"><span style="font-weight:700;">Total ARR (system only)</span><span style="color:var(--green);font-weight:700;">~$14M+ net new</span></div></div></td></tr>
+  </table>
+  <div style="margin-top:14px;background:rgba(5,150,105,0.10);border:1px solid rgba(5,150,105,0.20);border-radius:9px;padding:16px;line-height:1.8;">
+    <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">The Path to $25M+, Math Shown</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:12px;color:var(--muted);">
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;"><div style="color:var(--text);font-weight:700;margin-bottom:3px;">Net New ARR (both levers, 12 months)</div>$11-14M — this is the "Both Levers + ACV Lift" column from the scenario table above: 35% POV rate + 25-30 deals/month + $200K ACV. Hover the table cell for the full math.</div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;"><div style="color:var(--text);font-weight:700;margin-bottom:3px;">Existing Base</div>$5M ARR already in the ground</div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;"><div style="color:var(--text);font-weight:700;margin-bottom:3px;">NRR Expansion (135%)</div>~$1.75M from current customers with zero new deals</div>
+    </div>
+    <div style="margin-top:10px;font-size:13px;color:var(--text);font-weight:600;"><span class="tooltip-wrap" style="border-bottom:1px dashed var(--green);">System improvements alone (12 months): $17.75-$20.75M
+  <div class="tooltip-box" style="width:360px;">
+    <strong style="display:block;color:var(--green);margin-bottom:8px;">How $17.75-$20.75M Is Built (System Only, No New Hires)</strong>
+    <div class="math-line"><span>Starting ARR</span><span style="color:var(--text)">$5.0M</span></div>
+    <div class="math-line"><span>Net new ARR: both levers + ACV lift (12 months)</span><span style="color:var(--green)">+$11-14M</span></div>
+    <div class="math-line"><span>NRR expansion on $5M base (135% NRR)</span><span style="color:var(--cyan)">+$1.75M</span></div>
+    <div class="math-line" style="font-weight:700;"><span>Year 1 exit ARR (system only)</span><span style="color:var(--green);font-weight:700;">$17.75-$20.75M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">This assumes both levers fire and ACV reaches $200K by Q3 — no new AE hires counted here. The hiring plan adds $4-5M on top to close the final gap to $25M+.</div>
+  </div>
+</span>. The hiring plan closes the gap: <span style="color:var(--cyan)">+$4.2-5.2M from 4 existing AEs (certified fast) + 4 new AEs (ramped by Month 5).</span> <strong style="color:var(--text);">Combined path to $25M+ in 12 months. The hiring plan is the closer.</strong></div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px;font-size:12px;">
+      <div style="background:rgba(5,150,105,0.10);border:1px solid rgba(16,185,129,0.3);border-radius:7px;padding:8px 14px;color:var(--green);font-weight:600;">System levers: $17-21M</div>
+      <div style="color:var(--muted);font-size:18px;font-weight:700;">+</div>
+      <div style="background:rgba(2,132,199,0.10);border:1px solid rgba(2,132,199,0.25);border-radius:7px;padding:8px 14px;color:var(--cyan);font-weight:600;">Hiring plan: +$4-5M</div>
+      <div style="color:var(--muted);font-size:18px;font-weight:700;">=</div>
+      <div style="background:rgba(99,102,241,0.15);border:2px solid rgba(99,102,241,0.5);border-radius:7px;padding:8px 14px;color:var(--purple);font-weight:800;">$25M+ in 12 months</div>
+      <div style="color:var(--muted);font-size:11px;flex:1;">↓ see hiring plan below</div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;border-top:1px solid var(--border);padding-top:24px;">
+    <div style="background:rgba(2,132,199,0.08);border-left:4px solid var(--cyan);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:5px;">Connecting the Funnel to the Hiring Plan</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;">The funnel model above shows what the <strong>system improvements</strong> unlock. The hiring plan below shows what the <strong>team build-out</strong> adds on top. Both need to run in parallel from Day 1. The system without the headcount won't close the gap, and the headcount without the system sends more reps into the same leaky funnel.</div>
+    </div>
+    <h3 style="margin-bottom:6px;">The Hiring Plan</h3>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+      <div style="background:rgba(56,189,248,0.07);border:1px solid rgba(2,132,199,0.15);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Existing AE Baseline (4 AEs · $1.2M Quota Each)</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;"><span class="tooltip-wrap">4 AEs × $1.2M quota × 70% attainment = <strong style="color:var(--cyan)">$3.36M</strong>
+  <div class="tooltip-box" style="width:300px;">
+    <strong style="display:block;color:var(--cyan);margin-bottom:8px;">Existing AE Baseline Math</strong>
+    <div class="math-line"><span>AEs (2 Boston + 2 Bay Area)</span><span style="color:var(--text)">4</span></div>
+    <div class="math-line"><span>× Individual quota</span><span style="color:var(--cyan)">$1.2M</span></div>
+    <div class="math-line"><span>= Total team quota capacity</span><span style="color:var(--text)">$4.8M</span></div>
+    <div class="math-line"><span>× Attainment (70%, fully ramped)</span><span style="color:var(--yellow)">70%</span></div>
+    <div class="math-line"><span>= Closed ARR contribution</span><span style="color:var(--green)">$3.36M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Assumes all 4 are fully certified and operating independently. Getting them there fast is the top priority, each week of founder dependency is a week of lost quota productivity.</div>
+  </div>
+</span> when fully ramped. Priority: certify all 4 fast. New hires stack on top.</div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--yellow);">
+        <div style="font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Base Case: 1-3 Sales Hires</div>
+        <ul class="bullets" style="margin:0;">
+          <li>1-2 Enterprise AEs + 1 SDR by Month 3</li>
+          <li><span class="tooltip-wrap" style="border-bottom:1px dashed var(--muted);">AE quota: $1.2M each → $1.68M from 2 new AEs at 70% attainment
+  <div class="tooltip-box" style="width:300px;">
+    <strong style="display:block;color:var(--cyan);margin-bottom:8px;">New AE Quota Math (Base Case)</strong>
+    <div class="math-line"><span>New AEs hired (by Month 3)</span><span style="color:var(--text)">2</span></div>
+    <div class="math-line"><span>× Individual quota</span><span style="color:var(--cyan)">$1.2M</span></div>
+    <div class="math-line"><span>× Attainment (70%)</span><span style="color:var(--yellow)">70%</span></div>
+    <div class="math-line"><span>× Productive months (avg 8 of 12)</span><span style="color:var(--muted)">8/12</span></div>
+    <div class="math-line"><span>= Annualized contribution</span><span style="color:var(--green)">~$1.1-1.4M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Assumes 4-month ramp before AE is independently productive. Faster certification = faster contribution. Target: AEs running solo calls by Week 6.</div>
+  </div>
+</span></li>
+          <li>SDR generates 15-20 qualified meetings/month, lifting pipeline volume ~30%</li>
+          <li><span class="tooltip-wrap" style="border-bottom:1px dashed var(--yellow);">Year 1 ARR trajectory: $7-9M
+  <div class="tooltip-box" style="width:320px;">
+    <strong style="display:block;color:var(--yellow);margin-bottom:8px;">Base Case: 12-Month ARR Buildup</strong>
+    <div class="math-line"><span>Starting ARR</span><span style="color:var(--text)">$5.0M</span></div>
+    <div class="math-line"><span>Existing 4 AEs (certified by Month 2)</span><span style="color:var(--cyan)">+$2.0-2.5M</span></div>
+    <div class="math-line"><span>1-2 new AEs (hired M1-3, half-year contribution)</span><span style="color:var(--yellow)">+$0.7-1.0M</span></div>
+    <div class="math-line"><span>1 SDR → pipeline lift ~30%</span><span style="color:var(--yellow)">+$0.5-0.8M</span></div>
+    <div class="math-line"><span>NRR expansion (135% on $5M base)</span><span style="color:var(--green)">+$1.75M</span></div>
+    <div class="math-line"><span style="font-weight:700;">Year 1 exit ARR</span><span style="color:var(--yellow);font-weight:700;">$7-9M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Conservative. System improvements (POV rate, ACV lift) not fully credited here, those compound over time and push toward the high end.</div>
+  </div>
+</span></li>
+          <li>Break-even per AE: ~3 closed deals at $125K ACV, Month 4-5</li>
+        </ul>
+      </div>
+      <div class="card" style="border-top:3px solid var(--green);">
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">Target Case: 4-5 Sales Hires</div>
+        <ul class="bullets" style="margin:0;">
+          <li>3-4 Enterprise AEs + 1-2 SDRs by Month 6</li>
+          <li><span class="tooltip-wrap" style="border-bottom:1px dashed var(--muted);">Total new AE quota capacity: $3.9-5.2M
+  <div class="tooltip-box" style="width:300px;">
+    <strong style="display:block;color:var(--green);margin-bottom:8px;">Target Case: New AE Quota Capacity</strong>
+    <div class="math-line"><span>Low end: 3 new AEs × $1.2M</span><span style="color:var(--text)">$3.6M</span></div>
+    <div class="math-line"><span>High end: 4 new AEs × $1.2M</span><span style="color:var(--text)">$4.8M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Gross quota capacity. Net contribution in Year 1 is lower due to ramp time. See the attainment row for realized ARR.</div>
+  </div>
+</span></li>
+          <li><span class="tooltip-wrap" style="border-bottom:1px dashed var(--muted);">At 70% attainment: $2.7-3.6M additional closed ARR from new team
+  <div class="tooltip-box" style="width:320px;">
+    <strong style="display:block;color:var(--green);margin-bottom:8px;">Target Case: New AE Realized ARR</strong>
+    <div class="math-line"><span>3-4 new AEs × $1.2M quota</span><span style="color:var(--text)">$3.6-4.8M</span></div>
+    <div class="math-line"><span>× 70% attainment</span><span style="color:var(--yellow)">$2.52-3.36M</span></div>
+    <div class="math-line"><span>× Ramp factor (avg 8/12 months productive)</span><span style="color:var(--muted)">~85%</span></div>
+    <div class="math-line"><span>= Year 1 net contribution</span><span style="color:var(--green)">$2.1-2.9M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;">Ramp factor assumes Month 1-4 are ramp/certification. AEs hired by Month 2 can hit 8+ productive months in Year 1. Speed of hiring = speed of contribution.</div>
+  </div>
+</span></li>
+          <li>2 SDRs: ~2x current deal flow entering per month</li>
+          <li><span class="tooltip-wrap" style="border-bottom:1px dashed var(--green);">Year 1 ARR trajectory: $11-14M with win rate improving to 22-25%
+  <div class="tooltip-box" style="width:340px;">
+    <strong style="display:block;color:var(--green);margin-bottom:8px;">Target Case: 12-Month ARR Buildup to $25M+</strong>
+    <div class="math-line"><span>Starting ARR</span><span style="color:var(--text)">$5.0M</span></div>
+    <div class="math-line"><span>Existing 4 AEs (certified Month 2)</span><span style="color:var(--cyan)">+$3.36M</span></div>
+    <div class="math-line"><span>3-4 new AEs (hired M1-2, 8+ months productive)</span><span style="color:var(--green)">+$2.3-3.1M</span></div>
+    <div class="math-line"><span>1-2 SDRs → pipeline volume doubles</span><span style="color:var(--yellow)">+$1.5-2.0M</span></div>
+    <div class="math-line"><span>System levers: POV rate 23%→35%, ACV $125K→$175K+</span><span style="color:var(--purple)">+$6-8M</span></div>
+    <div class="math-line"><span>NRR expansion (135% on $5M base)</span><span style="color:var(--green)">+$1.75M</span></div>
+    <div class="math-line" style="font-weight:700;"><span>Year 1 exit ARR</span><span style="color:var(--green);font-weight:700;">$19.9-23.2M</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;"><strong style="color:var(--cyan);">Path to $25M:</strong> ACV expansion reaching $200K by Q3 (currently modeled at $175K avg) + full SDR pipeline impact pushes into $23-26M range. Achievable. Requires fast hiring and aggressive value selling from Day 1.</div>
+  </div>
+</span></li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:16px;">
+      <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Recommendation: Target Case, Paced for Delivery Capacity</div>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">2 AEs hired by Month 2 → validate independent pitch motion. Third AE + SDR by Month 4-5. First meaningful revenue Month 3-4. 4-6 AEs + 2 SDRs fully ramped by Month 6. $25M+ ARR by Year 1 end. Requires both system levers and hiring plan running in parallel from Day 1.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PRIORITIES -->
+<section id="priorities">
+  <div class="section-tag">Strategic Architecture</div>
+  <h2>The <span class="gradient-text">Big 3</span>, In Order</h2>
+
+
+  <div class="priority-block" style="border:2px solid var(--red);">
+    <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:16px;">
+      <div style="background:var(--red);color:white;font-size:28px;font-weight:900;width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--red);margin-bottom:5px;">The Opportunity, Address First</div><h3 style="margin:0;font-size:20px;">Build the Sales System That Scales Beyond Founders</h3></div>
+    </div>
+    <ul class="bullets">
+      <li>All three founders touch every deal, and the 70% POV close rate proves it's working. The goal isn't disruption, it's transition. Layer a scalable system underneath so the close rate stays, but growth isn't capped by founder hours. Founders deploy where they create asymmetric value; AEs own the repeatable motion.</li>
+      <li>Anuraag alone: ~540 hrs/yr at 16% win rate, ~27% of a co-founder's working hours in the early-stage funnel. This transition needs to be handled carefully so buyers don't notice a drop in quality, they notice a step up in responsiveness.</li>
+      <li><strong>What I'd do:</strong> Build a pitch any technically-trained AE can execute. Founders become the strategic knockout punch, reserved for $250K+ accounts and CTO-level close conversations.</li>
+    </ul>
+  </div>
+
+  <div class="priority-block" style="border:2px solid var(--yellow);">
+    <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:16px;">
+      <div style="background:var(--yellow);color:#0A0A0F;font-size:28px;font-weight:900;width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--yellow);margin-bottom:5px;">Pipeline Quality</div><h3 style="margin:0;font-size:20px;">Move More of the Right Deals to POV</h3></div>
+    </div>
+    <ul class="bullets">
+      <li>Two root causes: unqualified deals entering the funnel; AEs leading with product before establishing pain. No quantified pain = no urgency = "send me more info."</li>
+      <li><strong>What I'd do:</strong> MEDDPICC as shared qualification language and a POV Prescription Playbook. Every discovery call ends with a committed next step or a clean pass.</li>
+    </ul>
+  </div>
+
+  <div class="priority-block" style="border:2px solid var(--purple);">
+    <div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:16px;">
+      <div style="background:var(--purple);color:white;font-size:28px;font-weight:900;width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+      <div><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:5px;">Revenue Architecture</div><h3 style="margin:0;font-size:20px;">Premium Pricing and a Connected Buyer Journey</h3></div>
+    </div>
+    <ul class="bullets">
+      <li>$125K ACV is 40-60% below market. Databricks, Azure ML, Bedrock print $200-350K for narrower value props. Better discovery gets to the number the product actually justifies.</li>
+      <li>Target: $200K ACV for enterprise accounts. At 70% POV close, $200K avg vs $125K = 60% revenue lift without a single additional deal closed.</li>
+      <li>Marketing, SDR, and AE are three disconnected functions. AEs spend the first 20 minutes educating buyers that content should have pre-qualified.</li>
+      <li><strong>What I'd do:</strong> One continuous buyer journey. Content pre-qualifies. SDRs score against ICP. AEs inherit context and use discovery time on pain, not education.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 04 FOUNDER TO AE -->
+<section id="founder">
+  <div class="section-tag">Priority #1 Deep Dive</div>
+  <h2>Evolving Beyond <span class="gradient-text">Founder-Led Sales</span></h2>
+
+  <div class="hero-callout" style="margin-bottom:28px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Anuraag, Co-Founder</div>
+        <div style="font-size:24px;font-weight:800;color:var(--red);">
+  <span class="hrs-tooltip-wrap">~540 hrs/yr
+    <div class="hrs-tooltip"><strong>How we get to 540 hrs/yr</strong>10-11 hrs/week on tech demos, architecture calls, and complex discovery. 10.5 hrs x 48 working weeks = 504 hrs. Rounded to ~540 accounting for onboarding calls and ad hoc asks.<br><br>At 16% win rate: ~449 of those hours go to deals that never close.</div>
+  </span>
+</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;">Every tech demo, architecture call, complex discovery. At 16% win rate, 27% of a co-founder's working hours flow into deals that don't close.</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Nikunj, CEO</div>
+        <div style="font-size:24px;font-weight:800;color:var(--yellow);">
+  <span class="hrs-tooltip-wrap">~225 hrs/yr
+    <div class="hrs-tooltip"><strong>How we get to 225 hrs/yr</strong>4-5 hrs/week on exec relationship calls, vision conversations, and deal-advancing meetings. 4.5 hrs x 48 working weeks = 216 hrs. Rounded to ~225.<br><br>At 16% win rate: ~189 of those hours flow into deals that never close.</div>
+  </span>
+</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;">Exec relationships, vision calls. Every hour on a $125K deal is an hour not on a $400K+ account or the next round.</div>
+      </div>
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Abhishek, CTO</div>
+        <div style="font-size:24px;font-weight:800;color:var(--purple);">
+  <span class="hrs-tooltip-wrap">~175 hrs/yr
+    <div class="hrs-tooltip"><strong>How we get to 175 hrs/yr</strong>3-4 hrs/week on product depth calls, integration architecture, and roadmap discussions. 3.5 hrs x 48 working weeks = 168 hrs. Rounded to ~175.<br><br>Goal is not to remove him entirely, but to deploy him only where his involvement creates asymmetric value.</div>
+  </span>
+</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;">Product depth, integration architecture, roadmap. Deploy where his involvement creates asymmetric value. Not by default.</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(0,0,0,0.05);font-size:13px;color:var(--muted);line-height:1.7;">
+      <strong style="color:var(--text);">~940 founder-hours/year in sales.</strong> At $400/hr opportunity cost: <strong style="color:var(--red);">$376K of founder time at a 16% win rate.</strong> Architecture problem.
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:28px;">
+    <div class="card" style="border-top:3px solid var(--red);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:8px;">Phase 1 · Days 0-30</div>
+      <h4 style="color:var(--text);font-size:13px;margin-bottom:8px;">Extract and Codify the Playbook</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Shadow every in-flight deal for 2 weeks, no running the room</li>
+        <li>Extract the founders' pitch into a teachable, documented system</li>
+        <li>AE Certification launches: shadow, co-pilot, independent track</li>
+        <li><em>Milestone:</em> First certified AE runs a complete demo without a founder present</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--yellow);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:8px;">Phase 2 · Days 30-60</div>
+      <h4 style="color:var(--text);font-size:13px;margin-bottom:8px;">AEs Own Calls 1 and 2</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Certified AEs handle discovery, demo, POV kickoff independently</li>
+        <li>Escalation protocol: founders in at $150K+ or CTO-level buyers, strategic choice, not reflex</li>
+        <li><em>Milestone:</em> Anuraag's sales hours drop from ~540/yr to ~150/yr</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px;">Phase 3 · Days 60-180</div>
+      <h4 style="color:var(--text);font-size:13px;margin-bottom:8px;">Founders Are the Knockout Punch</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Nikunj (CEO) closes strategic enterprise and category-building relationships. Abhishek (CTO) handles roadmap commitments and technical architecture deals. Anuraag deploys where asymmetric value is created.</li>
+        <li>Everything below that threshold: AE team owns it</li>
+        <li><em>Milestone:</em> AE team supports $25-30M ARR trajectory</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:14px;">The 4 Demo Moments That Actually Win Deals</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+    <div style="background:var(--card2);border-radius:9px;padding:16px;border-left:3px solid var(--cyan);">
+      <div style="font-size:10px;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Move This to Minute 10</div>
+      <p style="font-size:13px;margin:0;line-height:1.5;"><strong style="color:var(--text);">Gated MCP playground demo</strong>, the moment that generates the most buyer questions currently happens 80% through a 60-min call. That is the opening act, not the finale.</p>
+    </div>
+    <div style="background:var(--card2);border-radius:9px;padding:16px;border-left:3px solid var(--cyan);">
+      <div style="font-size:10px;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Universal Pain Frame</div>
+      <p style="font-size:13px;margin:0;line-height:1.5;"><strong style="color:var(--text);">"You have 70-80 MCP servers in your environment right now, and that number will double by Q3. No visibility on cost, data exposure, or what happens when a model provider goes down."</strong> This opens the governance conversation before a single feature is mentioned.</p>
+    </div>
+    <div style="background:var(--card2);border-radius:9px;padding:16px;border-left:3px solid var(--cyan);">
+      <div style="font-size:10px;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Unlock Finance Budget, Lead with Compliance for FSI</div>
+      <p style="font-size:13px;margin:0;line-height:1.5;"><strong style="color:var(--text);">For FSI and healthcare buyers: security and guardrails come first.</strong> Regulated industry buyers need to hear compliance before they hear capability. Cost chargebacks and team-level attribution follow, turns an IT eval into a CFO conversation.</p>
+    </div>
+    <div style="background:var(--card2);border-radius:9px;padding:16px;border-left:3px solid var(--cyan);">
+      <div style="font-size:10px;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;">Proactive Trust-Builder</div>
+      <p style="font-size:13px;margin:0;line-height:1.5;"><strong style="color:var(--text);">"No TrueFoundry SDK, you can leave whenever you want."</strong> Remove the most common late-stage procurement objection in call 1, not in response to a blocker in month 3.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- 04b BUILD THE TEAM -->
+<section id="build-team">
+  <div class="section-tag">Talent Architecture</div>
+  <h2>How to <span class="gradient-text">Build the AE Team Quickly</span></h2>
+
+
+  <!-- What to look for -->
+  <h3 style="margin-bottom:14px;">What to Look for in Enterprise AE Candidates</h3>
+  <div class="card-grid" style="margin-bottom:28px;">
+    <div class="fix-card green" style="margin:0;">
+      <div class="fix-num">Must-Haves</div>
+      <div class="fix-title">Non-Negotiable Profile</div>
+      <ul class="bullets" style="margin:0;">
+        <li><strong>$750K–$1.5M quota history</strong> in enterprise SaaS, not mid-market, not SMB</li>
+        <li><strong>Technical comfort</strong>, doesn't need to code, but can hold a conversation with a CTO without flinching</li>
+        <li><strong>MEDDPICC or equivalent</strong> methodology experience, or provable instinct for qualification and multi-threading</li>
+        <li><strong>Discovery-first instinct</strong>, listens more than they pitch in first calls. Coachable on this if other signals are strong.</li>
+        <li><strong>Self-starter</strong>, can source without a full BDR motion under them</li>
+      </ul>
+    </div>
+    <div class="fix-card yellow" style="margin:0;">
+      <div class="fix-num">Strong Signals</div>
+      <div class="fix-title">High-Confidence Indicators</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Sold infrastructure, DevOps, or platform engineering products, understands the technical buyer</li>
+        <li>Closed multi-stakeholder deals (engineering + security + procurement + exec)</li>
+        <li>Has won competitive deals against Databricks, AWS, or Azure, knows the reframe instinctively</li>
+        <li>Has referrals from prior customers or champions, trust travels</li>
+        <li>Background: Datadog, HashiCorp, Grafana, Harness, CircleCI, Pulumi, Sysdig, adjacent infra SaaS</li>
+      </ul>
+    </div>
+    <div class="fix-card red" style="margin:0;">
+      <div class="fix-num">Red Flags</div>
+      <div class="fix-title">Disqualifying Patterns</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Can't explain what they actually do in discovery, "I ask questions" isn't an answer</li>
+        <li>Demo-first reflex, starts showing product before pain is established</li>
+        <li>Can't name their top 3 lost deals and why they lost them</li>
+        <li>No pattern of multi-threading, only has one contact at every account</li>
+        <li>Needs a fully built BDR motion to be productive, wrong stage company for that expectation</li>
+      </ul>
+    </div>
+    <div class="fix-card cyan" style="margin:0;">
+      <div class="fix-num">Interview Test</div>
+      <div class="fix-title">Discovery Simulation</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Role-play: they AE, you're VP Engineering at a 1,000-person FSI company. Watch the first 5 questions, do they context-set or go straight to pain?</li>
+        <li>"Walk me through your last deal loss. What happened at Stage 4?"</li>
+        <li>"How did you qualify the economic buyer in your last $500K+ deal?", should be specific, not generic</li>
+        <li>"Name the 3 biggest risks to your current pipeline.", reveals forecast discipline</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Where to find them -->
+  <h3 style="margin-bottom:14px;">Resources for Hiring Quickly</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px;">
+    <div class="card" style="border-top:3px solid var(--purple);">
+      <h4 style="color:var(--text);margin-bottom:8px;">🎯 Specialist Recruiters</h4>
+      <ul class="bullets" style="margin:0;">
+        <li><strong>Bravado</strong>, best network for enterprise SaaS AEs, quota-verified profiles</li>
+        <li><strong>GrowthByDesign</strong>, startup-to-scale-up SaaS hiring specialists</li>
+        <li><strong>Toptal / Arc</strong>, for SE / sales engineering talent</li>
+        <li>Brief each recruiter on TF's technical buyer profile and competitive landscape, most will get it wrong without that context</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--cyan);">
+      <h4 style="color:var(--text);margin-bottom:8px;">🔗 Direct Networks</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>LinkedIn Sales Navigator, search "enterprise AE" + Datadog/HashiCorp/Harness + "enterprise" in title</li>
+        <li>Former colleagues, best signal on culture fit and execution quality</li>
+        <li>TrueFoundry customer champions, ask who else in their network fits the profile</li>
+        <li><strong>Pavilion</strong> (formerly Revenue Collective) for enterprise SaaS revenue leaders with deep AE networks</li>
+        <li>TrueFoundry's own investor networks (Intel Capital, Peak XV, Jump Capital) for warm intros to enterprise SaaS talent</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--green);">
+      <h4 style="color:var(--text);margin-bottom:8px;">📋 Process to Move Fast</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Target: 2-week close from first screen to offer, not 8 weeks</li>
+        <li>3-round process: phone screen (30 min) → discovery role-play (45 min) → founder + me (60 min, case exercise)</li>
+        <li>Final round exercise: research a TF prospect, write first-call prep, present it. Tests research instinct and communication quality.</li>
+        <li>3 references from last 2 companies, ask specifically about forecast accuracy and deal loss patterns</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Ramp and coaching -->
+  <h3 style="margin-bottom:14px;">Building, Training, and Coaching the Team</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px;">
+    <div class="card" style="border-left:4px solid var(--red);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:8px;">Week 1-2: Foundation</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Product depth: shadowing Nikunj, Anuraag, and Abhishek on live calls, no talking</li>
+        <li>Competitive landscape: self-study on Databricks, Bedrock, LiteLLM, produce a cheat sheet by Day 10</li>
+        <li>Certification track begins: read all transcripts, identify 3 moments that moved deals forward</li>
+        <li>ICP: memorize the 46 customer profiles, understand who TF wins with and why</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--yellow);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:8px;">Week 3-4: Co-Pilot</div>
+      <ul class="bullets" style="margin:0;">
+        <li>AE leads discovery on real calls, founder on standby, not running the room</li>
+        <li>Post-call debrief: what question opened the most, where did momentum stall, what would you change</li>
+        <li>First MEDDPICC-scored deal review, AE must walk through every letter for their active pipeline</li>
+        <li>Role-play objection handling: Big 3 objections cold, no notes</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:4px solid var(--green);">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px;">Week 5-6: Certification</div>
+      <ul class="bullets" style="margin:0;">
+        <li>AE runs complete Call 1 + Demo independently, recorded for review</li>
+        <li>Certification gate: score 4/5 on Science Project Diagnostic for all active deals</li>
+        <li>Ongoing coaching cadence: weekly 1:1 deal review + monthly call listen + quarterly pitch recertification</li>
+        <li>Milestone: certified AE added to pipeline model at full quota contribution</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="hero-callout" style="border-color:rgba(99,102,241,0.35);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:10px;">Coaching Philosophy</div>
+    <div style="font-size:15px;font-weight:700;color:var(--text);line-height:1.7;">Build a team of high-character, high-coachability reps and give them a system worth running. Coach to the gaps every week. The playbook is the standard, not the manager's personal style. Everyone measured the same: MEDDPICC score, pipeline coverage, Stage 1 to POV rate, and POV close rate. People who can't clear certification after a real shot get replaced, quickly and fairly.</div>
+  </div>
+</section>
+
+
+<!-- 05 CURRENT TEAM -->
+<section id="current-team">
+  <div class="section-tag">Team Audit</div>
+  <h2>The Current Team: <span class="gradient-text">What's Working and What's the Ceiling</span></h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">13 people in the sales org. The right foundation, deployed against a system that hasn't been built yet. This is the honest assessment before making any structural changes.</p>
+
+  <!-- Team Structure -->
+  <h3 style="margin-bottom:14px;">Team Structure (13 People)</h3>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:28px;">
+    <div class="card" style="text-align:center;padding:16px;">
+      <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">3</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin:4px 0;">Co-Founders</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">Nikunj / CEO<br>Abhishek / CTO<br>Anuraag / Co-Founder</div>
+      <div style="margin-top:8px;font-size:10px;background:rgba(220,38,38,0.10);border:1px solid rgba(220,38,38,0.18);color:var(--red);padding:3px 7px;border-radius:4px;font-weight:700;">All in sales</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px;">
+      <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">4</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin:4px 0;">Account Execs</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">2 Boston · 2 Bay Area<br>$1.2M quota (fully ramped)</div>
+      <div style="margin-top:8px;font-size:10px;background:rgba(180,83,9,0.10);border:1px solid rgba(245,158,11,0.25);color:var(--yellow);padding:3px 7px;border-radius:4px;font-weight:700;">Ramp ASAP</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px;">
+      <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">~2</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin:4px 0;">SDRs / BDRs</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">Volume-focused outbound</div>
+      <div style="margin-top:8px;font-size:10px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);color:var(--purple);padding:3px 7px;border-radius:4px;font-weight:700;">Needs ICP scoring</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px;">
+      <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">2–3</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin:4px 0;">Solution Engineers</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">Pre-Sales / POV support</div>
+      <div style="margin-top:8px;font-size:10px;background:rgba(2,132,199,0.10);border:1px solid rgba(56,189,248,0.25);color:var(--cyan);padding:3px 7px;border-radius:4px;font-weight:700;">POV factory potential</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px;">
+      <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--purple),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">1–2</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin:4px 0;">Customer Success</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5;">Driving 135% NRR</div>
+      <div style="margin-top:8px;font-size:10px;background:rgba(5,150,105,0.10);border:1px solid rgba(5,150,105,0.20);color:var(--green);padding:3px 7px;border-radius:4px;font-weight:700;">Don't break this</div>
+    </div>
+  </div>
+
+  <!-- What's Working / What's the Ceiling -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;">
+    <div>
+      <h3 style="margin-bottom:12px;color:var(--green);">✓ What's Working, Keep and Protect</h3>
+      <div class="fix-card green">
+        <div class="fix-title">70% POV Close Rate</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">The founders' technical credibility and product depth is the reason this exists. Don't disrupt the close motion, build around it.</p>
+      </div>
+      <div class="fix-card green">
+        <div class="fix-title">135% NRR</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">CS is doing something right, expansion is real. Don't break this.</p>
+      </div>
+      <div class="fix-card green">
+        <div class="fix-title">16 Deals/Month Inbound Pipeline</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Strong for the stage. Shows product-market fit signal.</p>
+      </div>
+      <div class="fix-card green">
+        <div class="fix-title">Co-Founders in Every Technical Call</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">The right instinct when you're building credibility. The wrong default at $20M+.</p>
+      </div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:12px;color:var(--red);">✗ What's the Ceiling, What Needs to Change</h3>
+      <div class="fix-card red">
+        <div class="fix-title">AE Quota Attainment</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">$750K target, attainment likely 50–65%. The playbook isn't repeatable yet.</p>
+      </div>
+      <div class="fix-card red">
+        <div class="fix-title">SDR → AE Handoff Quality</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Meetings booked on quantity, not qualification. 77% of deals die before POV.</p>
+      </div>
+      <div class="fix-card red">
+        <div class="fix-title">No Independent AE Motion</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Every complex deal requires a founder. Can't scale 3 people to $25M.</p>
+      </div>
+      <div class="fix-card red">
+        <div class="fix-title">ICP Scoring, Do We Have It?</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">A key Day 1 question: is there a formal ICP definition with documented scoring criteria? If deals are entering the funnel based on who said yes to a meeting rather than fit criteria, this is a Week 1 fix, and one of the highest-leverage changes we can make.</p>
+      </div>
+      <div class="fix-card red">
+        <div class="fix-title">Qualification Gaps</div>
+        <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Economic buyer, budget, decision process not consistently surfaced before Stage 2.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gap Analysis Table -->
+  <h3 style="margin-bottom:14px;">The Gap Analysis</h3>
+  <table class="scenario-table" style="margin-bottom:28px;">
+    <tr>
+      <th>Role</th>
+      <th>Current State</th>
+      <th>Target State (12 Months)</th>
+    </tr>
+    <tr>
+      <td>AEs</td>
+      <td style="color:var(--yellow);">4 (2 Boston, 2 Bay Area) · $1.2M quota each · need faster ramp to independence</td>
+      <td style="color:var(--green);">6–8, independently certified</td>
+    </tr>
+    <tr>
+      <td>SDRs</td>
+      <td style="color:var(--red);">2, meeting-volume focused</td>
+      <td style="color:var(--green);">3–4, ICP-scored pipeline</td>
+    </tr>
+    <tr>
+      <td>SEs</td>
+      <td style="color:var(--yellow);">2–3, on every POV</td>
+      <td style="color:var(--green);">2–3, POV factory (not every call)</td>
+    </tr>
+    <tr>
+      <td>CS</td>
+      <td style="color:var(--yellow);">1–2, reactive</td>
+      <td style="color:var(--green);">2, expansion-proactive</td>
+    </tr>
+    <tr class="highlight-row">
+      <td>Founders in Sales</td>
+      <td style="color:var(--red);">Every deal</td>
+      <td style="color:var(--green);">$200K+ and CTO-level only</td>
+    </tr>
+  </table>
+
+  <!-- The Unlock -->
+  <div class="hero-callout" style="border-color:rgba(99,102,241,0.35);background:linear-gradient(135deg,rgba(99,102,241,0.12),rgba(2,132,199,0.08));">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--purple);margin-bottom:12px;">The Unlock</div>
+    <div style="font-size:18px;font-weight:700;color:var(--text);line-height:1.6;">"The 13-person team that got TrueFoundry to $5M ARR stays ,  and we build around them, not instead of them. But let's be direct: who we hire next matters as much as how. The right people in the wrong system underperform. The wrong hires with the right system fail faster. The unlock is both: a certifiable playbook that any strong AE can run, and the discipline to hire only people who can prove they'll run it."</div>
+  </div>
+</section>
+
+
+<!-- 06b PRICING STRATEGY -->
+<section id="pricing-strategy">
+  <div class="section-tag">Revenue Architecture</div>
+  <h2>Pricing Model & <span class="gradient-text">ACV Expansion</span></h2>
+
+
+  <!-- Current pricing overview -->
+  <h3 style="margin-bottom:14px;">Current Pricing Model</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:28px;">
+    <div class="card" style="text-align:center;border-top:3px solid var(--muted);">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Developer</div>
+      <div style="font-size:28px;font-weight:900;color:var(--text);">Free</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">50K requests/mo · 3 users · 5 MCP servers · Community support</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);">Role: lead capture + trial</div>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid var(--cyan);">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:8px;">Pro</div>
+      <div style="font-size:28px;font-weight:900;color:var(--cyan);">$499<span style="font-size:14px;font-weight:400;">/mo</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">1M requests/mo · 10 users · 25 MCP servers · Production SLA</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);">$5,988/yr list price</div>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid var(--purple);">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:8px;">Pro Plus</div>
+      <div style="font-size:28px;font-weight:900;color:var(--purple);">$2,999<span style="font-size:14px;font-weight:400;">/mo</span></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">1M requests/mo · 25 users · 50 MCP servers · VPC / on-prem · Priority SLA</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);">$35,988/yr list price</div>
+    </div>
+    <div class="card" style="text-align:center;border-top:3px solid var(--green);">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:8px;">Enterprise</div>
+      <div style="font-size:28px;font-weight:900;color:var(--green);">Custom</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5;">Custom requests · Unlimited users · Air-gapped deploy · SOC2 · HIPAA · GDPR · Enterprise SLA + dedicated onboarding</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--muted);">Avg ACV: ~$125K today</div>
+    </div>
+  </div>
+
+  <!-- The opportunity -->
+  <div class="caveat" style="margin-bottom:24px;">⚡ <strong>The gap:</strong> TrueFoundry's Enterprise pricing is landing at ~$125K ACV. Comparable platforms (Databricks, Azure ML, AWS Bedrock) are regularly printing $200-350K ACVs for <em>narrower</em> value props. This is an underprice problem, not a product problem.</div>
+
+  <!-- Two recommendations -->
+  <h3 style="margin-bottom:14px;">Recommendations to Increase Average ACV</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+    <div class="fix-card green" style="margin:0;">
+      <div class="fix-num">Recommendation 1 · Immediate</div>
+      <div class="fix-title">Better Value Selling, Not Price Changes</div>
+      <ul class="bullets" style="margin:0;">
+        <li><strong>Quantify cost of inaction before presenting any number.</strong> At 1,000-person enterprise, AI chaos = $400K+/yr problem.</li>
+        <li>$125K TF vs <span class="tooltip-wrap" style="border-bottom:1px dashed var(--yellow);">$400K+ cost of chaos = 3.2x year-one ROI
+  <div class="tooltip-box" style="width:340px;">
+    <strong style="display:block;color:var(--yellow);margin-bottom:8px;">The $400K Cost of AI Chaos (1,000-person Enterprise)</strong>
+    <div class="math-line"><span>Engineering hours: credential mgmt, access rotation, incident response</span><span style="color:var(--red)">~$120K/yr</span></div>
+    <div class="math-line"><span>Compliance exposure: unaudited AI data access, GDPR/SOC2 gaps</span><span style="color:var(--red)">~$80K/yr risk-adjusted</span></div>
+    <div class="math-line"><span>LLM spend waste: unmanaged multi-provider traffic, no cost controls</span><span style="color:var(--red)">~$100K/yr</span></div>
+    <div class="math-line"><span>Developer productivity loss: shadow IT, inconsistent tooling</span><span style="color:var(--red)">~$60K/yr</span></div>
+    <div class="math-line"><span>Downtime/incident risk: no fallback when a provider goes down</span><span style="color:var(--red)">~$40K/yr risk-adj</span></div>
+    <div class="math-line" style="font-weight:700;"><span>Total cost of chaos</span><span style="color:var(--red);font-weight:700;">~$400K+/yr</span></div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:6px;"><strong style="color:var(--cyan);">ROI math:</strong> $400K cost avoided ÷ $125K TrueFoundry = 3.2x year-one ROI. Present this before mentioning price. CFO sees cost avoidance, not software spend.</div>
+  </div>
+</span>. CFO approves cost avoidance; IT budget gets cut.</li>
+        <li>Confirm budget in Discovery. Stop pre-discounting. Floor: $150-175K ACV. $200K+ for multi-region, multi-cloud, or regulated-industry accounts.</li>
+      </ul>
+    </div>
+    <div class="fix-card cyan" style="margin:0;">
+      <div class="fix-num">Recommendation 2 · 30-90 Days</div>
+      <div class="fix-title">Remove the Ceiling: Enterprise Platform Licensing</div>
+      <ul class="bullets" style="margin:0;">
+        <li><strong>$200K is not the ceiling.</strong> It becomes the ceiling only if sold as a single-team point solution. Fortescue, S&P, OCBC have dozens of teams and hundreds of AI apps. Price to match that reality.</li>
+        <li><strong>Usage-based expansion in the contract:</strong> Auto-expand as teams deploy more AI applications. Every new team at Fortescue is a scheduled expansion event, not a renewal conversation. This is what drives NRR past 150%.</li>
+        <li><strong>Enterprise Platform License ($300K-1M+):</strong> 5+ BUs or 100+ AI applications = platform pricing. S&P Global is a $500K+ account if sold as a platform, not a per-team deal.</li>
+        <li><strong>Strategic tier for F100 / global FSI ($1M+ ARR):</strong> Multi-year, dedicated resources, executive sponsorship. These anchor the ARR trajectory for the year.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:16px 20px;">
+    <div style="font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">The ACV Math</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:12px;color:var(--muted);">
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;">
+        <div style="color:var(--text);font-weight:700;margin-bottom:3px;">Today</div>
+        $125K avg ACV × 70% POV close × 3 POVs/mo = <strong style="color:var(--red)">$2.6M net new ARR/yr</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;">
+        <div style="color:var(--text);font-weight:700;margin-bottom:3px;">With ACV Lift Only ($175K)</div>
+        $175K avg ACV × 70% × 3 POVs/mo = <strong style="color:var(--yellow)">$3.7M net new ARR/yr (+40%)</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;">
+        <div style="color:var(--text);font-weight:700;margin-bottom:3px;">Both Levers ($200K ACV + 35% POV rate)</div>
+        $200K × 70% × 5.25 POVs/mo = <strong style="color:var(--green)">$8.8M net new ARR/yr (+240%)</strong>
+      </div>
+      <div style="background:rgba(0,0,0,0.04);border-radius:7px;padding:10px;">
+        <div style="color:var(--text);font-weight:700;margin-bottom:3px;">Platform Licensing (multi-BU, $400K avg)</div>
+        Even 10 enterprise platform deals/yr = <strong style="color:var(--purple)">$4M ARR from 10 accounts alone</strong>. The ceiling disappears.
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--text);font-weight:600;">$200K is the floor for value-sold enterprise. $500K-1M is the ceiling for platform-licensed multi-BU orgs. The model only caps out when the selling motion does.</div>
+  </div>
+</section>
+
+
+<!-- 06 COMPETITION -->
+<section id="competition">
+  <div class="section-tag">Competitive Positioning</div>
+  <h2>Building the <span class="gradient-text">Competitive Advantage</span> Before Calls Start</h2>
+
+
+  <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:12px;padding:20px;margin-bottom:20px;">
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">The Universal Reframe, Works Across Every Competitor</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;">Every incumbent enterprise platform, Databricks, Bedrock, Azure AI, has the same gap: they are built for training and data pipelines, not for governing production AI workloads across multiple providers. TrueFoundry is the deployment and governance layer that completes the stack. The frame is never "replace X." The frame is "X already does what X does. TrueFoundry governs what happens after X."</div>
+  </div>
+
+  <div class="card-grid">
+    <div class="comp-card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px;">Databricks</div>
+      <ul class="bullets" style="margin:0 0 8px;"><li>Strong in: training, fine-tuning, data pipelines, ML experimentation</li><li>Gap: deploying models to production across ANY provider, MCP governance, multi-model cost attribution, RBAC at the inference layer</li></ul>
+      <div class="comp-win"><strong>Response:</strong> "Databricks and TrueFoundry are better together. Databricks trains it. TrueFoundry governs it in production. How does your Databricks deployment give you one control plane for Claude, GPT-4, and your fine-tuned Llama with team-level access controls?"</div>
+    </div>
+    <div class="comp-card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px;">AWS Bedrock / Azure AI</div>
+      <ul class="bullets" style="margin:0 0 8px;"><li>Strong in: managed model endpoints, native cloud integration, security within their cloud</li><li>Gap: multi-cloud, multi-model governance, everything breaks when you have models on Azure, agents on AWS, and open-source models on-prem</li></ul>
+      <div class="comp-win"><strong>Response:</strong> "Bedrock and Azure are excellent within their clouds. TrueFoundry is the governance layer that works across all of them, so your team isn't managing three separate control planes as your AI footprint grows."</div>
+    </div>
+    <div class="comp-card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px;">LiteLLM / Portkey (Open Source)</div>
+      <ul class="bullets" style="margin:0 0 8px;"><li>Strong in: developer flexibility, cost, free to start, active community</li><li>Gap: no enterprise RBAC, no audit logging, no SOC 2, no SLA, cannot satisfy procurement in a regulated enterprise</li></ul>
+      <div class="comp-win"><strong>Response:</strong> "LiteLLM is a great developer tool. When your procurement, security, and legal teams get involved, and they will, they need SOC 2, audit logs, and an SLA. That's the conversation we're having."</div>
+    </div>
+    <div class="comp-card">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);margin-bottom:6px;">Custom / Build In-House</div>
+      <ul class="bullets" style="margin:0 0 8px;"><li>The invisible competitor, "we'll just build this ourselves"</li><li>Gap: build vs buy math at enterprise scale is brutal. Platform engineering time, maintenance, security patches, uptime SLAs</li></ul>
+      <div class="comp-win"><strong>Response:</strong> "What's the fully-loaded cost of one platform engineer for 12 months? TrueFoundry's enterprise tier is a fraction of that, and it ships Day 1 with SOC 2 and the MCP Gateway already built."</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;border-top:3px solid var(--cyan);">
+    <h4 style="color:var(--text);margin-bottom:10px;">The Buyer Education Play, Pre-Empt Before Call 1</h4>
+    <ul class="bullets" style="margin:0;"><li>YouTube channel: category authority content on MCP governance, AI infrastructure, agent reliability. Buyers who watch 2 videos arrive knowing the category. <span style="background:rgba(180,83,9,0.14);border:1px solid rgba(180,83,9,0.25);border-radius:4px;padding:2px 6px;color:var(--yellow);font-weight:700;">⚡ The first-call conversion rate on educated inbound is significantly higher.</span></li><li>Website CTAs: capture buyers who research but don't book. Interactive ROI calculator, competitive comparison page, "your AI stack health check", lead capture before they go evaluate alternatives.</li><li>Pre-call sequence: every calendar invite includes a 3-minute product video and one-pager. AE confirms receipt. Call 1 starts at discovery, not at "let me explain what TrueFoundry does."</li></ul>
+  </div>
+</section>
+
+<!-- 07 OBJECTIONS -->
+<section id="objections">
+  <div class="section-tag">Sales Execution</div>
+  <h2><span class="gradient-text">Objection Handling</span> Playbook</h2>
+  <div class="caveat" style="margin-bottom:20px;">⚡ <strong>Macro frame:</strong> 70% POV win rate. Every objection ends the same way, get them into a 2-week POV. Data beats debate.</div>
+
+  <div class="toggle-bar">
+    <button class="toggle-btn active-a" id="obj-btn-1" onclick="showObj('1')">
+      The Big 3
+      <div class="toggle-tip"><strong style="color:var(--purple)">The Big 3:</strong> Build-It-Yourself, Bedrock, Databricks, most likely to kill a deal. Know cold.</div>
+    </button>
+    <button class="toggle-btn" id="obj-btn-2" onclick="showObj('2')">
+      Competitive
+      <div class="toggle-tip"><strong style="color:var(--purple)">Competitive:</strong> Azure, LiteLLM, Portkey, Kong, incumbents already in the stack. Better Together for all.</div>
+    </button>
+    <button class="toggle-btn" id="obj-btn-3" onclick="showObj('3')">
+      Friction Busters
+      <div class="toggle-tip"><strong style="color:var(--purple)">Friction Busters:</strong> Send info, think about it, no budget, happy with what we have, fake objections hiding real ones.</div>
+    </button>
+  </div>
+
+  <!-- BIG 3 -->
+  <div class="obj-tab active" id="obj-1">
+
+    <div class="fix-card red">
+      <div class="fix-num">Big 3 · Most Expensive to Lose</div>
+      <div class="fix-title">"We'll Build It Ourselves"</div>
+      <div class="obj-frame">They think they're building a router. They're actually building: routing + RBAC + audit trails + MCP token management + multi-provider fallback + credential rotation + cost attribution + API change maintenance, forever.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Ask scope first:</strong> "What does the build look like?" They'll say "a routing layer." Expand to the full list above.</li>
+          <li><strong>The math:</strong> 6–9 months, 2–3 engineers = ~$350K build + $150–200K/yr maintenance. TrueFoundry: $125K/yr managed.</li>
+          <li><strong>Flip to opportunity cost:</strong> "Would you rather your engineers build AI capabilities or AI infrastructure?"</li>
+          <li><strong>The late lesson:</strong> Teams that build it themselves migrate to TF 9–12 months later. The competitor who bought early shipped 4 AI features during that time.</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Make them say the full scope out loud: router + RBAC + audit + MCP + fallback + maintenance.</li>
+              <li>Math: $350K+ build, $150–200K/yr maintenance vs $125K/yr TF. Not close.</li>
+              <li>"AI plumbing or AI capabilities?", executive story when founders are in the room.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"2-week POV, one real team, one real use case. Real build-vs-buy data at the end, not my pitch."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card yellow">
+      <div class="fix-num">Big 3 · Most Common in Enterprise</div>
+      <div class="fix-title">"We're Already on Amazon Bedrock"</div>
+      <div class="obj-frame">Never replace Bedrock. Augment it. Bedrock is the model API. TrueFoundry is the governance layer in front of it. Better Together, TF literally recommends this stack in its own docs.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Better Together:</strong> Keep all AWS credits, endpoints, and Bedrock models. Add: org-wide governance, cost control, model agnosticism, MCP Gateway.</li>
+          <li><strong>Three Bedrock gaps:</strong> (1) No org-wide governance, API, not a control plane. (2) $20–40K/mo Provisioned Throughput lock-in. (3) No MCP Gateway, zero agent tooling.</li>
+          <li><strong>Cost story:</strong> 25–40% LLM spend reduction in first 90 days via intelligent routing. POV-proven.</li>
+          <li><strong>Committed AWS spend?</strong> "You still route through Bedrock. TF adds intelligence + governance on top. Committed spend stays protected."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Better Together. Bedrock = model API. TF = governance + routing layer in front of it.</li>
+              <li>Three gaps: no org governance, no MCP Gateway, no model escape hatch.</li>
+              <li>70% POV win rate. Get them in for 2 weeks, Bedrock stays put.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"2-week POV, your environment, Bedrock stays exactly where it is. Two weeks, then data. Who scopes it?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">Big 3 · Most Dangerous (Org Has Already "Decided")</div>
+      <div class="fix-title">"Databricks Is Approved Internally"</div>
+      <div class="obj-frame">Databricks = data + ML training. TrueFoundry = production AI governance. Sequential layers, not competitors. Fortescue proof: Databricks was approved, TF won anyway. Both are running today.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Reframe instantly:</strong> "Databricks is phenomenal for training and MLflow. Production AI governance, routing, agents, multi-cloud cost control, that's a different layer. That's TrueFoundry."</li>
+          <li><strong>Draw the stack:</strong> [Data] → [Databricks: ETL/Training] → [TrueFoundry: AI Gateway/MCP/Governance] → [Apps/Agents]. Sequential.</li>
+          <li><strong>Three gaps:</strong> (1) No MCP Gateway, zero agent tooling. (2) DBU double-tax at inference scale. (3) No multi-cloud unified governance plane.</li>
+          <li><strong>Fortescue frame:</strong> Databricks was the standard. TF won on multi-cloud + MCP + no SDK lock-in. Both still running. That's the proof.</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Databricks = training. TF = production governance. Different budget line, different problem.</li>
+              <li>Three gaps: no MCP, DBU double-tax, no multi-cloud governance. Know cold.</li>
+              <li>Fortescue: Databricks approved → TF won. Both running. That's the close.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"Technical discovery, map your current stack. No gap, I'll tell you. Gap exists, I'll show you where TF fills it without touching Databricks."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPETITIVE -->
+  <div class="obj-tab" id="obj-2">
+
+    <div class="fix-card cyan">
+      <div class="fix-num">Competitive · Better Together</div>
+      <div class="fix-title">"We're Already on Azure / Azure AI Foundry"</div>
+      <div class="obj-frame">Better Together, not displacement. Azure AI Foundry = Microsoft stack only. TrueFoundry = model-agnostic governance alongside it. Entra JWT passthrough is live and proven (Fortescue).</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>The gap:</strong> "Azure AI Foundry is great all-in on OpenAI/GPT-4o. The moment you need Anthropic, Llama, or your own GPU cluster, no answer. Built for the Microsoft stack, full stop."</li>
+          <li><strong>Switching cost reframe:</strong> "Not asking you to switch. Adding TF = 2 days setup. Being locked in when a better model ships = strategic disadvantage."</li>
+          <li><strong>Azure identity:</strong> Entra JWT passthrough, SSO unchanged, security posture unchanged, zero friction for your security team.</li>
+          <li><strong>Roadmap objection:</strong> "Microsoft's incentive is to keep you on Azure. Ours is to make sure every model choice is the right one, whoever built it."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Better Together. Native Azure OpenAI connection. Entra JWT passthrough proven (Fortescue).</li>
+              <li>Azure AI Foundry = MS-only. Any non-MS model = you're on your own.</li>
+              <li>Adding TF = 2 days. Lock-in when a better model ships = strategic risk.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"30-min walkthrough, connect to your Azure OpenAI endpoints, pull Entra in, show the governance layer. Nothing you've built gets touched."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card green">
+      <div class="fix-num">Competitive · Graduation Story</div>
+      <div class="fix-title">"We're Already Using LiteLLM"</div>
+      <div class="obj-frame">LiteLLM = prototype phase. TrueFoundry = enterprise production. Graduation story, not a takedown. "LiteLLM is where great AI teams start. TrueFoundry is where they scale."</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Five production gaps:</strong> No enterprise UI (YAML doesn't scale). No SLA (GitHub issues at 2am). No audit trails (CISO fails PII question). No env isolation. No MCP Gateway.</li>
+          <li><strong>Engineers pushing back?</strong> "Not asking them to give up flexibility. Build the other 80% on top of LiteLLM (6 months eng time), or buy the platform that's already done it."</li>
+          <li><strong>Migration?</strong> "Walk me through what you've customized. Routing logic, fallback chains, model aliases all have TF analogs with a UI instead of YAML. Done in under a week."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Graduation: LiteLLM = prototype. TF = enterprise production.</li>
+              <li>Five gaps: no UI, no SLA, no audits, no env isolation, no MCP. All become compliance requirements at scale.</li>
+              <li>LiteLLM = 20% (routing). Other 80% = 6 months senior eng. TF ships Day 1.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"Comparison audit, show me your LiteLLM setup, I'll show you what TF replaces and adds. If LiteLLM wins for your use case, I'll say so."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">Competitive · Scope Problem</div>
+      <div class="fix-title">"We're Already Using Portkey"</div>
+      <div class="obj-frame">Portkey = application-scoped (one team, one app). TrueFoundry = organization-scoped (every team, every env, one control plane). Works for one product. Doesn't scale across an org.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>The org failure:</strong> "Team A: Portkey for chatbot. Team B: different Portkey instance. Team C: building agents, not using it. CTO asks total AI spend, nobody has a unified answer."</li>
+          <li><strong>On-prem dealbreaker:</strong> Portkey = SaaS-only. TF = VPC/on-prem. Regulated industries or data residency requirements = Portkey can't serve you.</li>
+          <li><strong>Land and expand:</strong> "Start with one team. Don't force migration. Org-level value pulls the rest in, that's how 90% of our org-wide deployments started."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>App-scoped vs org-scoped. Portkey = one team. TF = every team, every env, one plane.</li>
+              <li>Portkey = SaaS-only. TF = VPC/on-prem. Regulated industries = hard dealbreaker.</li>
+              <li>Land and expand. Don't force migration. Start with one team.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"15-min demo: org-wide RBAC, env isolation, cost attribution, five teams on one platform vs. five Portkey instances nobody's coordinating."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card yellow">
+      <div class="fix-num">Competitive · Category Distinction</div>
+      <div class="fix-title">"We're Already Using Kong"</div>
+      <div class="obj-frame">Kong = HTTP-layer API gateway. TrueFoundry = AI control plane. Same stack, different layers. Kong sees LLM calls as opaque HTTP, no token costs, no semantics, no MCP governance.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Category line:</strong> "Kong = HTTP layer. TF = AI layer. Network team owns Kong. ML/platform team owns TF. Sequential, not competing."</li>
+          <li><strong>What Kong can't see:</strong> Token costs, semantic audit trails, AI fallback logic, MCP governance. Category gap, not a flaw.</li>
+          <li><strong>Custom Kong LLM plugins?</strong> "What's the maintenance cost per provider API change? TF maintains 50+ providers. Most custom Kong LLM plugins are a partial rebuild of what we ship."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Kong = API gateway (HTTP). TF = AI control plane. Same stack, different functions.</li>
+              <li>Kong sees LLM calls as opaque HTTP, no tokens, no semantics, no MCP. Category gap.</li>
+              <li>Internal frame: network team owns Kong, ML team owns TF. Not same budget.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"Technical session, draw the line between Kong and TF in your actual stack. Makes the internal sell a lot easier."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRICTION BUSTERS -->
+  <div class="obj-tab" id="obj-3">
+
+    <div class="fix-card cyan">
+      <div class="fix-num">Friction · Pre-Call Education Failure</div>
+      <div class="fix-title">"Send Me Some Information"</div>
+      <div class="obj-frame">Buyer wasn't educated before the call, SDR/marketing failure as much as AE failure. Don't send the deck. Ask what question they're trying to answer, then send the interactive buyer's guide.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Ask first:</strong> "What's the specific question, what TF does, how it fits your stack, or how it compares to what you're using?"</li>
+          <li><strong>Send the guide, not the deck:</strong> "Interactive buyer's guide, 10 min, built around the decisions AI infra teams are actually making. Tells you if we're worth your time."</li>
+          <li><strong>Log every instance:</strong> &gt;20% of calls = upstream failure. Fix SDR qualification + pre-call assets, not the script.</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Don't send the deck. Ask what question they need answered.</li>
+              <li>Buyer's guide, gated, qualifies intent, built to be forwarded.</li>
+              <li>"Send me info" at 20%+ = upstream failure. Fix it there.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"Buyer's guide link in your inbox after this call. And, what's your timeline on AI infrastructure decisions?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">Friction · Hidden Objection</div>
+      <div class="fix-title">"We Need to Think About It"</div>
+      <div class="obj-frame">Never the real objection. Always something hidden, fear, politics, unconvinced stakeholder, or no urgency. Diagnose it. Never accept without a named next step.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Diagnose:</strong> "What specifically, timing, business case, getting others involved?" Pause. Their next words are the real objection.</li>
+          <li><strong>1-10 scale:</strong> "How likely is TF in the next 90 days?" &lt;7: "What would make it an 8?" ≥7: "What's holding back a 10?"</li>
+          <li><strong>Two failure modes:</strong> Accepting it with no next step, or talking too much instead of asking. Win = specific named next step before you hang up.</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>"Think about it" = hidden objection. Ask: "What specifically?"</li>
+              <li>1-10 scale cuts through politeness instantly.</li>
+              <li>Leave with POV date, stakeholder call, or a clean no.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"1-10, how likely is TF in 90 days? ... What would make it a 10?, Let's put the POV kickoff on the calendar. Tuesday 2pm work?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card yellow">
+      <div class="fix-num">Friction · Value Gap or Wrong Budget Owner</div>
+      <div class="fix-title">"We Don't Have the Budget Right Now"</div>
+      <div class="obj-frame">Value hasn't landed OR talking to the wrong budget owner. Don't drop price. Connect to a cost center, quantify the cost of inaction, use the POV to generate the business case.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Diagnose:</strong> "No money this quarter, or haven't found where this lives in the budget?" Two very different problems.</li>
+          <li><strong>Three cost centers:</strong> Security (credential mgmt + audit), Infrastructure (gateway), AI Ops. "Which is most active right now?"</li>
+          <li><strong>ROI math:</strong> 5 hrs/wk credential mgmt × 1 eng × $150/hr = $39K/yr. TrueFoundry ACV: $125K = 3x ROI year one from savings alone.</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>No budget = value gap OR wrong owner. Diagnose first.</li>
+              <li>Three cost centers: security, infra, AI ops. Find that owner.</li>
+              <li>5 hrs/wk × 1 eng = $39K/yr. $125K ACV = 3x ROI year one.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">The Close</div>
+            <p>"POV is free. Two weeks. You walk away with the data, engineering hours, LLM cost attribution, latency. Business case built for you."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card green">
+      <div class="fix-num">Friction · Wrong Meeting or Weak Differentiation</div>
+      <div class="fix-title">"We're Happy With What We Have"</div>
+      <div class="obj-frame">Wrong meeting OR AE hasn't explained differentiation. Ask what they have before countering. Never pitch until you know what you're differentiating from.</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:12px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Ask first:</strong> "What do you have in place?" Listen for LiteLLM, home-built router, vendor SDKs, or nothing. Their answer sets your angle.</li>
+          <li><strong>Three probe questions:</strong> "How are you handling (1) credential rotation, (2) cost attribution by team, (3) MCP tool permissions?" These three break at scale, they're the core of what TF solves.</li>
+          <li><strong>The gap line:</strong> "Your router gives you routing. TrueFoundry gives you the enterprise control layer, RBAC, audit trails, cost attribution, MCP, that compliance, security, and finance require."</li>
+        </ul>
+        <div>
+          <div class="obj-memory">
+            <div class="om-title">⚡ Burn These In</div>
+            <ul>
+              <li>Ask what they have. Never pitch before you know the gap.</li>
+              <li>Routing ≠ enterprise control. RBAC + audit + MCP + cost attribution = the gap.</li>
+              <li>60-sec pitch below, memorize cold before any call.</li>
+            </ul>
+          </div>
+          <div class="obj-close" style="margin-top:8px;">
+            <div class="oc-label">60-Second Pitch, Memorize Cold</div>
+            <p>"TrueFoundry is the AI Gateway and MCP Gateway between your apps and every LLM, tool, and agent in your stack. Centralized credential management. Cost attribution by team. RBAC and audit trails for compliance. Multi-provider fallback so your AI never goes down. And the only enterprise MCP Gateway on the market, if you're building agents, nothing else exists at this level. 46 enterprise customers. 135% NRR. 70% win rate post-POV."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 COMPLEX SALES & PLAYBOOKS -->
+<section id="complex-sales">
+  <div class="section-tag">Playbook Design</div>
+  <h2>Complex Sales Processes <span class="gradient-text">&amp; Playbook Architecture</span></h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">TrueFoundry has a 70% POV win rate. The gap isn't the close, it's everything upstream. This is how you build a repeatable machine that gets more of the right deals to the POV stage.</p>
+
+  <div class="caveat" style="margin-bottom:24px;">⚡ <strong>The philosophy:</strong> A POV is not a science fair project. It's a closing motion with a co-authored finish line. We prescribe every step, name every milestone, and make the "yes" decision obvious before Day 14 arrives. Act like we've been in the end zone before.</div>
+
+  <!-- 6-stage pipeline -->
+  <h3 style="margin-bottom:14px;font-size:16px;">The 6-Stage Deal Pipeline</h3>
+  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:28px;">
+    <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:6px;">Stage 1</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">First Call</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The Fit Check", 30 min. Qualify pain, confirm budget exists, earn the right to Discovery.</div>
+    </div>
+    <div style="background:rgba(2,132,199,0.10);border:1px solid rgba(2,132,199,0.15);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--cyan);margin-bottom:6px;">Stage 2</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Discovery</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The War Room", 60 min. Map current state, quantify pain in dollars, name the Economic Buyer.</div>
+    </div>
+    <div style="background:rgba(5,150,105,0.10);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:6px;">Stage 3</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">POV Workshop</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The Co-Author", 90 min. Co-write success criteria. Book Day 7, Day 14, Exec Readout before leaving.</div>
+    </div>
+    <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(180,83,9,0.14);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--yellow);margin-bottom:6px;">Stage 4</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">POV Active</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The Proving Ground", 14 days hard stop. Prove 3 criteria. No scope creep. No science projects.</div>
+    </div>
+    <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--red);margin-bottom:6px;">Stage 5</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Exec Readout</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The Scoreboard", 45 min. Present results to Economic Buyer. No ambiguity. Verbal yes before you leave.</div>
+    </div>
+    <div style="background:rgba(99,102,241,0.15);border:1px solid rgba(99,102,241,0.35);border-radius:8px;padding:12px 10px;text-align:center;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:6px;">Stage 6</div>
+      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:4px;">Close</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">"The End Zone", 30 min. Remove procurement friction. Get paper signed. Celebrate.</div>
+    </div>
+  </div>
+
+  <!-- MEDDPICC + Science Project 2-col -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+
+    <!-- MEDDPICC -->
+    <div>
+      <h3 style="margin-bottom:12px;font-size:15px;">MEDDPICC, TrueFoundry Translation</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">The qualification language that lets AEs run deals independently, without the founder in every call. This is how we get the overall win rate from 17% toward 35%+.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--purple);">
+          <div style="font-size:11px;font-weight:700;color:var(--purple);">M, Metrics</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Quantified cost of AI infra chaos: eng hours/week, LLM spend waste, incident cost, time-to-deploy.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--cyan);">
+          <div style="font-size:11px;font-weight:700;color:var(--cyan);">E, Economic Buyer</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">CTO at &lt;500 employees. VP Eng at 500–2K. Named by call 2, not "probably the CTO."</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--green);">
+          <div style="font-size:11px;font-weight:700;color:var(--green);">D, Decision Criteria</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">How they evaluate AI Gateway vendors: security, deployment model (VPC/on-prem), MCP, multi-cloud.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--yellow);">
+          <div style="font-size:11px;font-weight:700;color:var(--yellow);">D, Decision Process</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Who approves $125K and how long it takes. Map it in Discovery. Never find out at Stage 5.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--red);">
+          <div style="font-size:11px;font-weight:700;color:var(--red);">P, Paper Process</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Legal, procurement, CISO review. CISO is the wildcard, surface security requirements at Stage 2.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--purple);">
+          <div style="font-size:11px;font-weight:700;color:var(--purple);">I, Identify Pain</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">The specific AI infra pain: no governance, no MCP, cost visibility, multi-cloud chaos. Quantify it.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--cyan);">
+          <div style="font-size:11px;font-weight:700;color:var(--cyan);">C, Champion</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Internal advocate willing to fight. Not the same as the EB. Has air cover. Can name the process.</div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 12px;border-left:3px solid var(--green);">
+          <div style="font-size:11px;font-weight:700;color:var(--green);">C, Competition</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;">Bedrock, Databricks, LiteLLM, build-it-yourself. Surface it by call 2. Never let it be a surprise.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Science Project Diagnostic -->
+    <div>
+      <h3 style="margin-bottom:12px;font-size:15px;">Science Project Diagnostic</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Answer all 5 before scheduling any POV. Running a bad POV costs 2–3 weeks of SE time on a deal that was never going to close. Protect the resource.</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--purple);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">1</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Consequence of inaction?</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">"What happens if you don't solve this in 6 months?" No real answer = no urgency = no deal.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--cyan);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">2</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Named economic buyer + decision process?</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">"It's a committee" without a named owner = science project. Coach champion to get air cover first.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--green);color:#0f172a;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">3</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Budget confirmed or path to budget?</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">"Maybe we can get some later" = not real. Directional budget + clear process = acceptable.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--yellow);color:#0f172a;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">4</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Clear path from POV success to contract?</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">"We'd have a bigger internal discussion" = not a buyer. Requalify or walk. You need a specific answer.</div>
+          </div>
+        </div>
+        <div style="background:var(--card);border-radius:8px;padding:10px 14px;display:flex;gap:12px;align-items:flex-start;">
+          <div style="background:var(--red);color:white;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;">5</div>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:var(--text);">Decision timeline defined?</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">"Broad market eval, no real timeline" = tire kicker. Deals without deadlines don't close.</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:8px;padding:10px 14px;margin-top:12px;">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:4px;">Scoring</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6;">5/5 → Schedule POV immediately &nbsp;|&nbsp; 4/5 → Schedule, coach the one gap &nbsp;|&nbsp; 3/5 → Return to Discovery &nbsp;|&nbsp; &lt;3 → Qualify out. Not a real opportunity yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POC Methodology -->
+  <h3 style="margin-bottom:14px;font-size:16px;">How We Run a POC That Sells Itself</h3>
+  <div class="caveat" style="margin-bottom:16px;">⚡ <strong>The frame:</strong> "We're not selling. We're co-authoring your business case together." A POC is not a free trial. It's a structured closing motion that generates the data the champion needs to get internal approval.</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+    <div class="fix-card green" style="margin:0;">
+      <div class="fix-num">Principle 1</div>
+      <div class="fix-title">Earned, Not Given</div>
+      <ul class="bullets" style="margin:0;">
+        <li>POV resources require clear pain, confirmed budget path, and a decision timeline. Science Project Diagnostic is the gate: score below 4/5 = back to Discovery.</li>
+        <li>A 2-week structured POV beats a 6-month science project every time. Protect the SE team's capacity.</li>
+      </ul>
+    </div>
+    <div class="fix-card cyan" style="margin:0;">
+      <div class="fix-num">Principle 2</div>
+      <div class="fix-title">Multi-Thread From Day 1</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Engineering evaluates. Simultaneously: infosec on security review, procurement on vendor onboarding, exec on the business story.</li>
+        <li>Every POV has a named contact in each swim lane by Day 3. Can't name them = not a real deal.</li>
+      </ul>
+    </div>
+    <div class="fix-card" style="margin:0;">
+      <div class="fix-num">Principle 3</div>
+      <div class="fix-title">Quantify Value Throughout — Not Just at the End</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Build the business case live from Day 1. Champion sells internally by Day 7, not Day 14.</li>
+        <li>Capture their language verbatim. "Credential rotation: 4 hours to 15 minutes" beats any stat you bring. Their words, their voice, their win.</li>
+        <li><strong>Fortescue example:</strong> Managing 70-80 MCP servers across teams — no centralized governance, no audit trail, no cost visibility. During the POV, every server brought under TrueFoundry's MCP Gateway is a line item in the business case. By Day 7 the champion can walk into their CTO and say: "We now have full visibility and control over all 80 MCPs. Here's what that's worth." That's a close, not a demo.</li>
+      </ul>
+    </div>
+    <div class="fix-card" style="margin:0;border-left-color:var(--yellow);">
+      <div class="fix-num">Principle 4</div>
+      <div class="fix-title">Champion Co-Authors the Business Case</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Time saved, cost reduced, security wins — captured in their words, not yours. Their language becomes the executive readout.</li>
+        <li>Champion co-presents the readout. They're not watching you sell — they're presenting their own findings. That's what closes at the exec level.</li>
+      </ul>
+    </div>
+  </div>
+
+
+
+  <!-- Stage gate summary -->
+  <h3 style="margin-bottom:12px;font-size:15px;">Stage Gate Checklist</h3>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="border-bottom:2px solid rgba(0,0,0,0.07);">
+          <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;width:30%;">Transition</th>
+          <th style="text-align:left;padding:8px 12px;color:var(--muted);font-weight:600;">Must be TRUE before advancing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid rgba(0,0,0,0.04);">
+          <td style="padding:8px 12px;color:var(--purple);font-weight:600;">First Call → Discovery</td>
+          <td style="padding:8px 12px;color:var(--muted);">Pain confirmed and real. EB named (not guessed). Initiative identified. Timeline exists.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,0.04);background:rgba(0,0,0,0.03);">
+          <td style="padding:8px 12px;color:var(--cyan);font-weight:600;">Discovery → POV Workshop</td>
+          <td style="padding:8px 12px;color:var(--muted);">Pain quantified in dollars/time/risk. EB identified by name. Champion has air cover. Budget directionally confirmed.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,0.04);">
+          <td style="padding:8px 12px;color:var(--green);font-weight:600;">POV Workshop → POV Active</td>
+          <td style="padding:8px 12px;color:var(--muted);">Success criteria doc signed. Day 7, Day 14, Exec Readout all calendared before leaving the room. HELM env confirmed.</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(0,0,0,0.04);background:rgba(0,0,0,0.03);">
+          <td style="padding:8px 12px;color:var(--yellow);font-weight:600;">POV Active → Exec Readout</td>
+          <td style="padding:8px 12px;color:var(--muted);">≥2 of 3 criteria met. Champion prepped to present. EB confirmed attending. No ambiguity on results.</td>
+        </tr>
+        <tr>
+          <td style="padding:8px 12px;color:var(--red);font-weight:600;">Exec Readout → Close</td>
+          <td style="padding:8px 12px;color:var(--muted);">EB verbal yes. Commercial terms aligned. Legal/security review complete or waived. Paper process known.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 09 MARKETING ALIGNMENT -->
+<section id="marketing">
+  <div class="section-tag">Marketing &amp; Sales Alignment</div>
+  <h2>Building the <span class="gradient-text">Buyer Before the Call</span></h2>
+
+
+  <!-- Buyer research stats -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+    <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:10px;padding:18px 20px;">
+      <div style="font-size:36px;font-weight:800;color:var(--purple);line-height:1;margin-bottom:8px;">81%</div>
+      <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:6px;">of B2B buyers have already picked a winner before they ever speak to a sales rep.</div>
+      <div style="font-size:11px;color:var(--muted);">6sense B2B Buyer Experience Report, 2024, survey of 2,509 recent buyers</div>
+    </div>
+    <div style="background:rgba(56,189,248,0.07);border:1px solid rgba(56,189,248,0.18);border-radius:10px;padding:18px 20px;">
+      <div style="font-size:36px;font-weight:800;color:var(--cyan);line-height:1;margin-bottom:8px;">80%</div>
+      <div style="font-size:13px;color:var(--text);font-weight:500;margin-bottom:6px;">of the B2B buying journey happens without any contact with the vendor, up from 57% in 2015.</div>
+      <div style="font-size:11px;color:var(--muted);">Gartner, the self-directed buyer journey has nearly doubled in a decade</div>
+    </div>
+  </div>
+  <div style="background:rgba(5,150,105,0.09);border-left:3px solid var(--green);border-radius:6px;padding:12px 16px;margin-bottom:24px;">
+    <div style="font-size:12px;color:var(--text);line-height:1.6;"><strong>What this means:</strong> By the time a buyer books a meeting, their shortlist is largely formed. If TF isn't in the consideration set before that call, the AE is fighting for a decision already made. Content and gated assets aren't a nice-to-have, they're how you get on the shortlist.</div>
+  </div>
+
+  <!-- Asset recommendations -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;">
+
+    <div class="fix-card cyan">
+      <div class="fix-num">Recommendation · 30-Day Fix</div>
+      <div class="fix-title">YouTube, Activate the Existing Asset</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-top:10px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Add CTAs at the 30% mark</strong> of every video, that's when viewer engagement peaks. Point to a gated comparison matrix, not the homepage. One clear next step per video.</li>
+          <li><strong>Weekly product demo cadence:</strong> AI-edited clips of new features, distributed by co-founders on LinkedIn → drives to YouTube → CTA → SDR follow-up within 24 hours.</li>
+          <li>109 existing videos with no conversion path. 30-day fix, near-zero cost. Buyers who watch 2 arrive understanding the category, materially shortens discovery.</li>
+        </ul>
+        <div style="background:rgba(5,150,105,0.10);border:1px solid rgba(5,150,105,0.18);border-radius:6px;padding:10px 12px;align-self:start;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:6px;">Impact</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">50–100 qualified inbound leads/month from content that's already published. Compounding over time as new videos are added.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fix-card">
+      <div class="fix-num">Recommendation · Days 30–60</div>
+      <div class="fix-title">Website &amp; Email, Lead Value Before Asking for Commitment</div>
+      <div style="display:grid;grid-template-columns:3fr 2fr;gap:14px;margin-top:10px;">
+        <ul class="bullets" style="margin:0;">
+          <li><strong>Build a gated comparison matrix</strong> as the primary lead capture tool. Visitors self-select by entering their context, receive the interactive competitive guide, and marketing gets an intent signal. Replaces passive "Request a Demo" CTAs with something that delivers value first.</li>
+          <li><strong>Tighten the outbound email sequence:</strong> fix personalization fields, replace content-link CTAs with a single clear ask per email, add one proof point (customer name, metric, or outcome) per send.</li>
+
+        </ul>
+        <div style="background:rgba(5,150,105,0.10);border:1px solid rgba(5,150,105,0.18);border-radius:6px;padding:10px 12px;align-self:start;">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:6px;">Impact</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5;">The gated matrix works everywhere: cold outbound, warm website visitors, mid-funnel follow-up. One asset, multiple channels.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLA Framework -->
+  <h3 style="margin-bottom:12px;font-size:15px;">The Sales ↔ Marketing SLA</h3>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Without a formal SLA, each team measures what's easy, not what moves revenue. Install by Day 30.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+    <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--purple);margin-bottom:10px;">Marketing Delivers to Sales</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Leads pre-educated on TrueFoundry's category, first call starts at pain discovery, not product intro</li>
+        <li>Documented ICP with firmographic and technographic scoring criteria</li>
+        <li>Competitive battle decks refreshed within 2 weeks of any major competitor announcement</li>
+        <li>Pre-call sequence sent to every booked meeting, 2-min explainer video + one-pager, before call 1</li>
+        <li>Monthly review of win/loss themes, content adapts to close identified gaps</li>
+      </ul>
+    </div>
+    <div style="background:rgba(5,150,105,0.10);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:10px;">Sales Delivers to Marketing</div>
+      <ul class="bullets" style="margin:0;">
+        <li>Win/loss notes filed within 48 hours, specific objections and themes, not just "bad timing"</li>
+        <li>Weekly objection log, what's surfacing in calls and at what frequency</li>
+        <li>Competitor intel flagged immediately when new information surfaces in deals</li>
+        <li>Customer introductions for case studies and testimonials, AE facilitates, marketing executes</li>
+        <li>SDR sequence feedback, which emails drive responses, which get ignored</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Buyer education flywheel -->
+  <h3 style="margin-bottom:12px;font-size:15px;">The Buyer Education Flywheel</h3>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px;">
+    <div style="background:var(--card);border-radius:8px;padding:12px;text-align:center;border-top:3px solid var(--purple);">
+      <div style="font-size:18px;margin-bottom:6px;">🎬</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">YouTube Content</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">Weekly product demos + MCP explainers. AI-edited. Co-founders distribute on LinkedIn.</div>
+    </div>
+    <div style="background:var(--card);border-radius:8px;padding:12px;text-align:center;border-top:3px solid var(--cyan);">
+      <div style="font-size:18px;margin-bottom:6px;">🎯</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">CTA at 30%</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">Every video. Directed to the interactive buyer's guide at peak engagement.</div>
+    </div>
+    <div style="background:var(--card);border-radius:8px;padding:12px;text-align:center;border-top:3px solid var(--green);">
+      <div style="font-size:18px;margin-bottom:6px;">📋</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">Gated Asset</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">Interactive comparison matrix. Buyer self-qualifies and gets the doc. Marketing gets the intent signal.</div>
+    </div>
+    <div style="background:var(--card);border-radius:8px;padding:12px;text-align:center;border-top:3px solid var(--yellow);">
+      <div style="font-size:18px;margin-bottom:6px;">📞</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">SDR &lt;24hrs</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">Warm follow-up within 24 hours of download. Pre-qualified context in hand.</div>
+    </div>
+    <div style="background:var(--card);border-radius:8px;padding:12px;text-align:center;border-top:3px solid var(--purple);">
+      <div style="font-size:18px;margin-bottom:6px;">🤝</div>
+      <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">Educated Buyer</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.4;">Arrives on call 1 understanding the category. AE goes straight to pain discovery.</div>
+    </div>
+  </div>
+
+
+  <!-- Top of Funnel Education -->
+  <div class="card" style="margin-top:28px;border-top:3px solid var(--green);">
+    <h4 style="color:var(--text);margin-bottom:10px;">Pre-Educating the Buyer: Top-of-Funnel Education Assets</h4>
+
+    <ul class="bullets" style="margin:0;">
+      <li><strong>MCP Governance 101 guide</strong>, a definitive explainer that positions TrueFoundry as the category authority. Gated, drives lead capture, and becomes the resource buyers forward internally to get buy-in.</li>
+      <li><strong>AI Infrastructure Health Check</strong>, an interactive self-assessment CTA. Buyers answer 5 questions about their current AI stack and get a personalized readout. Marketing gets intent data. Sales gets context before call 1.</li>
+      <li><strong>"Cost of AI Chaos" calculator</strong>, a simple tool that quantifies what unmanaged AI infrastructure costs in engineering hours, security risk, and LLM spend waste. Turns an abstract problem into a dollar figure the buyer can take to their CFO.</li>
+      <li><strong>Early-stage nurture sequence</strong>, for buyers who engage with content but aren't ready to book. Drip education over 4-6 weeks: category insight, customer proof points, competitive positioning. When they're ready, TrueFoundry is already the default.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 10 AI OPS -->
+<section id="ai-ops">
+  <div class="section-tag">The Compounding Advantage</div>
+  <h2>AI-Native <span class="gradient-text">Revenue Operations</span></h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">TrueFoundry sells AI infrastructure. The sales org should prove it. Seven systems, buildable in 90 days, compounding every week.</p>
+
+  <div style="margin-bottom:16px;">
+    <span style="font-size:11px;color:var(--muted);margin-right:10px;">HOVER ON EACH MEDDPICC LETTER TO SEE THE DEFINITION:</span>
+    <div class="meddpicc-wrap">
+      <div class="medd-letter">M<div class="medd-popup"><strong>Metrics</strong>Quantifiable impact the buyer gets. "What does success look like in numbers, cost saved, time reduced, risk avoided?" Without metrics, there is no business case and no urgency.</div></div>
+      <div class="medd-letter">E<div class="medd-popup"><strong>Economic Buyer</strong>The person who controls the budget and can say yes or no unilaterally. Not the champion. Not the evaluator. The person who signs the PO. If you haven't identified this person, the deal is at risk.</div></div>
+      <div class="medd-letter">D<div class="medd-popup"><strong>Decision Criteria</strong>The specific requirements the buyer will use to make their choice. Technical requirements, security requirements, pricing structure, support SLA. If you don't know their criteria, you can't win on them.</div></div>
+      <div class="medd-letter">D<div class="medd-popup"><strong>Decision Process</strong>The steps the organization will follow to make the decision. Who else is involved? What does approval look like? What comes after the POV? Map this in discovery or get surprised in procurement.</div></div>
+      <div class="medd-letter">P<div class="medd-popup"><strong>Paper Process</strong>Legal, security review, procurement, vendor onboarding. Every enterprise has a paper process. Understanding it early means no surprises after the technical close. "What does your vendor approval process look like?" should be asked in call 2.</div></div>
+      <div class="medd-letter">I<div class="medd-popup"><strong>Identify Pain</strong>The quantifiable business problem. Not "they want AI governance", "they have 80 MCP servers with no visibility and three compliance audits coming in Q2." Specific, urgent, owned by someone. This is what creates compelling events.</div></div>
+      <div class="medd-letter">C<div class="medd-popup"><strong>Champion</strong>The person inside the organization who will sell TrueFoundry when you're not in the room. They have access to the economic buyer, they believe in the outcome, and their credibility is on the line. No champion means no deal.</div></div>
+      <div class="medd-letter">C<div class="medd-popup"><strong>Competition</strong>What else are they evaluating or already using? Databricks, Bedrock, build in-house, do nothing. Understanding the competitive landscape helps you frame TrueFoundry's position before the buyer brings it up.</div></div>
+    </div>
+  </div>
+
+  <div class="ai-stack">
+    <div class="ai-card">
+      <span class="diff-tag diff-easy">Easy</span>
+      <h4>Call Intelligence Layer</h4>
+      <ul class="bullets" style="margin:0;"><li>Every call recorded, tagged by outcome</li><li>LLM surfaces opening lines, discovery questions, and objection handles that convert vs. stall</li><li>Output: living Winning Language Library, updated monthly from best-performer patterns</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-easy">Easy</span>
+      <h4>POV Documentation Engine</h4>
+      <ul class="bullets" style="margin:0;"><li>AI agent: transcript to status email, milestone update, slippage flag</li><li>30-40 min saved per POV per week. At 10 concurrent POVs = 300-400 min/week recaptured</li><li>Same architecture built at Unsupervised: raw transcripts to auto-classification to live dashboard, one afternoon</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-medium">Medium</span>
+      <h4>Pipeline Forecasting and Account Plans</h4>
+      <ul class="bullets" style="margin:0;"><li>MEDDPICC scoring feeds weighted forecast probability. Deals missing any letter auto-flagged.</li><li>Automated account plans pinged to reps showing open MEDDPICC gaps with specific fill-in recommendations: "No Economic Buyer documented, suggested question for next call."</li><li>Board forecasting becomes defensible, built from evidence, not optimism</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-easy">Easy</span>
+      <h4>Competitive Intelligence Feed</h4>
+      <ul class="bullets" style="margin:0;"><li>Daily monitoring: Databricks, Bedrock, Azure ML, LiteLLM, Portkey, Kong</li><li>AI summarizes what's relevant, flags battle card updates, delivers weekly digest to AE team</li><li>Every AE knows about a competitive move before a buyer brings it up</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-medium">Medium</span>
+      <h4>ICP Signal Scoring</h4>
+      <ul class="bullets" style="margin:0;"><li>AI enrichment before any SDR touch: Kubernetes in prod, active ML models, open platform engineering roles, cloud mix</li><li>SDRs receive a scored lead with context, not a name and email</li><li>Students, early-stage, and tire-kickers filtered before touching an AE calendar</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-medium">Medium</span>
+      <h4>Outbound Personalization Engine</h4>
+      <ul class="bullets" style="margin:0;"><li>Multi-agent workflow: research account, identify pain angle by persona, generate first-touch sequence</li><li>Research-informed personalization, not template personalization</li><li>At Unsupervised: same architecture lifted TOFU engagement 43%</li></ul>
+    </div>
+    <div class="ai-card">
+      <span class="diff-tag diff-hard">Hard</span>
+      <h4>Buyer Education Content Engine</h4>
+      <ul class="bullets" style="margin:0;"><li>AI-assisted YouTube scripting and publishing: MCP governance deep dives, competitive comparisons, architecture walkthroughs</li><li>Website CTA personalization: visitor intent scoring, dynamic CTAs based on company size and tech stack signals</li><li>Goal: 30% of booked demos arrive already knowing the category, reducing first-call education time to near zero</li></ul>
+    </div>
+  </div>
+</section>
+
+<!-- 06 10 FIXES -->
+<section id="fixes">
+  <div class="section-tag">Observations &amp; Recommendations</div>
+  <h2><span class="gradient-text">10 Recommendations</span>, Quick Wins First</h2>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Ordered by speed to impact. Items 1-4 ship this week. Items 5-8: 30-60 days. Items 9-10: 60-90 days.</p>
+
+  <div class="fix-card cyan">
+    <div class="fix-num">01, Day 1 Win</div>
+    <div class="fix-title">Reorder the Demo: Lead with the Best Moment</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>The gated MCP tool access control demo generates the most buyer questions. In the S&amp;P call it happened 80% through a 60-minute session, long after attention peaks.</li><li>Move it to minute 10-15. Create urgency, then tell the governance story that explains why it scales.</li></ul>
+    <span class="fix-tag cyan">S&amp;P AI Gateway demo</span>
+    <span class="fix-tag green">Impact: changes the energy of every first call immediately</span>
+  </div>
+
+  <div class="fix-card cyan">
+    <div class="fix-num">02, Day 1 Win</div>
+    <div class="fix-title">Rebuild the First-Call Deck Opening</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>Current sequence: team bios, investor logos, Fortune 500 logos. That leads with credentials before trust is established.</li><li>What resonates: buyer's world first, TrueFoundry as the answer second.</li></ul>
+    <span class="fix-tag cyan">Fortescue Call 1 opening</span>
+    <span class="fix-tag green">Rebuild: pain and industry context opens. Credibility slide moves to position 3-4, after the buyer says "yes, that's us."</span>
+  </div>
+
+  <div class="fix-card cyan">
+    <div class="fix-num">03, Day 1 Win</div>
+    <div class="fix-title">Always Own the Next Step</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>In the OCBC call: the buyer asked for next steps before the AE did. When buyers define the next step, momentum is in their hands.</li><li>Every AE should propose the POV commitment in the final 10 minutes of every call.</li></ul>
+    <span class="fix-tag cyan">OCBC demo</span>
+    <span class="fix-tag green">POV Prescription close script added to every call framework. AE proposes, buyer accepts or modifies.</span>
+  </div>
+
+  <div class="fix-card cyan">
+    <div class="fix-num">04, Day 1 Win</div>
+    <div class="fix-title">Require Pre-Read Materials Before Every Call</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>Calls currently open with 20-30 minutes of "let me explain TrueFoundry." Buyers who arrive educated shift the call from education to discovery, and discovery calls convert at meaningfully higher rates.</li></ul>
+    <span class="fix-tag cyan">OCBC opening, 25 min of context before any discovery</span>
+    <span class="fix-tag green">Required pre-read in every calendar invite. AE confirms receipt before the call is confirmed. One calendar template change.</span>
+  </div>
+
+  <div class="fix-card yellow">
+    <div class="fix-num">05, Week 1-2</div>
+    <div class="fix-title">Add Three High-Value Props to Every Pitch</div>
+    <ul class="bullets" style="margin:0 0 10px;">
+      <li><strong>FSI and healthcare buyers:</strong> lead with security guardrails, compliance posture, and RBAC. Open with this, not with it.</li>
+      <li><strong>CFO and Finance buyers:</strong> cost chargebacks and team-level attribution unlock a budget conversation IT cannot have.</li>
+      <li><strong>All buyers:</strong> "No TrueFoundry SDK, you can leave whenever you want." Say this in call 1, not in response to a procurement blocker in month 3.</li>
+    </ul>
+    <span class="fix-tag yellow">Fortescue Call 2 and OCBC</span>
+    <span class="fix-tag green">Three persona-specific pitch tracks: CFO, CISO, CTO. Each opens with the value prop that unlocks their budget.</span>
+  </div>
+
+  <div class="fix-card yellow">
+    <div class="fix-num">06, Week 2-4</div>
+    <div class="fix-title">Simplify Pricing for Champions to Sell Internally</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>When buyers cannot internalize what they will spend, they cannot build a business case. Champions struggle to sell internally. Budget conversations stall.</li><li>Confirming budget range in discovery, before POV starts, is one of the highest-leverage changes possible.</li></ul>
+    <span class="fix-tag yellow">Fortescue pricing discussion</span>
+    <span class="fix-tag green">Three tiers with transparent floor and ceiling. Budget confirmed in discovery as a hard gate before any POV begins.</span>
+  </div>
+
+  <div class="fix-card">
+    <div class="fix-num">07, Month 1-2</div>
+    <div class="fix-title">Build a Buyer Education Engine Before Call 1</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>A significant opportunity exists to pre-educate buyers before the first meeting. Today, AEs are doing the job that content, YouTube, and website CTAs should have done before a calendar invite was accepted.</li><li>Questions worth exploring: What happens to website visitors who don't book a demo? Is there a YouTube presence building category authority? Are competitive alternatives addressed before buyers bring them up on calls?</li><li>Pre-educated buyers arrive with urgency already formed. That changes the first-call conversion rate significantly.</li></ul>
+    <span class="fix-tag">Internal Q&amp;A, lead funnel and CTA strategy</span>
+    <span class="fix-tag green">Pre-call materials + YouTube category content + website CTA optimization. Buyers who arrive educated close at higher rates and with less founder involvement.</span>
+  </div>
+
+  <div class="fix-card">
+    <div class="fix-num">08, Month 1-2</div>
+    <div class="fix-title">Build Competitive Battle Decks Across Key Alternatives</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>Enterprise buyers arrive with existing vendor relationships. When those alternatives come up on calls without a prepared response, the conversation goes on defense. That pattern is worth solving proactively across the full competitive landscape, not just one vendor.</li><li>The core reframe works broadly: TrueFoundry is the deployment and governance layer. Incumbents are the training and data layer. Better together, not either/or.</li></ul>
+    <span class="fix-tag">Fortescue Call 1, incumbent approved before TrueFoundry entered</span>
+    <span class="fix-tag green">Priority: Databricks, AWS Bedrock, Azure AI, LiteLLM/Portkey. Week 1 deliverable on Databricks, Month 1 for the full set.</span>
+  </div>
+
+  <div class="fix-card">
+    <div class="fix-num">09, Month 2-3</div>
+    <div class="fix-title">Bring Consistency to Deal Qualification</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>Economic buyer, budget path, and competitive landscape are not surfaced consistently. A useful question to pressure-test: how many deals in the current pipeline have a confirmed budget range and a named economic buyer? That number reveals the scope of the opportunity.</li></ul>
+    <span class="fix-tag">OCBC, economic buyer not confirmed in 45-min session</span>
+    <span class="fix-tag green">MEDDPICC as shared language. Deals do not advance beyond Stage 2 without documented Pain, Economic Buyer, and a committed next step.</span>
+  </div>
+
+  <div class="fix-card red">
+    <div class="fix-num">10, Month 2-3 (Structural)</div>
+    <div class="fix-title">Build the Independent AE Motion</div>
+    <ul class="bullets" style="margin:0 0 10px;"><li>Every demo requires a co-founder today. Adding SDRs or improving outbound feeds the same bottleneck without breaking it. This is the structural ceiling on $25M+.</li><li>AE Certification is the unlock: 5-week shadow, co-pilot, independent track. Escalation protocol that defines when founders engage, by deal size and buyer level, not by habit.</li></ul>
+    <span class="fix-tag red">Fortescue Call 1 + 2 + OCBC, all three required co-founder involvement</span>
+    <span class="fix-tag green">AE Certification launches in the first 90 days. First certified AE running independent demos is the 90-day milestone.</span>
+  </div>
+</section>
+
+
+<!-- 08 PLAN -->
+<section id="plan">
+  <div class="section-tag">Execution Timeline</div>
+  <h2>The <span class="gradient-text">30 / 60 / 90</span> Plan</h2>
+
+
+  <div class="plan-wrap">
+    <div class="plan-col active" id="planA">
+      <div class="plan-header"><h4 style="color:var(--purple);margin:0 0 3px;">Demand-Constrained Plan</h4><p style="font-size:11px;margin:0;">Delivery is ready. Every incremental qualified deal reaching POV has a 70% close rate, the ROI on pipeline investment is very high.</p></div>
+      <div class="plan-phase">
+        <div class="plan-phase-label">Days 1-14: Listen and Diagnose</div>
+        <ul>
+          <li>Shadow every in-flight deal — silent observer, no running the room</li>
+          <li>Read 90 days of call transcripts before forming opinions</li>
+          <li>Interview every AE and SDR: top disqualifications, top objections</li>
+          <li>Audit inbound leads vs ICP criteria, size the qualification gap</li>
+          <li>Map competitive mentions across lost deals by deal stage</li>
+        </ul>
+      </div>
+      <div class="plan-phase">
+        <div class="plan-phase-label">Days 15-30: Deliver Quick Wins</div>
+        <ul>
+          <li>Lock ICP: 5 firmographic signals scored and weighted as SDR gate before any AE meeting</li>
+          <li>Deploy SDR qualification scorecard — hard gate, enforced</li>
+          <li>Build and deploy battle decks, Databricks first</li>
+          <li>Rebuild first-call deck, reorder demo to lead with MCP playground</li>
+          <li>Add 3 undersold value props to all pitch tracks</li>
+          <li>Post AE JDs, engage 3-5 recruiters — 2 AE offers out by Day 30</li>
+        </ul>
+      </div>
+      <div class="plan-phase">
+        <div class="plan-phase-label">Days 31-60: Build the System</div>
+        <ul>
+          <li>Call intelligence stack live, LLM-tagged, Winning Language Library v1 published</li>
+          <li>MEDDPICC installed as shared qualification language across all active deals</li>
+          <li>AI outbound engine live with research-led personalization</li>
+          <li>POV Prescription enforced: every call ends with committed next step or clean pass</li>
+          <li>Budget confirmed in Discovery — no POV starts without it</li>
+          <li>AE Certification running, all 4 existing AEs in shadow schedule</li>
+          <li>1-2 new AE offers signed, onboarding by Day 45</li>
+        </ul>
+      </div>
+      <div class="plan-phase">
+        <div class="plan-phase-label">Days 61-90: Scale and Measure</div>
+        <ul>
+          <li>Outbound at 20%+ of new POV entries</li>
+          <li>SDR-to-AE conversion measurably improving vs baseline</li>
+          <li>First existing AEs certified, running demos independently</li>
+          <li>New AE(s) into co-pilot mode, on track for independent demos by Week 10</li>
+          <li>Second new AE offer extended or in final stages</li>
+          <li>$25M+ pipeline model delivered with explicit, challengeable assumptions</li>
+          <li>30/60-day forecast accuracy baseline established</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;border-top:3px solid var(--cyan);">
+    <h4 style="color:var(--text);margin-bottom:12px;">Universal Day 1 Actions, Regardless of Scenario</h4>
+    <div class="card-grid-3">
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Day 1</div><p style="font-size:12px;margin:0;color:var(--text);line-height:1.5;">Call recording access. Read 90 days of transcripts. Attend every in-flight deal as silent observer.</p></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Week 1</div><p style="font-size:12px;margin:0;color:var(--text);line-height:1.5;">Databricks battle deck. Reordered demo. Fixed first-call opening. Three undersold value props in pitch.</p></div>
+      <div><div style="font-size:10px;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;">Week 2</div><p style="font-size:12px;margin:0;color:var(--text);line-height:1.5;">Call intelligence live. First MEDDPICC deal review. Pipeline model draft, assumptions named and challengeable.</p></div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- 10 REFERRALS -->
+<section id="referrals">
+  <div class="section-tag">Pipeline Channel</div>
+  <h2>The Fastest Pipeline <span class="gradient-text">Worth Exploring</span></h2>
+
+  <p style="font-size:14px;color:var(--muted);margin-bottom:24px;">135% NRR. Customers are expanding. They're also the warmest possible source of new deals, inside their company and in their network.</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+    <div class="card" style="border-top:3px solid var(--green);">
+      <h4 style="color:var(--green);margin-bottom:10px;">Internal Referrals</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Every enterprise customer has multiple teams. The team using TrueFoundry is not the only one spinning up AI workflows.</li>
+        <li>Ask the champion: "Which other team in your company has the same pain you had six months ago?" One introduction from a trusted internal voice closes in half the time.</li>
+        <li>Fortescue alone could be a 3-5 deal account. S&amp;P has dozens of teams. The expansion motion is a referral motion in disguise.</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--cyan);">
+      <h4 style="color:var(--cyan);margin-bottom:10px;">External Referrals</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Enterprise platform engineers talk to each other. A warm intro from a peer at Fortescue carries more weight than any outbound sequence.</li>
+        <li>Brief the champion on what a qualified referral looks like: enterprise, Kubernetes in prod, active AI development, governance pain.</li>
+        <li>External referrals close 50-70% faster and land 20-30% higher ACV, buyer arrives pre-sold.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:4px solid var(--green);background:rgba(52,211,153,0.06);">
+    <h4 style="color:var(--text);margin-bottom:10px;">Week 1 Deliverable: The Referral Ask</h4>
+    <ul class="bullets" style="margin:0;">
+      <li>Map the top 10 happiest accounts by NRR expansion and call frequency.</li>
+      <li>Script a referral ask for each champion, tailored to what they know about their network.</li>
+      <li>Ask for one internal intro AND one external referral per account. Set the bar low, make it easy.</li>
+      <li>Track referral pipeline separately, makes CS ROI visible in the board forecast from Day 1.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 11 WHY -->
+<section id="why">
+  <div class="section-tag">The Close</div>
+  <h2>Why <span class="gradient-text">This Works</span></h2>
+
+  <div class="proof-row">
+    <div class="proof-card">
+      <div class="proof-icon">📈</div>
+      <h4>The Numbers Are Real</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Unsupervised AI: <strong>$4.2M → $10.8M ARR</strong> across two roles. Win rate <strong>16% → 43%</strong>, same playbook, different product.</li>
+        <li>$1.5M F50 expansion (CFO-grade ROI alignment). IBM: 131%/123% quota, F100 enterprise.</li>
+      </ul>
+    </div>
+    <div class="proof-card">
+      <div class="proof-icon">🤖</div>
+      <h4>Can Sell AND Build the Stack</h4>
+      <ul class="bullets" style="margin:0;">
+        <li>Not theoretical. At Unsupervised: built multi-agent outbound in n8n (TOFU +43%), built the Deepwork pipeline in one afternoon. TF's VP Sales should be the best proof point for what the product enables.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;background:linear-gradient(135deg,rgba(99,102,241,0.18),rgba(2,132,199,0.10));border:1px solid rgba(99,102,241,0.35);border-radius:14px;padding:28px;text-align:center;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--purple);margin-bottom:14px;">The Recommendation in One Line</div>
+    <div style="font-size:20px;font-weight:700;color:var(--text);line-height:1.6;">Move lead-to-qualified-POV from 23% to 35%+ through better messaging, call scripts, CTAs, and pricing clarity. Lift ACV from $125K to $200K through better value selling. Build and certify an independent AE team that scales the 70% close rate. That is the path from $5M to $25M+.</div>
+  </div>
+</section>
+
+
+
+
+
+
+
+<!-- APPENDIX DIVIDER -->
+<section style="padding:32px 0 8px;border-bottom:none;">
+  <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-top:2px solid var(--border);padding-top:24px;">Appendix</div>
+  <h2 style="font-size:28px;color:var(--muted);">Reference Material</h2>
+  <p style="font-size:13px;color:var(--muted);">Open questions and technical reference, not for live presentation.</p>
+</section>
+
+<!-- APPENDIX A1 OPEN QUESTIONS -->
+<section id="open-questions" style="border-top:2px solid var(--border);">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Appendix A1</div>
+  <div class="section-tag">What Shapes the Plan</div>
+  <h2><span class="gradient-text">Open Questions</span></h2>
+
+
+  <div style="margin-bottom:8px;"><div style="display:inline-flex;align-items:center;gap:7px;background:rgba(5,150,105,0.12);border:1px solid rgba(5,150,105,0.20);border-radius:5px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;">Plan-Shaping, Some Answered, Others Shape the Execution</div></div>
+
+  <div class="q-card" style="border-left:4px solid var(--green);">
+    <div class="q-num" style="background:var(--green);">Q1</div>
+    <h3>Demand-constrained, confirmed ✓</h3>
+    <div style="background:rgba(5,150,105,0.09);border:1px solid rgba(5,150,105,0.18);border-radius:9px;padding:14px;margin-top:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Answered, Demand Is the Bottleneck</div>
+      <p style="font-size:12px;color:var(--muted);margin:0;line-height:1.6;">Every incremental qualified deal reaching POV closes at 70%. The entire 30/60/90 plan is built on this, invest in top of funnel from Day 1.</p>
+    </div>
+  </div>
+
+  <div class="q-card" style="border-left:4px solid var(--green);">
+    <div class="q-num" style="background:var(--green);">Q2</div>
+    <h3>POV cycle time, stable and improving ✓</h3>
+    <div style="background:rgba(5,150,105,0.09);border:1px solid rgba(5,150,105,0.18);border-radius:9px;padding:14px;margin-top:12px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Answered, Confirmed by Nikunj: Stable and Getting Faster</div>
+      <p style="font-size:12px;color:var(--muted);margin:0;line-height:1.6;">Healthy and improving. Constraint is upstream, not enough qualified deals reaching POV. POV factory optimization is secondary.</p>
+    </div>
+  </div>
+
+  <div class="q-card" style="border-left:4px solid var(--red);">
+    <div class="q-num" style="background:var(--red);">Q3</div>
+    <h3>Is there a formal ICP definition with documented scoring criteria?</h3>
+    <div class="branch-grid" style="margin-top:12px;">
+      <div class="branch-card" style="background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.15);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--red);margin-bottom:8px;">No Formal ICP</div>
+        <p style="font-size:12px;color:var(--muted);margin:0;line-height:1.6;">Week 1 deliverable. Interview AEs and SDRs, pull firmographic data on all 46 customers, build the 5-point scoring card. Everything downstream depends on it.</p>
+      </div>
+      <div class="branch-card" style="background:rgba(5,150,105,0.09);border:1px solid rgba(5,150,105,0.18);">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--green);margin-bottom:8px;">ICP Exists, Not Enforced</div>
+        <p style="font-size:12px;color:var(--muted);margin:0;line-height:1.6;">Comp or coaching issue. SDRs paid on meetings booked = change the comp. Coaching issue = install the 5-point gate as enforcement.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;margin-bottom:8px;"><div style="display:inline-flex;align-items:center;gap:7px;background:rgba(180,83,9,0.10);border:1px solid rgba(180,83,9,0.18);border-radius:5px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--yellow);text-transform:uppercase;letter-spacing:1px;">Plan-Tuning, Changes a Lever or Timeline</div></div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q4: RevOps and CRM setup?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">Gong deployed and clean pipeline data means building on a foundation. Spreadsheets or founder memory means instrumentation is the first prerequisite. MEDDPICC scoring has no value without a CRM to score into.</p></div>
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q5: How are SDRs compensated?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">Paid on meetings booked means the incentive is misaligned. Change comp to meetings-held and behavior corrects immediately. Paid on meetings-advanced means it is a coaching and domain knowledge issue, completely different fix.</p></div>
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q6: How is revenue distributed across customer segments?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">All observed deals are enterprise-grade buyers (Fortescue, OCBC, S&amp;P). Confirming whether the current book skews toward larger enterprise or smaller accounts tells us how fast value engineering can lift ACV in existing deals vs. requiring a deliberate upmarket motion.</p></div>
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q7: Budget for content and YouTube?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">Budget allocated means Month 2 work plan. Requires new request means Month 4+ after core system work demonstrates ROI. Content payoff is 6-12 months, timing matters more than the motion itself.</p></div>
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q8: Is there a structured win/loss process today?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">If structured: there is a data foundation to extract winning language, identify top objections, and feed them into SDR scripts and battle cards within 30 days. If informal: a 30-day sprint to interview 5 won and 5 lost deals builds the first version of the objection playbook. Every dollar in outbound and content works harder once we know what language converts.</p></div>
+    <div class="card" style="border-left:3px solid var(--yellow);"><h4 style="color:var(--text);font-size:13px;">Q9: AE quota attainment last year?</h4><p style="font-size:12px;line-height:1.6;margin:0;color:var(--muted);">60-70% attainment on $750K means coaching and methodology work. Consistent at or above quota means a new $1.2M target may require net new pipeline volume, which changes the hiring plan timeline.</p></div>
+  </div>
+</section>
+<!-- APPENDIX A2 ABHISHEK TECHNICAL -->
+<section id="abhishek-technical" style="border-top:2px solid var(--border);">
+  <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Appendix A2</div>
+  <div class="section-tag">Appendix A2</div>
+  <h2><span class="gradient-text">Abhishek</span></h2>
+
+  <h3 style="margin-bottom:14px;">Key Focus Areas</h3>
+  <div class="card-grid" style="margin-bottom:28px;">
+    <div class="card" style="border-left:4px solid var(--cyan);">
+      <h4>AI Gateway vs Bedrock / Databricks</h4>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Differentiation in the enterprise AI control plane. Where TrueFoundry wins technically and where the story resonates.</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--cyan);">
+      <h4>MCP Gateway as Emerging Standard</h4>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Where does this go? Is this the REST API moment for AI agents, or is it still too early to bet the roadmap on it?</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--cyan);">
+      <h4>Technical Adoption Patterns in Enterprise</h4>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">How do engineering teams actually adopt AI infrastructure? What does the real onboarding arc look like vs what's pitched?</p>
+    </div>
+    <div class="card" style="border-left:4px solid var(--cyan);">
+      <h4>What Technical Objections Kill POVs?</h4>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Not objections to starting, objections mid-evaluation. The ones that stall or kill a deal already in motion.</p>
+    </div>
+  </div>
+
+  <h3 style="margin-bottom:14px;">Technical Questions</h3>
+  <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+    <div class="q-card">
+      <div class="q-num">1</div>
+      <p style="font-size:14px;color:var(--text);margin:0;line-height:1.7;font-style:italic;">"What technical objection kills the most deals once a POV starts? Not objections to starting, objections mid-evaluation."</p>
+    </div>
+    <div class="q-card">
+      <div class="q-num">2</div>
+      <p style="font-size:14px;color:var(--text);margin:0;line-height:1.7;font-style:italic;">"Is MCP becoming the REST API moment for AI agents, or is it still too early to bet the roadmap on it?"</p>
+    </div>
+    <div class="q-card">
+      <div class="q-num">3</div>
+      <p style="font-size:14px;color:var(--text);margin:0;line-height:1.7;font-style:italic;">"When Databricks is already approved internally and we enter the deal, what's the technical story that actually works? What resonates with the engineering team?"</p>
+    </div>
+    <div class="q-card">
+      <div class="q-num">4</div>
+      <p style="font-size:14px;color:var(--text);margin:0;line-height:1.7;font-style:italic;">"Where does the AI Gateway fit in a customer's existing stack, do they rip out Bedrock, or is TrueFoundry layered on top? What does the architecture actually look like in production?"</p>
+    </div>
+    <div class="q-card">
+      <div class="q-num">5</div>
+      <p style="font-size:14px;color:var(--text);margin:0;line-height:1.7;font-style:italic;">"What's the most compelling enterprise AI Gateway use case you've seen close a deal? What made it land?"</p>
+    </div>
+  </div>
+
+  <!-- Jamie's Observations -->
+  <h3 style="margin-bottom:8px;">Observations from Customer Calls</h3>
+
+  <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:28px;">
+    <div class="fix-card cyan">
+      <div class="fix-num">From Fortescue Calls</div>
+      <div class="fix-title" style="font-size:14px;">No-SDK-Lock-In Story Is Undersold</div>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Customers want to know "can I leave?", engineers respond to the no-SDK-lock-in story instantly. It's coming up reactively when it should be part of the opening frame.</p>
+    </div>
+    <div class="fix-card cyan">
+      <div class="fix-num">From OCBC</div>
+      <div class="fix-title" style="font-size:14px;">Entra JWT Passthrough Should Be Proactive</div>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Entra JWT passthrough was asked about twice in the same call. Should be proactively demoed, not surfaced reactively when a buyer asks.</p>
+    </div>
+    <div class="fix-card cyan">
+      <div class="fix-num">Across Calls</div>
+      <div class="fix-title" style="font-size:14px;">Control Plane vs Compute Plane Confusion</div>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Even technically sophisticated buyers were confused. Worth discussing how to simplify the technical narrative without dumbing it down.</p>
+    </div>
+    <div class="fix-card cyan">
+      <div class="fix-num">Product Strength</div>
+      <div class="fix-title" style="font-size:14px;">MCP Gateway 3-Layer Auth Needs a CISO Summary</div>
+      <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.6;">Genuinely impressive, but it needs a 30-second plain-language summary for a CISO, not just engineers. The technical depth is real; the narrative wrapper needs work.</p>
+    </div>
+  </div>
+
+  <!-- Technical Differentiation Grid REMOVED per feedback -->
+  <div style="display:none;"><div class="ai-card" style="border-top-color:var(--purple);"><ul class="bullets" style="margin:0;"><li><strong>TF:</strong> Ships Day 1 with full stack</li><li><strong>DIY:</strong> 6-9 months + ongoing maintenance burden</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Genuine Questions -->
+  <h3 style="margin-bottom:14px;">Genuine Questions to Ask Abhishek</h3>
+  <div class="card" style="border-left:4px solid var(--purple);margin-bottom:28px;">
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="q-num" style="flex-shrink:0;">1</div>
+        <p style="font-size:13px;color:var(--text);margin:0;line-height:1.6;">What does the product roadmap look like for the next 12 months? Where is MCP Gateway heading?</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="q-num" style="flex-shrink:0;">2</div>
+        <p style="font-size:13px;color:var(--text);margin:0;line-height:1.6;">What's the win rate against Bedrock / Azure and <em style="color:var(--cyan);font-style:normal;font-weight:600;">WHY</em> do you win technically?</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="q-num" style="flex-shrink:0;">3</div>
+        <p style="font-size:13px;color:var(--text);margin:0;line-height:1.6;">Is the no-SDK-lock-in story the right technical moat, or is there something deeper?</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div class="q-num" style="flex-shrink:0;">4</div>
+        <p style="font-size:13px;color:var(--text);margin:0;line-height:1.6;">Where does TrueFoundry lose on technical merit, what's the honest gap vs the competition?</p>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+</main>
+
+<script>
+window.addEventListener('scroll', () => {
+  const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('scroll-bar').style.transform = `scaleX(${scrolled / 100})`;
+});
+
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(item => item.classList.remove('active'));
+      const active = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => observer.observe(s));
+
+function navTo(id) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const clicked = document.querySelector(`.nav-item[href="#${id}"]`);
+  if (clicked) clicked.classList.add('active');
+}
+
+function showObj(tab) {
+  ['1','2','3'].forEach(t => {
+    const panel = document.getElementById('obj-'+t);
+    const btn = document.getElementById('obj-btn-'+t);
+    if (panel) panel.className = 'obj-tab' + (t === tab ? ' active' : '');
+    if (btn) btn.className = 'toggle-btn' + (t === tab ? ' active-a' : '');
+  });
+}
+
+// Plan toggle removed, demand-constrained confirmed as the operating model
+
+const funnelBars = [
+  { id: 'bar1', width: '100%' },
+  { id: 'bar2', width: '23%' },
+  { id: 'bar3', width: '18%' },
+  { id: 'bar4', width: '13%' },
+];
+const funnelObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      funnelBars.forEach(b => {
+        const el = document.getElementById(b.id);
+        if (el) el.style.width = b.width;
+      });
+      funnelObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+const funnel = document.querySelector('.funnel-wrap');
+if (funnel) funnelObserver.observe(funnel);
+</script>
+</body>
+</html>
