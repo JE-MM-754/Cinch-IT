@@ -102,3 +102,10 @@ node_modules/
 # Claude worktrees (embedded git repos)
 Cinch-IT/dead-lead-reactivation/app/frontend/.claude/
 memory/motion-state.json
+
+# Personal memory - never commit
+MEMORY.md
+TOOLS.md
+USER.md
+memory/*.md
+memory/*.json
